@@ -8,6 +8,8 @@ tags: [LSTM, ELMo]
 typora-root-url: ..
 ---
 
+
+
 # Introduction
 
 대용량 corpus로 사전 학습한 단어 embedding vector를 사용하는 것은 이제 NLP 모델의 표준으로 자리 잡았습니다. 이 vector들이 문맥상 단어의 의미와 문장 구조에 대한 정보를 잘 함축하고 있기 때문입니다. 이에 따라 NLP 분야의 많은 연구자들이 모델 성능 향상을 위해 고품질의 단어 embedding vector를 구하는 방법을 연구해 왔는데요. 전통적인 방법들은 단어당 하나의 embedding(static word embedding) vector밖에 구할 수 없다는 한계가 있었습니다. 
@@ -20,7 +22,7 @@ typora-root-url: ..
 
 # ELMo: Embeddings from Language Models 
 
-## 1. Bidirectional language models
+## Bidirectional language models
 
 forward LM이 $N$개의 단어($t_1, t_2, ..., t_N$)로 이루어진 squence의 확률을 계산하는 방법은 다음과 같습니다.
 
@@ -40,7 +42,7 @@ $$\sum_{k=1}^N=(\log{p(t_k|t_1, t_2,...,t_{k-1}; \Theta_x, \Theta^\rightarrow_{L
 
 
 
-## 2. ELMo
+## ELMo
 
 ![](/assets/img/bert/elmo-embedding-2.jpg)
 
@@ -56,13 +58,13 @@ $$ELMo_k^{task}=E(R_k;\Theta^{task})=\gamma^{task}\sum_{j=0}^{L}s_j^{task}\mathb
 
 
 
-## 3. Using biLMs for supervised NLP tasks
+## Using biLMs for supervised NLP tasks
 
 ELMo는 target task를 수행할 때, 이렇게 사전 학습한 ELMo embedding vector를 업데이트하지 않고 추가적인 feature로써 사용합니다. 구체적으로 설명하면, 단어 embedding vector $x_k$와 ELMo embedding vector $ELMo_k^{task}$를 이어 붙인 $[x_k;ELMo_k^{task}]$를 task RNN에 입력합니다. 또한 저자들의 실험에 따르면, 일부 task들에 대해서는 task RNN의 output $h_k$에도 $ELMo_k^{task}$를 이어 붙여서 $[h_k;ELMo_k^{task}]$을 사용하면 성능이 더욱 향상된다고 합니다. 이러한 방식은 `feature-based` 방식으로 볼 수 있으며, [OpenAI GPT](https://jieun121070.github.io/posts/Paper-Review-Improving-Language-Understanding/)가 사용하는 `fine-tuning` 방식과 대조됩니다.
 
 
 
-## 4. Pre-trained bidirectional language model architecture
+## Pre-trained bidirectional language model architecture
 
 논문에서 사용한 모델 구조는 다음과 같습니다.
 
@@ -73,8 +75,6 @@ ELMo는 target task를 수행할 때, 이렇게 사전 학습한 ELMo embedding 
   - [kim et al. (2015)](https://arxiv.org/abs/1508.06615) 모델 구조 참고 (완전히 동일하지 않음)
 
 ![](/assets/img/bert/character-conv.png)
-
-
 
 # Reference
 
