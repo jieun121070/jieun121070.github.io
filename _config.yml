@@ -28,8 +28,8 @@ url: "https://jieun121070.github.io"
 github:
   username: jieun121070 # change to your github username
 
-twitter:
-  username: twitter_username # change to your twitter username
+# twitter:
+#   username: twitter_username # change to your twitter username
 
 social:
   # Change to your full name.
@@ -38,13 +38,13 @@ social:
   email: jieun121070@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username # change to your twitter homepage
-    - https://github.com/username # change to your github homepage
+    # - https://twitter.com/username # change to your twitter homepage
+    - https://github.com/jieun121070 # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
 
-google_site_verification: d1HSsq8TG_3uub2xca1ZQLFjZOu3bHhAvfPTpe2C_8c
+google_site_verification: hFQR7uHwc8cFiNFVYdORtMzBfQ3-GYONbTiHX_6FxO8
 
 # ↑ --------------------------
 # The end of `jekyll-seo-tag` settings
