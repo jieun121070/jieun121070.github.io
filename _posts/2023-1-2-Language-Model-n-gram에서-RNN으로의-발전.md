@@ -8,7 +8,8 @@ tags: [Language-Model, n-gram, LSTM, RNN]
 typora-root-url: ..
 ---
 
-# n-gram
+## n-gram
+
 Language Model(LM)은 어떤 단어들의 나열 $x^{(1)}, x^{(2)},..., x^{(t)}$ 이 주어졌을 때,  다음 단어 $x^{(t+1)}$가 등장할 확률을 계산하는 모델입니다. 이 때 모든 단어들은 미리 정의한 단어 사전 $V$에 포함되어 있음을 가정합니다.
 
 $$P(x^{(t+1)}|x^{(t)},…,x^{(1)})$$
@@ -21,7 +22,7 @@ $$P(w|그래서\,떡국을)=\frac{count(그래서\,떡국을\,w)}{count(그래�
 
 
 
-# Recurrent Neural Network(RNN)
+## Recurrent Neural Network(RNN)
 
 n-gram 이후 사용된 `RNN` 모델은 n-gram 모델의 문제점을 개선했습니다. RNN은 고정된 길이의 sequence를 입력할 필요도 없고, count 기반 방식도 아니기 때문입니다.
 
@@ -31,7 +32,7 @@ RNN의 또다른 장점은 $t$시점의 단어를 예측할 때 이전에 등장
 
 ![](/assets/img/rnn/rnn2.jpg){: width="500"}
 
-## LSTM
+### LSTM
 
 이러한 RNN의 문제점을 해결하기 위한 대표적인 방법이 바로 cell 구조를 `LSTM`으로 바꾸는 것입니다. LSTM은 RNN의 hidden state $h$ 이외에도 정보를 얼마나 저장할지 결정하는 cell state $c$라는 변수를 사용합니다. 또한 잊어버리거나(forget gate $f$), 기억하거나(input gate $i$), 출력하는(output gate $o$) 정보의 양을 제어하는 gate를 사용하는데요. 각 gate에 sigmod 함수 $\sigma$를 취해서 gate의 output은 0과 1 사이의 값을 갖습니다. 이러한 장치들을 통해 **LSTM cell은 RNN 모델이 앞 시점에 나왔던 정보를 보다 오래 기억하도록 도와줍니다.** 
 
@@ -49,6 +50,6 @@ $$c_t=f_t \odot c_{t-1}+i_t \odot g_t\\ h_t=o_t \odot tanh(c_t)$$
 
 
 
-# Reference
+## Reference
 
 - [rnn language model with pytorch](https://medium.com/@florijan.stamenkovic_99541/rnn-language-modelling-with-pytorch-packed-batching-and-tied-weights-9d8952db35a9)

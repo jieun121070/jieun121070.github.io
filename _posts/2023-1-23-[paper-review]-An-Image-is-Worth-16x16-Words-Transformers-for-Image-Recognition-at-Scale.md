@@ -7,7 +7,7 @@ categories: [Vision]
 tags: [Transformer, Vision-Transformer]
 ---
 
-# Introduction
+## Introduction
 
 Transformer가 NLP 분야의 새로운 표준으로 떠오르면서, Transformer를 vision 분야에도 적용하려는 다수의 연구가 진행되었습니다. 하지만 전체적인 CNN 구조를 유지한 모델이 많았는데요. 본 논문에서 제안하는 Vision Transformer는 기존 Transformer의 구조를 최대한 바꾸지 않고 높은 **image classification** 성능을 달성했습니다. 
 하지만 ImageNet과 같은 mid-sized dataset에 대해서는 ResNet보다 낮은 성능을 보였는데요. Transformer는 CNN 고유의 `inductive bias`가 부족하기 때문에 데이터 양이 충분하지 않으면 일반화 성능이 떨어진다고 합니다.
@@ -16,15 +16,15 @@ Transformer와 inductive bias에 대한 자세한 설명은 아래 포스트를 
 - [Inductive-Bias](https://jieun121070.github.io/posts/Inductive-Bias/)
 - [Transformer](https://jieun121070.github.io/posts/paper-review-Attention-is-All-You-Need/)
 
-# Related Work
+## Related Work
 
 가장 간단히 self-attention을 이미지에 적용할 수 있는 방법으로는 이미지 내에서 각각의 픽셀과 다른 모든 픽셀들의 attention 가중치를 구하는 방법을 생각해볼 수 있습니다. 이 방법은 계산 비용이 너무 많이 들어서 현실적인 크기의 입력 이미지에 적용하기가 어렵습니다. 그래서 approximation 방법들이 제안되었는데요. 각각의 픽셀 주변의 이웃 픽셀들과만 self-attention을 적용하는 방법 등이 있습니다. 하지만 이 방법들도 복잡한 엔지니어링이 요구된다는 제약이 존재합니다.
 
 또다른 관련 연구로는 image GPT(iGPT)가 있는데요. 이미지 해상도와 color space를 축소한 다음 이미지 픽셀에 Transformer를 적용한 모델로, unsupervised 방식으로 학습합니다. (Vision Transformer는 supervised 방식으로 학습)
 
-# Method
+## Method
 
-## Vision Transformer
+### Vision Transformer
 
 ![](/assets/img/transformer/vit.gif)
 
@@ -200,6 +200,6 @@ class VisionTransformer(nn.Module):
 
 
 
-# Reference
+## Reference
 
 - [https://github.com/lucidrains/vit-pytorch](https://github.com/lucidrains/vit-pytorch)

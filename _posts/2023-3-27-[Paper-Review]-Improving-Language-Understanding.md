@@ -8,7 +8,7 @@ tags: [Transformer, GPT]
 typora-root-url: ..
 ---
 
-# Introduction
+## Introduction
 
 NLP 모델을 개발할 때, 일반적으로 unlabeled 데이터셋은 충분하지만 특정 task를 학습시키기 위한 labeled 데이터셋은 부족하다는 문제가 있습니다. GPT-1은 이 문제를 해결하기 위해 `unsupervised pre-training`과 `supervised fine-tuning`을 결합하여 사용하는 `semi-supervised learning` 방식을 사용합니다. 따라서 대용량의 unlabeled 데이터셋과 target task를 학습할 적당량의 labeled 데이터셋이 있을 때 사용 가능한 모델입니다. 이 때, 두 데이터셋의 domain은 같지 않아도 무방합니다. GPT-1는 이러한 과정을 통해 약간의 adaptation만으로 다양한 task에 적용할 수 있는 범용적인 representation을 학습하고자 했습니다.
 
@@ -18,9 +18,9 @@ NLP 모델을 개발할 때, 일반적으로 unlabeled 데이터셋은 충분하
 
 
 
-# GPT-1
+## GPT-1
 
-## 1. 모델 구조
+### 모델 구조
 
 ![](/assets/img/bert/openai-gpt.jpg)
 
@@ -31,10 +31,9 @@ GPT-1과 대표적 선행 연구인 [ELMo](https://jieun121070.github.io/posts/P
 > BERT uses a denoising self-supervised pre-training task, while the GPT line of work uses language modeling as its pre-training task
 
 
+### 학습 과정
 
-## 2. 학습 과정
-
-### Unsupervised pre-training
+#### Unsupervised pre-training
 
 먼저 language model로 대용량 unlabeled 데이터셋 $\mathcal{U}= \{ u_1,...,u_n \}$를 학습합니다.
 
@@ -48,7 +47,7 @@ $$h_l=transformer\_block(h_{l-1})\forall i \in [1, n]$$
 
 $$P(u)=softmax(h_nW_e^T)$$
 
-### Supervised fine-tuning
+#### Supervised fine-tuning
 
 다음으로는 supervised model로 labeled 데이터셋 $\mathcal{C}$를 학습하여 fine-tuning을 수행합니다. 이 때, 데이터셋 $\mathcal{C}$의 데이터들은 일련의 토큰들 $x^1,...,x^m$과 해당 sequence의 label $y$로 이루어져 있습니다.
 
@@ -62,7 +61,7 @@ $$L_3(\mathcal{C})=L_2(\mathcal{C})+\lambda*L_1(\mathcal{C})$$
 
 
 
-## 3. 모델 성능 평가
+### 모델 성능 평가
 
 ![](/assets/img/bert/gpt-1_result.PNG)
 _Results on natural language inference_
@@ -77,9 +76,10 @@ GPT-1(위 표에서는 Finetuned Transformer LM으로 표기)은 대부분의 �
 
 
 
-# GPT-2
+## GPT-2
 
-## 1. 등장 배경
+### 등장 배경
+
 ![](/assets/img/bert/bert_result.PNG)
 _BERT 실험 결과_
 
@@ -94,7 +94,7 @@ GPT-1 이후 등장한 [BERT](https://jieun121070.github.io/posts/BERT/)는 대�
 
 
 
-## 2. 학습 데이터셋
+### 학습 데이터셋
 
 Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식을 사용합니다. 이 때문에 조건부 확률 $p(output \vert input)$을 추정하는 것이 아니라, $p(output \vert input, task)$를 추정하는 문제가 됩니다.
 
@@ -113,7 +113,7 @@ Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식�
 
 
 
-## 3. 모델 수정 사항 (GPT-1 > GPT-2)
+### 모델 수정 사항 (GPT-1 > GPT-2)
 
 - layer normalization의 위치를 각각의 sub-block의 input으로 변경
 - 마지막 self-attention block 뒤에 layer normalization 추가
@@ -125,7 +125,7 @@ Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식�
 
 
 
-## 4. 모델 성능 평가
+### 모델 성능 평가
 
 ![](/assets/img/bert/gpt-2_result.PNG)
 _Zero-shot results_
@@ -136,7 +136,7 @@ GPT-2는 zero-shot task에서 8개의 데이터셋 중 7개에 대해 선행연�
 
 
 
-# Reference
+## Reference
 
 - [illustrated-gpt2](https://jalammar.github.io/illustrated-gpt2)
 - [generative-pre-training-gpt-2-vs-gpt-3](https://www.eastagile.com/blogs/generative-pre-training-gpt-2-vs-gpt-3)

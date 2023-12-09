@@ -8,7 +8,7 @@ tags: [SegFormer, Semantic-Segmentation, Transformer]
 typora-root-url: ..
 ---
 
-# 1. Introduction
+## Introduction
 
 semantic segmentation은 image classification의 연장선에 있다고 볼 수 있습니다. 우리가 흔히 알고 있는 image classification은 이미지 단위 classification이고, semantic segmentation은 픽셀 단위 classification이기 때문입니다. 이런 연유로 [Long et al. 2015](https://arxiv.org/pdf/1411.4038.pdf)에서 semantic segmentation 수행을 위해 `fully convolutional networks (FCNs)`을 사용한 이후, FCN은 semantic segmentation 분야의 지배적인 구조로 자리잡았습니다. 두 분야의 높은 관련성 때문에 최신 semantic segmentation 모델들은 image classsification에서 널리 사용되는 구조의 변형인 경우가 많았습니다. 이에 따라 **backbone 구조 설계**에 대한 연구가 활발히 진행되어 왔으며, 이 과정에서 semantic segmentation 분야의 성능이 크게 향상했습니다. 또한 **문맥 정보를 효과적으로 추출하는 구조를 설계**하는 것도 중요한데요. 대표적인 예가 kernel에 구멍을 내어 receptive field를 확장하는 구조인 `dilated convolution` 입니다. 
 
@@ -28,11 +28,11 @@ NLP 분야에서 [Transformer](https://jieun121070.github.io/posts/paper-review-
 
 이러한 배경으로, 본 논문에서는 **hierarchical Transformer encoder**와 **MLP decoder**로 구성된 semantic segmentation 모델인 **SegFormer**를 제안합니다. hierarchical Transformer encoder는 CNN처럼 다양한 크기의 feature map을 생성하고, MLP decoder는 여러 layer의 정보를 종합하여 local attention과 global attention을 결합함으로써 유용한 representation을 생성하는 역할을 한다고 합니다. Method 파트에서 모델 구조를 좀 더 자세히 살펴 보겠습니다.
 
-# 2. Method
+## Method
 
 ![](/assets/img/transformer/segformer.jpg)
 
-## 2.1 Hierachical Transformer Encoder
+### 1. Hierachical Transformer Encoder
 
 Hierachical Transformer Encoder가 입력 값을 처리하는 과정을 정리해 보면 아래와 같습니다. 
 
@@ -61,7 +61,7 @@ $$x_{out}=MLP(GELU(Conv_{3 \times 3}(MLP(x_{in}))))+x_{in}$$
 
 
 
-## 2.2 Lightweight All-MLP Decoder
+### 2. Lightweight All-MLP Decoder
 
 Decoder가 Encoder의 output을 전달 받아 처리하는 과정은 아래와 같습니다.
 

@@ -8,7 +8,7 @@ tags: [Transformer, Attention, Self-Attention]
 typora-root-url: ..
 ---
 
-# Introduction
+## Introduction
 
 sequence modeling 관점에서 [RNN](https://jieun121070.github.io/posts/Language-Model-n-gram%EC%97%90%EC%84%9C-RNN%EC%9C%BC%EB%A1%9C%EC%9D%98-%EB%B0%9C%EC%A0%84/)과 Transformer를 비교해보면 다음과 같이 정리할 수 있습니다.
 
@@ -21,26 +21,29 @@ sequence modeling 관점에서 [RNN](https://jieun121070.github.io/posts/Languag
 
 이처럼 Transformer는 RNN이 지닌 문제점을 개선한 모델로, 논문 제목에서 알 수 있듯이 RNN 없이 [attention](https://jieun121070.github.io/posts/%EA%B8%B0%EA%B3%84%EB%B2%88%EC%97%AD-%EB%B6%84%EC%95%BC%EC%97%90%EC%84%9C%EC%9D%98-RNN/)만으로 encoder와 decoder를 구성했습니다. 최근 NLP 분야에서 높은 성능을 보여주고 있는 [BERT](https://jieun121070.github.io/posts/BERT/)와 [OpenAI GPT](https://jieun121070.github.io/posts/Paper-Review-Improving-Language-Understanding/)도 Transformer 구조를 기반으로 만들어졌을 만큼 영향력이 매우 큰 모델입니다.
 
-# Model Architecture
+## Model Architecture
 
 ![](/assets/img/transformer/transformer.jpg){: width="600"}
 
-## Encoder
+### Encoder
 
 - encoder의 input은 단어 embedding + positional embedding입니다. 어떤 단어의 embedding에 위치에 따라 다른 positional embedding 값을 더하는 것입니다. RNN은 source sequence의 단어가 차례대로 입력되어야 하기 때문에 병렬처리가 어려운데요. Transformer는 단어 embedding에 positional embedding을 더해 주어 위치 정보를 담기 때문에 순서대로 입력하지 않아도 됩니다. 즉, source sequence를 한 번에 입력할 수 있으므로 **병렬처리가 용이**하다는 장점이 있습니다. 또한 같은 단어라도 문장에 따라 다른 의미를 가질 수 있는데, positional embedding을 사용하면 이를 구현할 수 있습니다. 즉, **문맥 정보를 담은 embedding**을 구할 수 있는 것입니다.
 - encoder는 6개 layer로 구성되는데, 각각의 layer는 2개의 sub layer를 갖습니다. 첫 번째 sub layer는 multi-head self-attention layer이고 두 번째는 position-wise fully connected feed-forward network입니다. 각각의 sub layer에 residual connection과 layer normalization을 적용하여 output은 $LayerNorm(x+Sublayer(x))$이고, output의 차원 $d_{model}=512$입니다.
 
-## Decoder
+### Decoder
+
 - decoder는 역시 6개 layer로 구성되는데, encoder와 같은 sub layer에 encoder output에 대한 multi-head attention을 수행하는(**encoder-decoder attention**) layer가 추가되어 총 3개의 sub layer를 갖습니다.
 - 또한 decoder의 multi-head self-attention layer는 **position $i$보다 뒤에 있는 position들을 masking**해서 이미 알고있는 output을 바탕으로 position $i$을 예측하도록 했습니다.
 
-## Attention
-### Scaled Dot-Product Attention
+### Attention
+
+#### Scaled Dot-Product Attention
+
 - `query` $Q$와 모든 `key` $K$의 dot product를 구한 뒤 scaling factor $\sqrt{d_k}$로 나누어서 value $V$에 대한 가중치를 얻습니다. scaling factor $\sqrt{d_k}$로 나누는 것은, `query`와 `key`의 dimension $d_k$가 크면 dot-product  값이 커져서 softmax 함수의 gradient가 너무 작아지기 때문에 이를 막기 위함입니다.
 
 $$Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V$$
 
-### Multi-Head Attention
+#### Multi-Head Attention
 
 ![](/assets/img/transformer/multi-head.jpg){: width="300"}
 
@@ -54,16 +57,21 @@ $$head_i=Attention(QW_i^Q, KW_i^K,VW_i^V)$$
 
 - multi-head attention을 수행한 뒤에도 출력 값의 dimension이 동일하게 유지됩니다.
 
-### Applications of Attention in our Model
+#### Applications of Attention in our Model
+
 Transformer에서는 multi-head attention을 세 가지 방법으로 구분해서 사용합니다.
-#### encoder-decoder attention layer
+##### encoder-decoder attention layer
+
 encoder-decoder attention layer에서는 decoder layer의 output이 `query`로 사용되고, encoder의 output이 `key`와 `value`로 사용됩니다. 각각의 decoder position이 source sequence의 어느 부분과 관련성이 큰지 학습하는 부분으로, 전형적인 encoder-decoder attention 모델의 메커니즘을 모방한 것입니다. ([이전 포스트](https://jieun121070.github.io/posts/기계번역-분야에서의-RNN/))
-#### encoder self-attention
+##### encoder self-attention
+
 encoder의 self-attention에서는 encoder layer의 output이 `query`, `key`, `value`로 사용되어 source sentence 내 단어들 간의 attention 값을 계산할 수 있습니다.
-#### **masked** decoder self-attention
+##### **masked** decoder self-attention
+
 masked decoder self-attention에서는 decoder layer의 output이 `query`, `key`, `value`로 사용되어 target sentence 내 단어들 간의 attention 값을 계산할 수 있습니다. +position $i$보다 뒤에 있는 position들을 masking
 
-# Why Self-Attention
+## Why Self-Attention
+
 ### self-attention
 
 ![](/assets/img/transformer/self-attention-mechanism.jpg){: width="600"}
@@ -82,7 +90,8 @@ masked decoder self-attention에서는 decoder layer의 output이 `query`, `key`
 - 병렬처리가 가능한 연산량이 많음
 - long-range dependency를 처리하기 용이함
 
-# Training
+## Training
+
 - Optimizer
   - Adam optimizer
   - 첫 4000 step 동안은 learning rate를 선형적으로 증가시키다가 그 이후에는 $step\_num^{-0.5}$에 비례하여 감소시킴
@@ -92,6 +101,7 @@ masked decoder self-attention에서는 decoder layer의 output이 `query`, `key`
     - embedding과 positional encoding의 합에 dropout 적용
   - Label Smoothing
 
-# Reference
+## Reference
+
 - [CS480/680 Lecture 19: Attention and Transformer Networks](https://www.youtube.com/watch?v=OyFJWRnt_AY)
 - [self-attention](https://towardsai.net/p/nlp/getting-meaning-from-text-self-attention-step-by-step-video)
