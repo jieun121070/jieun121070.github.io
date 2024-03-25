@@ -59,7 +59,7 @@ typora-root-url: ..
 - **label**은 key-value로 구성하고, 여러 object를 의미있게 관리하기 위해 사용
 - **annotation**은 주로 API의 설정값으로 활용
 
-### 3.1. **Pod**
+### 3.1. Pod
 
 - 쿠버네티스는 컨테이너를 pod이라는 최소 개념으로 관리
 - 하나의 pod은 여러 개의 컨테이너를 가질 수 있지만 대부분 한 개 또는 두 개.
@@ -68,7 +68,7 @@ typora-root-url: ..
 - pod은 고유한 자체 IP가 있지만 직접 IP로 통신하지 않음. pod은 언제든지 죽을 수 있고, 다른 노드로 이동할 수 있고 확장되거나 축소될 수 있기 때문
   - pod에 연결할 수 있는 서비스를 만들고 해당 서비스의 IP, port를 통해 통신
 
-### 3.2. **Controller**
+### 3.2. Controller
 
 - `ReplicaSet`(Replication Controller) pod을 확장할 때 사용
   - 동일한 pod의 개수가 많아질수록 pod을 일일이 정의하는 것은 매우 비효율적
@@ -86,27 +86,27 @@ typora-root-url: ..
 - `Cronjob` 특정 주기로 실행되고 종료되는 Job을 위한 컨트롤러
 - **pod은 컨테이너를 관리하고, controller는 pod을 관리하는 것**
 
-### 3.3. **Service**
+### 3.3. Service
 
 - `ClusterIP`
   - 여러 개의 pod을 중앙에서 load balancing하는 서비스
   - ClusterIP는 클러스터 **내부에서만 통신할** 수 있음. 보통 Deployment에 할당하고 서로 다른 Deployment나 StatefulSet과 통신이 필요할 때 사용.
   - 내부적으로 `endpoint` object로 IP 리스트를 관리함. 여러 개의 복제된 pod에 서비스를 연결하면 여러 개의 pod IP를 관리함.
 
-![](/assets/img/docker/service.png)
+![](/assets/img/docker/service.png){: width="100"}
 
 - `NodePort`
   - ClusterIP는 내부 통신용이기 때문에 외부에서 접속하려면 각 노드에 외부에서 접속할 수 있는 port를 오픈해야 함
   - NodePort는 각 VM에 port를 오픈하고 들어온 요청을 내부의 ClusterIP로 연결함
   - NodePort를 만들면 ClusterIP가 자동으로 생성됨
 
-![](/assets/img/docker/nodeport.png)
+![](/assets/img/docker/nodeport.png){: width="100"}
 
 - `Loadbalancer`
   - NodePort를 외부에 연결된 LoadBalancer와 연결
   - `LoadBalancer` > `NodePort` > `ClusterIP` 순으로 연결됨
 
-![](/assets/img/docker/loadbalancer.png)
+![](/assets/img/docker/loadbalancer.png){: width="100"}
 
 - `Ingress`
   - Loadbalancer는 IP로만 생성되기 때문에 service마다 IP를 계속 만들어야 해서 비용 발생 → 하나의 IP를 사용하되 도메인 또는 Path에 따라 내부 ClusterIP와 연결하는 것이 Ingress (보통 모든 노드에 80/443 port로 오픈)
@@ -115,25 +115,22 @@ typora-root-url: ..
 
 ![](/assets/img/docker/ingress.png)
 
-### 3.4. **Storage**
+### 3.4. Storage
 
 - 데이터를 저장하기 위해 기본적인 `Volume` 외에도 다양한 종류의 volume 지원
 - `PersistentVolume` 관리자가 여러 개의 volume을 미리 생성해 두면 pod에서 volume을 요청할 때 조건(용량/라벨)에 맞는 volume을 사용
 - `PersistentVolumeClaims` 관리자가 미리 volume을 생성하는 것이 아니라 pod을 생성할 때 동적으로 volume을 만드는 역할
 - storage의 class(등급)을 지정해 둠
 
-### 3.5. **ConfigMap / Secret**
+### 3.5. ConfigMap / Secret
 
 - `ConfigMap` 공개되어도 괜찮은 설정 정보를 관리
 - `Secret` 암호화하여 저장할 정보를 관리
 - pod에서는 환경변수 또는 파일로 바인딩하여 사용 가능
 
-
-
-# Reference
+## Reference
 
 - [kubernetes architecture](https://medium.com/@kavishkafernando/exploring-the-kubernetes-architecture-a-foundation-for-modern-application-deployment-f2c0f15d661e)
-
 - [쿠버네티스 시작하기](https://subicura.com/2019/05/19/kubernetes-basic-1.html)
 - [Kubernetes NodePort vs LoadBalancer vs Ingress? When should I use what?](https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0)
 
