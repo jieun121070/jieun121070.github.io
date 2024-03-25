@@ -93,20 +93,20 @@ typora-root-url: ..
   - ClusterIP는 클러스터 **내부에서만 통신할** 수 있음. 보통 Deployment에 할당하고 서로 다른 Deployment나 StatefulSet과 통신이 필요할 때 사용.
   - 내부적으로 `endpoint` object로 IP 리스트를 관리함. 여러 개의 복제된 pod에 서비스를 연결하면 여러 개의 pod IP를 관리함.
 
-![](/assets/img/docker/service.png){: width="100"}
+![](/assets/img/docker/service.png){: width="400"}
 
 - `NodePort`
   - ClusterIP는 내부 통신용이기 때문에 외부에서 접속하려면 각 노드에 외부에서 접속할 수 있는 port를 오픈해야 함
   - NodePort는 각 VM에 port를 오픈하고 들어온 요청을 내부의 ClusterIP로 연결함
   - NodePort를 만들면 ClusterIP가 자동으로 생성됨
 
-![](/assets/img/docker/nodeport.png){: width="100"}
+![](/assets/img/docker/nodeport.png){: width="400"}
 
 - `Loadbalancer`
   - NodePort를 외부에 연결된 LoadBalancer와 연결
   - `LoadBalancer` > `NodePort` > `ClusterIP` 순으로 연결됨
 
-![](/assets/img/docker/loadbalancer.png){: width="100"}
+![](/assets/img/docker/loadbalancer.png){: width="400"}
 
 - `Ingress`
   - Loadbalancer는 IP로만 생성되기 때문에 service마다 IP를 계속 만들어야 해서 비용 발생 → 하나의 IP를 사용하되 도메인 또는 Path에 따라 내부 ClusterIP와 연결하는 것이 Ingress (보통 모든 노드에 80/443 port로 오픈)
