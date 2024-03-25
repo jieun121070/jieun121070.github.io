@@ -111,12 +111,9 @@ $$\mathcal{L}_{RC}(z)=\frac{1}{N}\sum^N_{i=1}\sum^N_{j=1}w_{ij}\delta_{ij}^2+(1-
 PatchCore와 같은 방식으로 anomaly score를 산출합니다.
 
 - pixel-wise anomaly score
-
-  $\rightarrow$ memory bank $\mathcal{M}$의 nearest coreset $r^*$와 representation layer의 output $f(p_t)$의 거리
-
+- memory bank $\mathcal{M}$의 nearest coreset $r^*$와 representation layer의 output $f(p_t)$의 거리
 - image-wise anomaly score
-
-  $\rightarrow$ 이미지 내의 모든 patch feature들의 anomaly score의 최댓값
+- 이미지 내의 모든 patch feature들의 anomaly score의 최댓값
 
 anomaly detection의 정확도는 score-level 앙상블로 향상시킬 수 있습니다. 각각의 모델은 서로 다른 score 분포를 가지고 있기 때문에 정규화(modified z-score)를 수행합니다. 정규화된 anomaly score $\bar{s_t}$는 다음과 같이 정의할 수 있습니다.
 
@@ -147,12 +144,9 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 ### Metrics
 
 - Anomaly detection 성능 지표: image-lebel AUROC
-
-  $\rightarrow$ 테스트 이미지의 anomaly score와 클래스(정상/비정상) 예측 결과 사용
-
+- 테스트 이미지의 anomaly score와 클래스(정상/비정상) 예측 결과 사용
 - Segmentation 성능 지표: pixel-level AUROC
-
-  $\rightarrow$ 테스트 이미지 내 모든 픽셀의 anomaly score 사용
+- 테스트 이미지 내 모든 픽셀의 anomaly score 사용
 
 ### Implementation details
 
@@ -185,13 +179,13 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 ## 3.2 Ablation study
 
-### coreset subsampling percentage
+**coreset subsampling percentage**
 
 ![](/assets/img/ad/res1.png)
 
 - coreset subsampling percentage가 1%일 때 가장 좋은 성능을 보였습니다.
 
-### f layer의 output dimension
+**f layer의 output dimension**
 
 - PatchCore는 output dimension이 1024일 때, ReConPatch는 512일 때 가장 좋은 성능을 보였습니다.
 - 모든 dimension 설정에서 ReConPatch의 성능이 PatchCore보다 높았습니다.
@@ -199,13 +193,13 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 ![](/assets/img/ad/res2.png)
 
-### hierarchy level과 patch size
+**hierarchy level과 patch size**
 
 ![](/assets/img/ad/res3.png)
 
 - patch size를 5로, hierarchy level을 1, 2, 3으로 설정했을 때 Detection 성능이 거의 떨어지지 않으면서 Segmentation 성능이 가장 높았습니다.
 
-### 이미지 품질에 따른 모델 성능 차이 실험
+**이미지 품질에 따른 모델 성능 차이 실험**
 
 ![](/assets/img/ad/res4.png)
 
@@ -228,11 +222,11 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 - ensemble 모델 실험 결과
   - pixel-level AUROC
-    - [image size 480X480] PNI의 99.06%보다는 낮은 segmentation 성능을 보였습니다.
-    - [image size 320X320] 평균 98.36%로 PatchCore의 98.2%보다는 높은 segmentation 성능을 보였습니다.
+    - [image size $480\times480$] PNI의 99.06%보다는 낮은 segmentation 성능을 보였습니다.
+    - [image size $320\times320$] 평균 98.36%로 PatchCore의 98.2%보다는 높은 segmentation 성능을 보였습니다.
   - image-level AUROC
-    - [image size 480X480] 99.62 → 99.72 anomaly detection SOTA 성능을 달성했습니다.
-    - [image size 320X320] 평균 99.67%로 PatchCore의 99.6%보다 더 좋은 성능을 보였습니다. image size를 줄였는데도 PNI가 480X480으로 기록한 성능 99.63%보다 나은 성능을 보였습니다.
+    - [image size $480\times480$] 99.62 → 99.72 anomaly detection SOTA 성능을 달성했습니다.
+    - [image size $320\times320$] 평균 99.67%로 PatchCore의 99.6%보다 더 좋은 성능을 보였습니다. image size를 줄였는데도 PNI가 $480\times480$으로 기록한 성능 99.63%보다 나은 성능을 보였습니다.
 
 ## 3.4 Anomaly detection on BTAD
 
@@ -240,7 +234,7 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 - 실험 셋팅
   - feature extractor: pre-trained WideResNet-101
-  - image size: 480X480
+  - image size: $480\times480$
 - 실험 결과
   - [image-level AUROC] 평균 95.8%로 anomaly detection SOTA 성능을 달성했습니다.
   - [pixel-level AUROC] 평균 97.5%로 PatchCore의 97.3%보다 나은 성능을 보였습니다.
