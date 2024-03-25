@@ -1,6 +1,6 @@
 ---
 title: "이미지 분야 Anomaly Detection 딥러닝 모델 비교"
-date: 2023-3-13
+date: 2023-5-1
 author: jieun
 math: True
 categories: [Vision]

@@ -57,7 +57,11 @@ PaDiM은 texture class에서 높은 성능을 보였습니다. 반면에, object
 
 위 이미지는 실험에 사용된 MVTec dataset의 이미지 중 일부입니다. texture class는 특정 패턴을 보여주기 때문에 이미지 alignment가 성능에 큰 영향을 주지 않습니다. 그래서 PaDiM을 사용했을 때 높은 성능을 얻을 수 있습니다. 하지만 object class의 경우, 만약 물체가 정렬되어 있지 않거나 중앙에 위치해 있지 않으면 위치별  multivariate Gaussian distribution을 구하는 PaDiM의 특성상 성능이 크게 저하될 것입니다. 반면 SPADE는 이미지 내 특정 pixel과 $K$개 최근접 이웃 이미지들의 모든 pixel 사이의 거리를 산출하기 때문에 이미지 alignment에 덜 의존적이라는 장점을 갖습니다.
 
+![](/assets/img/ad/inf.png)
 
+_Mean inference time per image on MVTec AD. Scores are (image AUROC, pixel AUROC, PRO metric)_
+
+[PatchCore](https://jieun121070.github.io/posts/paper-review-Towards-Total-Recall-in-Industrial-Anomaly-Detection/) 저자들의 실험을 정리한 위 표에 따르면, 동일한 MVTec dataset에 대해 PaDiM은 SPADE보다 inference 속도가 빠르고, 성능도 더 우수합니다. 또한 전체 중 10%의 coreset을 subsampling한 PatchCore-10%보다 성능은 낮지만 inference 속도가 빠르다는 점을 확인할 수 있습니다.
 
 ## 한계점
 
