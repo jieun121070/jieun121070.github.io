@@ -23,27 +23,27 @@ typora-root-url: ..
 
 따라서 최근 몇 년 사이에 발표된 모델들 모두 공통적으로 pretrained model의 여러 layer에서 featrure를 뽑아 concatenate 함으로써 구체성과 추상성을 함께 취하는 방식을 사용합니다.
 
-### 1. 분석 단위의 변화: pixel에서 patch로
+## 1. 분석 단위의 변화: pixel에서 patch로
 
 SPADE는 pixel 단위로 비교하는데, PaDiM부터는 patch로 쪼개어 비교하기 시작합니다.
 
-### 2. PaDiM은 이미지 정렬이 중요한 모델
+## 2. PaDiM은 이미지 정렬이 중요한 모델
 
 PaDiM은 영역의 분포를 학습하기 때문에 이미지 정렬이 중요한 모델입니다. 반면에, SPADE는 모든 pixel feature들 사이의 거리를 산출하기 때문에 이미지 정렬에 영향을 받지 않습니다. 이러한 이유로 SPADE보다 Texture에는 높은 성능을 보이는데, Object에는 낮은 성능을 보입니다.
 
 또한 PaDiM은 다른 모델과 달리, train, test 이미지 shape 동일해야 한다는 치명적 문제점도 가지고 있습니다.
 
-###  3. 추가 학습이 필요한 모델
+## 3. 추가 학습이 필요한 모델
 
 CFA, ReConPatch는 다른 모델들과 달리 추가 학습이 필요한 모델입니다. ImageNet 데이터셋과는 다른 산업용 이미지의 특성을 학습할 수 있습니다.
 
-### 4. memory bank의 크기 비교
+## 4. memory bank의 크기 비교
 
 ![](/assets/img/ad/mb.png)
 
 CFA는 학습 데이터셋의 크기와 관계없이, 사용자가 지정한 K개 만큼의 feature vector를 뽑아 memory bank를 구성합니다. 다른 모델들도 sampling 방식을 사용해 memory bank의 크기를 제한할 수 있는데요. memory bank가 너무 크면 inference time이 증가하고, memory bank가 너무 작으면 대표성이 떨어져서 성능을 보장할 수 없습니다. 따라서 데이터셋을 잘 대표하는 memory bank를 구성하는 것이 중요합니다.
 
-### 5. PatchCore, ReConPatch 비교
+## 5. PatchCore, ReConPatch 비교
 
 **공통점**
 
@@ -58,42 +58,42 @@ CFA는 학습 데이터셋의 크기와 관계없이, 사용자가 지정한 K�
 - ReConPatch는 anomlay detection 성능 개선을 목표로 개발된 모델로, anomaly segmentation 성능이 중요하다면 PNI, CFA 사용하는 것이 적절합니다.
 - ReConPatch가 PatchCore보다 대체로 개선된 성능을 보입니다.
 
-### 6. 테스트 시 anomaly score 산출 방식 비교
+## 6. 테스트 시 anomaly score 산출 방식 비교
 
-- SPADE
+### SPADE
 
-  1. 학습 데이터 중 테스트 이미지와 가장 가까운 $K$개의 이미지(**KNN**)를 선별. 테스트 이미지와 해당 $K$개 이미지들의 **유클리디안 거리** 평균을 전체 이미지의 anomaly score로 사용
+1. 학습 데이터 중 테스트 이미지와 가장 가까운 $K$개의 이미지(**KNN**)를 선별. 테스트 이미지와 해당 $K$개 이미지들의 **유클리디안 거리** 평균을 전체 이미지의 anomaly score로 사용
 
-     $$d(y)=\frac{1}{K} \sum_{f \in N_{K}(f_y)}||f-f_y||^2$$
+   $$d(y)=\frac{1}{K} \sum_{f \in N_{K}(f_y)}||f-f_y||^2$$
 
-  2. 해당 이미지들과 테스트 이미지 내 pixel feature의 **유클리디안 거리**를 계산
+2. 해당 이미지들과 테스트 이미지 내 pixel feature의 **유클리디안 거리**를 계산
 
-  3. 계산된 거리들 중 가장 가까운 $\kappa$개 pixel feature들의 **평균 값**을 계산하여 개별 pixel의 anomaly score로 사용
+3. 계산된 거리들 중 가장 가까운 $\kappa$개 pixel feature들의 **평균 값**을 계산하여 개별 pixel의 anomaly score로 사용
 
-     $$d(y,p)=\frac{1}{\kappa}\sum_{f \in N_{\kappa}(F(y,p))}||f-F(y,p)||^2$$
+   $$d(y,p)=\frac{1}{\kappa}\sum_{f \in N_{\kappa}(F(y,p))}||f-F(y,p)||^2$$
 
-- PaDiM
+### PaDiM
 
-  1. 학습 데이터를 통해 multivariate gaussian(MVG) 분포를 구함
-  2. 이 분포와 테스트 이미지 내 patch feature의 **마할라노비스 거리**를 구함
-  3. patch 별 마할라노비스 거리를 담은 matrix를 anomaly map으로 사용하고, 이 matrix의 값 중 **최댓값**을 전체 이미지의 anomaly score로 사용
+1. 학습 데이터를 통해 multivariate gaussian(MVG) 분포를 구함
+2. 이 분포와 테스트 이미지 내 patch feature의 **마할라노비스 거리**를 구함
+3. patch 별 마할라노비스 거리를 담은 matrix를 anomaly map으로 사용하고, 이 matrix의 값 중 **최댓값**을 전체 이미지의 anomaly score로 사용
 
-- PatchCore, ReConPatch
+### PatchCore, ReConPatch
 
-  1. coreset subsampling 기법을 사용해 memory bank 구성
-  2. **memory bank** 내 patch feature들과 테스트 이미지 내 patch feature들 사이의 **유클리디안 거리**를 구함
+1. coreset subsampling 기법을 사용해 memory bank 구성
+2. **memory bank** 내 patch feature들과 테스트 이미지 내 patch feature들 사이의 **유클리디안 거리**를 구함
 
-- CFA
+### CFA
 
-  1. 최초에 K-means clustering을 통해 $K$개의 patch feature를 가진 **memory bank** 구성
+1. 최초에 K-means clustering을 통해 $K$개의 patch feature를 가진 **memory bank** 구성
 
-  2. 학습 데이터셋에서 구한 patch feature들이 memory bank의 feature들과 가까워지도록 feature 업데이트 (별도의 학습 과정이 필요함)
+2. 학습 데이터셋에서 구한 patch feature들이 memory bank의 feature들과 가까워지도록 feature 업데이트 (별도의 학습 과정이 필요함)
 
-  3. 테스트 이미지 내 patch feature $\phi(p_t)$와 가장 가까운 $k$개의 memory bank featrue $c_t$ 사이의 **유클리디안 거리**를 구하고, 그 최솟값을 계산
+3. 테스트 이미지 내 patch feature $\phi(p_t)$와 가장 가까운 $k$개의 memory bank featrue $c_t$ 사이의 **유클리디안 거리**를 구하고, 그 최솟값을 계산
 
-     $$\mathcal{S}*t=\min*{k}\mathcal{D}(\phi(p_t), c_t^k)$$
+   $$\mathcal{S}_t=\min_{k}\mathcal{D}(\phi(p_t), c_t^k)$$
 
-  4. 단순히 거리 최솟값 $\mathcal{S}_t$를 anomaly score로 쓰는 것이 아니라, **softmin** 값을 구해서 이를 해당 patch의 anomaly score로 사용. 다른 $k-1$개의 memory bank featrue $c_t$와 비교해 얼마나 가까운지 측정하려는 것
+4. 단순히 거리 최솟값 $\mathcal{S}_t$를 anomaly score로 쓰는 것이 아니라, **softmin** 값을 구해서 이를 해당 patch의 anomaly score로 사용. 다른 $k-1$개의 memory bank featrue $c_t$와 비교해 얼마나 가까운지 측정하려는 것
 
 | <center>모델 명</center>                                     | <center>Official<br />Code</center>                          | <center>분석 단위</center>               | <center>Anomaly Score<br />산출 방식</center>    | <center>Memory Bank<br />크기</center>                       | <center>Pre-trained<br />CNN</center>                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |

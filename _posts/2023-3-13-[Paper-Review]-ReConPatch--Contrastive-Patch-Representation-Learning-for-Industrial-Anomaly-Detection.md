@@ -79,7 +79,7 @@ patch-level feature는 이웃한 patch들과의 상관관계를 내포하고 있
 
 **두 patch vector $z_i$와 $z_j$의 거리**
 
-$$\delta_{ij}=\frac{||z_i-z_j||*2}{\frac{1}{N}\sum^N*{n=1}||z_i-z_n||_2}$$
+$$\delta_{ij}=\frac{||z_i-z_j||_2}{\frac{1}{N}\sum^N_{n=1}||z_i-z_n||_2}$$
 
 위 수식에서 $z_i$는 $i$번째 patch의 embedding vector를 의미하고, $z_j$는 $j$번째 patch의 embedding vector를 의미합니다. $\delta_{ij}$는 두 vector의 유클리디안 거리를 $z_i$와 나머지 모든 vector들과의 유클리디안 거리 평균으로 나눈 값으로, $z_i$와 $z_j$의 상대적 거리를 나타냅니다.
 
@@ -89,24 +89,19 @@ $$\delta_{ij}=\frac{||z_i-z_j||*2}{\frac{1}{N}\sum^N*{n=1}||z_i-z_n||_2}$$
 
 **relaxed contrastive loss**
 
-$$\mathcal{L}*{RC}(z)=\frac{1}{N}\sum^N*{i=1}\sum^N_{j=1}w_{ij}\delta_{ij}^2+(1-w_{ij})max(m-\delta_{ij},0)^2$$
+$$\mathcal{L}_{RC}(z)=\frac{1}{N}\sum^N_{i=1}\sum^N_{j=1}w_{ij}\delta_{ij}^2+(1-w_{ij})max(m-\delta_{ij},0)^2$$
 
 - $N$: 총 데이터 수
 
 - $w_{ij}$: 두 vector $z_i$와 $z_j$의 inter-feature similarity
 
   - $w_{ij}$가 크면 (=두 vector가 서로 유사하면) $\delta_{ij}^2$항의 영향력이 상대적으로 커짐
-
-    → 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 멀 때 loss 증가
-
-    → 두 vector $z_i$와 $z_j$ 사이의 거리를 최소화하는 방향으로 학습
-
-  - $w_{ij}$가 작으면 (=두 vector가 서로 상이하면) $(1-w_{ij})max(m-\delta_{ij},0)^2$ 항의 영향력이 상대적으로 커짐
-
-    → 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 $m$보다 가까울 때 loss 증가
-
-    → 두 vector $z_i$와 $z_j$ 사이의 거리를 늘려서 보다 명확하게 구분하는 방향으로 학습
-
+- 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 멀 때 loss 증가
+    - 두 vector $z_i$와 $z_j$ 사이의 거리를 최소화하는 방향으로 학습
+- $w_{ij}$가 작으면 (=두 vector가 서로 상이하면) $(1-w_{ij})max(m-\delta_{ij},0)^2$ 항의 영향력이 상대적으로 커짐
+  - 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 $m$보다 가까울 때 loss 증가
+  - 두 vector $z_i$와 $z_j$ 사이의 거리를 늘려서 보다 명확하게 구분하는 방향으로 학습
+  
 - $\delta_{ij}$: 두 vector $z_i$와 $z_j$의 정규화된 거리
 
 - $m$: 마진 값. $\delta_{ij}$가 이 값 이하일 때만 유사한 쌍으로 간주됨
@@ -117,11 +112,11 @@ PatchCore와 같은 방식으로 anomaly score를 산출합니다.
 
 - pixel-wise anomaly score
 
-  → memory bank $\mathcal{M}$의 nearest coreset $r^*$와 representation layer의 output $f(p_t)$의 거리
+  $\rightarrow$ memory bank $\mathcal{M}$의 nearest coreset $r^*$와 representation layer의 output $f(p_t)$의 거리
 
 - image-wise anomaly score
 
-  → 이미지 내의 모든 patch feature들의 anomaly score의 최댓값
+  $\rightarrow$ 이미지 내의 모든 patch feature들의 anomaly score의 최댓값
 
 anomaly detection의 정확도는 score-level 앙상블로 향상시킬 수 있습니다. 각각의 모델은 서로 다른 score 분포를 가지고 있기 때문에 정규화(modified z-score)를 수행합니다. 정규화된 anomaly score $\bar{s_t}$는 다음과 같이 정의할 수 있습니다.
 
@@ -153,11 +148,11 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 - Anomaly detection 성능 지표: image-lebel AUROC
 
-  → 테스트 이미지의 anomaly score와 클래스(정상/비정상) 예측 결과 사용
+  $\rightarrow$ 테스트 이미지의 anomaly score와 클래스(정상/비정상) 예측 결과 사용
 
 - Segmentation 성능 지표: pixel-level AUROC
 
-  → 테스트 이미지 내 모든 픽셀의 anomaly score 사용
+  $\rightarrow$ 테스트 이미지 내 모든 픽셀의 anomaly score 사용
 
 ### Implementation details
 
