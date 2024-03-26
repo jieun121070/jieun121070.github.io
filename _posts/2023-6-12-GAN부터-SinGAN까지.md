@@ -8,7 +8,7 @@ tags: [GAN]
 typora-root-url: ..
 ---
 
-본 포스트에서는 GAN부터 SinGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 VAE와 GAN의 차이점에 대해 알아보겠습니다.
+본 포스트에서는 GAN부터 SinGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
 - 모델링 대상
 
@@ -36,31 +36,19 @@ typora-root-url: ..
 ## 1. [GAN](https://arxiv.org/pdf/1406.2661.pdf) (2014)
 
 ![](/assets/img/gan/gan.png)
-
 _GAN architecture_
 
 - 생성자와 판별자 두 개의 네트워크 학습
-
   - 생성자의 역할은 판별자가 구분하기 어려운, 진짜같은 이미지를 생성하는 것
-
   - 판별자의 output은 Real(1), Fake(0)
-
   - loss function
-
     - $\underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(x)))]$
-
       - 판별자 학습 시 생성자 고정 $\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(x)))]$
-
       - 생성자 학습 시 판별자 고정
-
         $\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(x)))]$
-
       - 위 과정을 반복하는 과정에서 생성자와 판별자가 서로 경쟁하면서 학습
-
     - 생성자가 만든 이미지가 real인지 fake인지 판별자가 구분할 수 없어서 $D(G(z))$가 0.5에 가까워지는 것이 목표
-
 - 실험 결과
-
   - 학습 데이터를 단순히 암기한 것이 아님
   - 흐릿하지 않고 또렷한 이미지를 생성할 수 있음
   - latent vector 사이의 interpolation으로도 있을 법한 이미지를 생성할 수 있음
@@ -243,35 +231,21 @@ class Discriminator(nn.Module):
 ![](/assets/img/gan/singan.png)
 
 - [official code](https://github.com/tamarott/SinGAN)
-
 - 한 장의 이미지만을 사용해 GAN 네트워크를 학습
-
 - 총 $N+1$개의 가벼운 개별 GAN 학습 (PGGAN은 하나의 네트워크)
-
   - 생성자
-
     - Residual Learning을 이용해 초반에는 대략적인(coarse) 정보 > 점차 세밀한(fine) 정보를 추가
-
       - 생성자는 noise $z_n$와 이전 단계 output $\tilde{x}_{n+1}$을 입력으로 받게 됨
-
       - $\tilde{x}*n=G_n(z_n, (\tilde{x}*{n+1})\uparrow^r)$
-
         $\tilde{x}*n=(\tilde{x}*{n+1})\uparrow^r+\psi_n(z_n+(\tilde{x}_{n+1})\uparrow^r)$
-
       - 깊은 네트워크를 사용할 수 있음
-
     - $\psi_n$은 5개의 conv-block으로 이루어진 **fully convolutional net**
-
       - conv-block 구조: Conv(3X3)-BatchNorm-LeakyReLU
       - conv-block별 kernel 개수: 32, 64, 128, 256, 512
       - fully convolutional net이기 때문에 테스트 시에 noise map의 모양을 바꿔가면서 다양한 크기와 가로세로비를 갖는 이미지를 생성할 수 있음
-
   - 판별자는 전체 이미지가 아니라 **패치 단위** 판별
-
     - 초반에는 패치의 크기가 크고, 점점 패치의 크기가 작아짐 > 점진적으로 자세한 정보를 추가
-
 - 목적함수
-
   - $\underset{G_n}{\min}\,\underset{D_n}{\max}\,\mathcal{L}*{adv}(G_n, D_n)+\alpha \mathcal{L}*{rec}(G_n)$
   - Adversarial loss $\mathcal{L}_{adv}(G_n, D_n)$
     - 실제 이미지 $x_n$ 내 패치들의 분포와 $G_n$이 생성한 가짜 이미지 $\tilde x_{n}$ 내 패치들의 분포 사이의 **wasserstein 거리**가 가깝도록 학습
