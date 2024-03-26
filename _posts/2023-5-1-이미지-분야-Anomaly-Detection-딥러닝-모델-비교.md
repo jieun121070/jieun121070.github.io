@@ -25,7 +25,7 @@ typora-root-url: ..
 
 ## 1. 분석 단위의 변화: pixel에서 patch로
 
-SPADE는 pixel 단위로 비교하는데, PaDiM부터는 patch로 쪼개어 비교하기 시작합니다.
+SPADE는 pixel 단위로 유사도를 비교하는데, PaDiM부터는 patch로 쪼개어 비교하기 시작합니다.
 
 ## 2. PaDiM은 이미지 정렬이 중요한 모델
 
@@ -41,21 +41,20 @@ CFA, ReConPatch는 다른 모델들과 달리 추가 학습이 필요한 모델�
 
 ![](/assets/img/ad/mb.png)
 
-CFA는 학습 데이터셋의 크기와 관계없이, 사용자가 지정한 K개 만큼의 feature vector를 뽑아 memory bank를 구성합니다. 다른 모델들도 sampling 방식을 사용해 memory bank의 크기를 제한할 수 있는데요. memory bank가 너무 크면 inference time이 증가하고, memory bank가 너무 작으면 대표성이 떨어져서 성능을 보장할 수 없습니다. 따라서 데이터셋을 잘 대표하는 memory bank를 구성하는 것이 중요합니다.
+CFA는 학습 데이터셋의 크기와 관계없이, 사용자가 지정한 $K$개 만큼의 feature vector를 뽑아 memory bank를 구성합니다. 다른 모델들도 sampling 방식을 사용해 memory bank의 크기를 제한할 수 있는데요. memory bank가 너무 크면 inference time이 증가하고, memory bank가 너무 작으면 대표성이 떨어져서 성능을 보장할 수 없습니다. 따라서 데이터셋을 잘 대표하는 memory bank를 구성하는 것이 중요합니다.
 
 ## 5. PatchCore, ReConPatch 비교
 
 **공통점**
 
 - locally aware patch-feature를 생성합니다.
-
 - memory bank를 효과적으로 구성하기 위한 greedy coreset sampling 사용합니다.
-- Faiss를 사용합니다.
+- vector similarity 검색 모델로 Faiss를 사용합니다.
 
 **차이점**
 
-- ReConPatch는 추가 학습이 필요합니다.
-- ReConPatch는 anomlay detection 성능 개선을 목표로 개발된 모델로, anomaly segmentation 성능이 중요하다면 PNI, CFA 사용하는 것이 적절합니다.
+- PatcCore와 달리, ReConPatch는 추가 학습이 필요합니다.
+- ReConPatch는 anomlay detection 성능 개선에 중점을 둔 모델로, anomaly segmentation 성능이 중요하다면 PNI, CFA 사용하는 것이 적절합니다.
 - ReConPatch가 PatchCore보다 대체로 개선된 성능을 보입니다.
 
 ## 6. 테스트 시 anomaly score 산출 방식 비교
@@ -102,4 +101,4 @@ CFA는 학습 데이터셋의 크기와 관계없이, 사용자가 지정한 K�
 | [PaDiM](https://jieun121070.github.io/posts/paper-review-PaDiM-a-Patch-Distribution-Modeling-Framework-for-Anomaly-Detection-and-Localization/) |                                                              | <center>patch level</center>             | <center>MVG +<br />Mahalanobis distance</center> | <center>$\mathcal{N}(\mu, \Sigma) \in \mathbb{R}^{H \times W \times D^2}$</center> | <center>ResNet18<br />wide ResNet50<br />EfficientNet-B5</center> |
 | [PatchCore](https://jieun121070.github.io/posts/paper-review-Towards-Total-Recall-in-Industrial-Anomaly-Detection/) | [link](https://github.com/amazon-science/patchcore-inspection) | <center>patch level</center>             |                                                  | <center>$\mathcal{M} \in \mathbb{R}^{\left\vert \mathcal{X} \right\vert \times \gamma(H \times W) \times D^\prime}$</center> | <center>wide ResNet50</center>                               |
 | [CFA](https://jieun121070.github.io/posts/Paper-Review-CFA-Coupled-hypersphere-based-Feature-Adaptation/) | [link](https://github.com/sungwool/CFA_for_anomaly_localization) | <center>patch level</center>             |                                                  | <center>$\mathcal{C} \in \mathbb{R}^{\gamma(H \times W \times D)}$</center> | <center>ResNet18<br />wide ResNet50<br />EfficientNet-B5</center> |
-| ReConPatch                                                   |                                                              | <center>patch level</center>             |                                                  | <center>$\mathcal{M} \in \mathbb{R}^{\left\vert \mathcal{X} \right\vert \times \gamma(H \times W) \times D^\prime}$</center> | <center>wide ResNet50</center>                               |
+| [ReConPatch](https://jieun121070.github.io/posts/Paper-Review-ReConPatch-Contrastive-Patch-Representation-Learning-for-Industrial-Anomaly-Detection/) |                                                              | <center>patch level</center>             |                                                  | <center>$\mathcal{M} \in \mathbb{R}^{\left\vert \mathcal{X} \right\vert \times \gamma(H \times W) \times D^\prime}$</center> | <center>wide ResNet50</center>                               |
