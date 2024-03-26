@@ -11,24 +11,17 @@ typora-root-url: ..
 본 포스트에서는 GAN부터 SinGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
 - 모델링 대상
-
   - VAE는 explicit distribution을 모델링
-
     VAE는 입력 데이터의 잠재 공간에 대한 확률 분포를 명시적으로 모델링합니다. encoder는 입력 데이터를 기반으로 잠재 공간에서의 평균(mean)과 분산(variance)을 출력하고, 이 평균과 분산을 사용해 잠재 공간에서 샘플링을 수행하여 새로운 데이터를 생성합니다.
-
   - GAN은 implicit distribution을 모델링 (VAE 보다 좀 더 practical)
-
     GAN에서 생성자는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습합니다. 판별자는 실제 데이터와 생성된 데이터를 구분하는 기능을 학습합니다. 생성자의 목적은 판별자를 속이는 것이므로, 생성자는 결국 실제 데이터 분포를 모방하는 데이터를 생성할 수 있는 함수를 간접적으로 학습하게 됩니다.
-
 - 분포 사이의 유사성을 측정하는 metric
-
   - VAE는 KL divergence 사용
     - 두 분포 p와 q가 주어졌을 때, p가 q에 대해 얼마나 다른지 측정
     - 확률 분포 p가 확률 분포 q가 모든 point에서 같을 때 최솟값 0을 가짐
     - KL divergence는 비대칭(asymmetric)
       - 확률 분포 p가 0에 가깝고, 확률 분포 q는 0이 아닐 때 q의 효과는 무시됨
       - 동등하게 중요한 두 분포 사이의 유사도를 측정하고 싶을 때 적합하지 않음
-
   - (Vanila) GAN은 JS divergence 사용
     - 두 분포 p과 q가 주어졌을 때, 두 분포의 중간 지점과의 차이를 측정
     -  JS divergence 는 대칭(symmetric)
@@ -236,9 +229,12 @@ class Discriminator(nn.Module):
   - 생성자
     - Residual Learning을 이용해 초반에는 대략적인(coarse) 정보 > 점차 세밀한(fine) 정보를 추가
       - 생성자는 noise $z_n$와 이전 단계 output $\tilde{x}_{n+1}$을 입력으로 받게 됨
-      - $\tilde{x}*n=G_n(z_n, (\tilde{x}*{n+1})\uparrow^r)$
-        $\tilde{x}*n=(\tilde{x}*{n+1})\uparrow^r+\psi_n(z_n+(\tilde{x}_{n+1})\uparrow^r)$
       - 깊은 네트워크를 사용할 수 있음
+
+        $$\tilde{x} \ast n=G_n(z_n, (\tilde{x} \ast {n+1}) \uparrow^r)$$
+
+        $$\tilde{x} \ast n=(\tilde{x} \ast {n+1}) \uparrow^r+\psi_n(z_n+(\tilde{x}_{n+1}) \uparrow^r)$$
+
     - $\psi_n$은 5개의 conv-block으로 이루어진 **fully convolutional net**
       - conv-block 구조: Conv(3X3)-BatchNorm-LeakyReLU
       - conv-block별 kernel 개수: 32, 64, 128, 256, 512
@@ -246,7 +242,7 @@ class Discriminator(nn.Module):
   - 판별자는 전체 이미지가 아니라 **패치 단위** 판별
     - 초반에는 패치의 크기가 크고, 점점 패치의 크기가 작아짐 > 점진적으로 자세한 정보를 추가
 - 목적함수
-  - $\underset{G_n}{\min}\,\underset{D_n}{\max}\,\mathcal{L}*{adv}(G_n, D_n)+\alpha \mathcal{L}*{rec}(G_n)$
+  - $\underset{G_n}{\min}\,\underset{D_n}{\max}\,\mathcal{L} \ast {adv}(G_n, D_n)+\alpha \mathcal{L} \ast {rec}(G_n)$
   - Adversarial loss $\mathcal{L}_{adv}(G_n, D_n)$
     - 실제 이미지 $x_n$ 내 패치들의 분포와 $G_n$이 생성한 가짜 이미지 $\tilde x_{n}$ 내 패치들의 분포 사이의 **wasserstein 거리**가 가깝도록 학습
     - Markovian discriminator $D_n$: overlapping된 패치가 real인지 fake인지 분류
