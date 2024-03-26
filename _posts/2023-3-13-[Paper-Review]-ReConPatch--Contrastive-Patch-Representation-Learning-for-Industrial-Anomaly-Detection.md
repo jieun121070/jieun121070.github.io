@@ -53,7 +53,7 @@ pre-trained 모델의 학습에 사용된 데이터셋과 분석 대상 데이�
 
 ![](/assets/img/ad/sim.png)
 
-case (a)에서 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹치지 않지만 case (b)에서는 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹칩니다. 이러한 차이로 두 case에서 $\bar{z_i}$와 $\bar{z_j}$의 pairwise similarity는 동일하지만 contextual similarity는 다릅니다. case (a)에서 $\bar{z_i}$와 $\bar{z_j}$는 서로 다른 그룹에 포함되므로 similarity가 낮아야(거리가 멀어야) 하고, case (b)에서 $\bar{z_i}$와 $\bar{z_j}$는 같은 그룹에 포함되므로 similarity가 높아야(거리가 가까워야)하는데, pairwise similarity로는 이러한 관계성을 파악할 수 없습니다. pairwise similarity의 한계점을 보완하는 metric으로써 contextual similarity를 사용했습니다.
+case (a)에서 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹치지 않지만 case (b)에서는 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹칩니다. 이러한 차이로 두 case에서 $\bar{z_i}$와 $\bar{z_j}$의 pairwise similarity는 동일하지만 contextual similarity는 다릅니다. case (a)에서 $\bar{z_i}$와 $\bar{z_j}$는 서로 다른 그룹에 포함되므로 similarity가 낮아야(거리가 멀어야) 하고, case (b)에서 $\bar{z_i}$와 $\bar{z_j}$는 같은 그룹에 포함되므로 similarity가 높아야(거리가 가까워야)하는데, pairwise similarity로는 이러한 관계성을 파악할 수 없습니다. **pairwise similarity의 한계점을 보완하는 metric으로써 contextual similarity를 사용했습니다.**
 
 - final similarity
   - pairwise similarity로 feature 그룹 간 관계를 파악하기에는 부족함
@@ -116,15 +116,13 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 #### Dataset
 
 ![](/assets/img/ad/mvtec.png)
-
-- MVTec AD
+_MVTec AD_
   - 클래스 15개
   - 학습 데이터 3629개
   - 테스트 데이터 1725개
 
 ![](/assets/img/ad/btad.png)
-
-- BTAD
+_BTAD_
   - 클래스 3개
   - 학습 데이터 2540개
   - 테스트 데이터 691개
