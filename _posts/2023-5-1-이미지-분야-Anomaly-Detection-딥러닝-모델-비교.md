@@ -16,12 +16,12 @@ typora-root-url: ..
 - 비정상 패턴이 모호하고, 테스트 시에 새로운 패턴이 나타날 가능성이 있음
 - 특히 산업 이미지 데이터는 비정상 패턴이 다양해서 까다로움
 
-위와 같은 문제 때문에 많은 Anomaly Detection 모델들이 정상 데이터만을 학습에 사용하는 `one class classification` 방식을 사용하는데요. 오늘 비교 대상 모델들도 모두 one class classification 방식을 사용합니다. 또한 ImageNet 데이터 기반의 pre-trained CNN 모델을 사용해 이미지의 feature를 추출하고, 이 때 **여러 layer로부터 구한 feature를 종합적으로 고려**하는 방식을 사용했다는 공통점이 있습니다. 여러 level의 feature를 사용한 이유는 detection 및 localization 성능을 향상시키기 위함인데요. CNN 모델의 마지막 layer로부터 구한 feature만 사용하면 아래와 같은 문제가 발생합니다.
+위와 같은 문제 때문에 많은 Anomaly Detection 모델들이 정상 데이터만을 학습에 사용하는 `one class classification` 방식을 사용하는데요. 오늘 비교 대상 모델들도 모두 one class classification 방식을 사용합니다. 또한 ImageNet 데이터 기반의 pre-trained CNN 모델을 사용해 이미지의 feature를 추출하고, 이 때 **여러 layer로부터 구한 feature를 종합적으로 고려**하는 방식을 사용했다는 공통점이 있습니다. CNN 모델의 마지막 layer로부터 구한 feature만 사용한다면 아래와 같은 문제가 발생합니다.
 
-- 입력 이미지는 convolution layer를 거치면서 점차 위치 정보를 잃게 됩니다. 마지막 layer에서는 위치 정보가 거의 존재하지 않는 추상적인 feature를 생성합니다.
+- 입력 이미지는 convolution layer를 거치면서 점차 위치 정보를 잃게 됩니다. 마지막 layer에서는 위치 정보가 거의 존재하지 않는 추상적인 feature를 생성합니다. 이 경우 localization 성능이 크게 떨어집니다.
 - 마지막 layer에서는 ImageNet 데이터 기반의 classification task에 편향된 feature를 생성합니다.
 
-따라서 최근 몇 년 사이에 발표된 모델들 모두 공통적으로 pretrained model의 여러 layer에서 featrure를 뽑아 concatenate 함으로써 구체성과 추상성을 함께 취하는 방식을 사용합니다.
+따라서 최근 몇 년 사이에 발표된 모델들 모두 공통적으로 pretrained model의 여러 layer에서 featrure를 뽑아 concatenate 하는 방식을 사용하는데요. feature의 구체성과 추상성을 함께 취해 localization과 detection 성능을 모두 향상시키기 위함입니다.
 
 ## 1. 분석 단위의 변화: pixel에서 patch로
 
@@ -92,7 +92,7 @@ CFA는 학습 데이터셋의 크기와 관계없이, 사용자가 지정한 $K$
 
    $$\mathcal{S}_t=\min_{k}\mathcal{D}(\phi(p_t), c_t^k)$$
 
-4. 단순히 거리 최솟값 $\mathcal{S}_t$를 anomaly score로 쓰는 것이 아니라, **softmin** 값을 구해서 이를 해당 patch의 anomaly score로 사용. 다른 $k-1$개의 memory bank featrue $c_t$와 비교해 얼마나 가까운지 측정하려는 것
+4. 단순히 거리 최솟값 $\mathcal{S}_t$를 anomaly score로 쓰는 것이 아니라, **softmin** 값을 구해서 이를 해당 patch의 anomaly score로 사용. 다른 $k-1$개의 memory bank featrue $c_t$와 비교해 얼마나 가까운지 **상대적인 거리**를 측정하려는 것
 
 | <center>모델 명</center>                                     | <center>Official<br />Code</center>                          | <center>분석 단위</center>               | <center>Anomaly Score<br />산출 방식</center>    | <center>Memory Bank<br />크기</center>                       | <center>Pre-trained<br />CNN</center>                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
