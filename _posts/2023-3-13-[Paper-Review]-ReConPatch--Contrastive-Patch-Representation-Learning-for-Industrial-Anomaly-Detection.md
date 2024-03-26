@@ -56,21 +56,13 @@ pre-trained 모델의 학습에 사용된 데이터셋과 분석 대상 데이�
 case (a)에서 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹치지 않지만 case (b)에서는 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹칩니다. 이러한 차이로 두 case에서 $\bar{z_i}$와 $\bar{z_j}$의 pairwise similarity는 동일하지만 contextual similarity는 다릅니다. case (a)에서 $\bar{z_i}$와 $\bar{z_j}$는 서로 다른 그룹에 포함되므로 similarity가 낮아야(거리가 멀어야) 하고, case (b)에서 $\bar{z_i}$와 $\bar{z_j}$는 같은 그룹에 포함되므로 similarity가 높아야(거리가 가까워야)하는데, pairwise similarity로는 이러한 관계성을 파악할 수 없습니다. pairwise similarity의 한계점을 보완하는 metric으로써 contextual similarity를 사용했습니다.
 
 - final similarity
-
   - pairwise similarity로 feature 그룹 간 관계를 파악하기에는 부족함
-
   - 두 데이터 포인트가 nearest neighbor를 많이 공유할수록 contextual similarity가 높아짐
-
   - pairwise similarity와 contextual similarity의 linear combination
-
     $$w_{ij}=\alpha \cdot w_{ij}^{Pairwise}+(1-\alpha) \cdot w_{ji}^{Contextual}, \alpha \in [0, 1]$$
-
   - pairwise similarity
-
     $$w_{ij}^{Pairwise}=e^{-||\bar{z_i}-\bar{z_j}||^2_2/\sigma}$$
-
   - contextual similarity
-
     $$\tilde{w_{ij}}^{Contextual}=\begin{cases}\frac{\mathcal{N}_k(i) \cap \mathcal{N}_k(j)}{\mathcal{N}_k(i)}, & j \in \mathcal{N}_k(i) \\ 0, & otherwise \end{cases}$$
 
 ### relaxed contrastive loss
@@ -92,18 +84,14 @@ $$\delta_{ij}=\frac{||z_i-z_j||_2}{\frac{1}{N}\sum^N_{n=1}||z_i-z_n||_2}$$
 $$\mathcal{L}_{RC}(z)=\frac{1}{N}\sum^N_{i=1}\sum^N_{j=1}w_{ij}\delta_{ij}^2+(1-w_{ij})max(m-\delta_{ij},0)^2$$
 
 - $N$: 총 데이터 수
-
 - $w_{ij}$: 두 vector $z_i$와 $z_j$의 inter-feature similarity
-
   - $w_{ij}$가 크면 (=두 vector가 서로 유사하면) $\delta_{ij}^2$항의 영향력이 상대적으로 커짐
 - 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 멀 때 loss 증가
     - 두 vector $z_i$와 $z_j$ 사이의 거리를 최소화하는 방향으로 학습
 - $w_{ij}$가 작으면 (=두 vector가 서로 상이하면) $(1-w_{ij})max(m-\delta_{ij},0)^2$ 항의 영향력이 상대적으로 커짐
   - 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 $m$보다 가까울 때 loss 증가
   - 두 vector $z_i$와 $z_j$ 사이의 거리를 늘려서 보다 명확하게 구분하는 방향으로 학습
-  
 - $\delta_{ij}$: 두 vector $z_i$와 $z_j$의 정규화된 거리
-
 - $m$: 마진 값. $\delta_{ij}$가 이 값 이하일 때만 유사한 쌍으로 간주됨
 
 ## 2.3 Anomaly detection with ReConPatch
