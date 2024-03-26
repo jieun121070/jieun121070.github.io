@@ -8,7 +8,7 @@ tags: [Anomaly-Detection, ReConPatch]
 typora-root-url: ..
 ---
 
-# 1. Introduction
+## 1. Introduction
 
 이상 탐지는 사전에 수집한 데이터를 바탕으로, 정상 케이스와 비정상 케이스를 구분하는 방법을 학습하는 모델인데요. 비정상 케이스가 희박하고, 학습 데이터와는 다른 새로운 유형의 비정상 케이스가 발견되는 등 데이터셋에 문제가 있는 경우가 많기 때문에 분석에 어려움이 있습니다. 이러한 배경으로 이상 탐지 방법론은 정상 데이터만을 학습에 사용하는 `one-class classification` 방향으로 발전해 왔습니다. `one-class classification`의 주요 컨셉은 데이터 간의 거리 metric을 학습시켜서 정상 데이터와의 거리가 먼 데이터를 비정상 데이터로 검출하는 것입니다. 데이터 간의 거리 metric을 학습하는 방법은 크게 두 가지로 나눌 수 있습니다.
 
@@ -25,13 +25,13 @@ pre-trained 모델의 학습에 사용된 데이터셋과 분석 대상 데이�
 
 본 논문에서 제안하는 ReConPatch는 **pre-trained 모델에서 추출한 feature들의 linear modulation을 학습**함으로써 이러한 문제점을 해결하고자 합니다. 또한 분석 대상 데이터에 최적화된 동시에 정상과 비정상을 확실히 구분할 수 있는 feature를 수집하기 위해서 `contrastive learning` 방식을 사용했습니다. 마지막으로, patch feature들 사이의 similarity를 평가하는 지표로써 `pairwise similarity`와 `contextual similarity`를 함께 사용했다는 점이 특징입니다.
 
-# 2. Method
+## 2. Method
 
-## 2.1 Overall structure
+### 2.1 Overall structure
 
 ![](/assets/img/ad/reconpatch.png)
 
-### training phase
+#### training phase
 
 - [PatchCore](https://jieun121070.github.io/posts/paper-review-Towards-Total-Recall-in-Industrial-Anomaly-Detection/)와 같은 방식으로 Patch-level feature $\mathcal{P}(x, h, w) \in \mathbb{R}^{C^\prime}$를 만듭니다.
 - pre-trained CNN 모델의 여러 layer에서 input $x$의 feature map을 추출합니다. layer 별로 feature map의 크기가 다르기 때문에, 크기를 맞춰주고 이어 붙입니다. 이러한 방식으로 생성한 locally aware feature는 patch size $s$ 안에서 이웃한 feature vector들을 aggregate하는 효과가 있습니다.
@@ -41,13 +41,13 @@ pre-trained 모델의 학습에 사용된 데이터셋과 분석 대상 데이�
 - 위와 같은 과정을 통해 학습한 feature representation layer $f$에 pre-trained CNN에서 추출한 patch-level feature를 통과시키면 target-oriented feature를 얻을 수 있습니다. 다시 말해 분석 대상 데이터셋에 최적화된 patch-level feature를 구할 수 있는 것입니다.
 - 학습이 완료되면 feature representation $f$에서 greedy approximation algorithm 기반의 subsampling 방식으로 coreset이 샘플링되고, Memory Bank $\mathcal{M}$에 저장됩니다.
 
-### inference phase
+#### inference phase
 
 - training phase와 동일하게 테스트 데이터의 feature를 구한 다음, 이 feature를 memory bank의 정상 이미지들의 feature와 비교해서 anomaly score를 산출합니다.
 
-## 2.2 Patch-level feature representation learning
+### 2.2 Patch-level feature representation learning
 
-### similarity metric
+#### similarity metric
 
 본 논문에서는 feature representation을 학습하기 위해 `contrastive learning` 방식을 사용했습니다. 그런데 `contrastive learning`을 사용하면 정상 데이터들의 variation을 모델링하게 되므로, false-positive rate이 증가할 수 있다는 단점이 있습니다. contrastive learning 방식을 사용하여 유사한 데이터 포인트는 similarity가 높게, 상이한 데이터 포인트는 similarity가 낮게 학습하기 위해서는 어떤 데이터들이 서로 유사하고, 어떤 데이터들이 서로 상이한지를 라벨링한 데이터셋(labeled pair)이 필요한데요. 현실적으로 이러한 데이터를 구하는 것은 쉽지 않습니다. 저자들은 이러한 문제를 해결하기 위해서 feature들 사이의 pairwise similarity와 contextual similarity를 학습 과정에서 pseudo-label로 사용했습니다.
 
@@ -65,7 +65,7 @@ case (a)에서 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹치지 않�
   - contextual similarity
     $$\tilde{w_{ij}}^{Contextual}=\begin{cases}\frac{\mathcal{N}_k(i) \cap \mathcal{N}_k(j)}{\mathcal{N}_k(i)}, & j \in \mathcal{N}_k(i) \\ 0, & otherwise \end{cases}$$
 
-### relaxed contrastive loss
+#### relaxed contrastive loss
 
 patch-level feature는 이웃한 patch들과의 상관관계를 내포하고 있기 때문에 OK, NG와 같이 명시적인 라벨을 가지지 않습니다. 더욱이 ReConPatch의 목표는 feature들을 명확히 구분하는 것이라기 보다는 분석 대상 데이터셋에 최적화된 feature를 구하는 것입니다. 따라서 저자들은 `relaxed contrastive loss`를 사용했습니다. relaxed contrastive loss에서는 inter-feature similarity $w$가 psedo-label로 사용됩니다.
 
@@ -86,15 +86,15 @@ $$\mathcal{L}_{RC}(z)=\frac{1}{N}\sum^N_{i=1}\sum^N_{j=1}w_{ij}\delta_{ij}^2+(1-
 - $N$: 총 데이터 수
 - $w_{ij}$: 두 vector $z_i$와 $z_j$의 inter-feature similarity
   - $w_{ij}$가 크면 (=두 vector가 서로 유사하면) $\delta_{ij}^2$항의 영향력이 상대적으로 커짐
-- 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 멀 때 loss 증가
+    - 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 멀 때 loss 증가
     - 두 vector $z_i$와 $z_j$ 사이의 거리를 최소화하는 방향으로 학습
-- $w_{ij}$가 작으면 (=두 vector가 서로 상이하면) $(1-w_{ij})max(m-\delta_{ij},0)^2$ 항의 영향력이 상대적으로 커짐
-  - 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 $m$보다 가까울 때 loss 증가
-  - 두 vector $z_i$와 $z_j$ 사이의 거리를 늘려서 보다 명확하게 구분하는 방향으로 학습
+  - $w_{ij}$가 작으면 (=두 vector가 서로 상이하면) $(1-w_{ij})max(m-\delta_{ij},0)^2$ 항의 영향력이 상대적으로 커짐
+    - 두 vector $z_i$와 $z_j$ 사이의 상대적 거리 $\delta_{ij}$가 $m$보다 가까울 때 loss 증가
+    - 두 vector $z_i$와 $z_j$ 사이의 거리를 늘려서 보다 명확하게 구분하는 방향으로 학습
 - $\delta_{ij}$: 두 vector $z_i$와 $z_j$의 정규화된 거리
 - $m$: 마진 값. $\delta_{ij}$가 이 값 이하일 때만 유사한 쌍으로 간주됨
 
-## 2.3 Anomaly detection with ReConPatch
+### 2.3 Anomaly detection with ReConPatch
 
 PatchCore와 같은 방식으로 anomaly score를 산출합니다.
 
@@ -109,11 +109,11 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 위 수식에서 $\tilde{s}$는 anomaly score의 median이고, MAD는 전체 학습 데이터셋에 대한 Mean Absolute Deviation입니다. $\beta$는 constant scale factor로, 저자들이 설정한 값은 1.4826입니다.
 
-# 3. Experiments and analysis
+## 3. Experiments and analysis
 
-## 3.1 Experimental setup
+### 3.1 Experimental setup
 
-### Dataset
+#### Dataset
 
 ![](/assets/img/ad/mvtec.png)
 
@@ -129,14 +129,14 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
   - 학습 데이터 2540개
   - 테스트 데이터 691개
 
-### Metrics
+#### Metrics
 
 - Anomaly detection 성능 지표: image-lebel AUROC
 - 테스트 이미지의 anomaly score와 클래스(정상/비정상) 예측 결과 사용
 - Segmentation 성능 지표: pixel-level AUROC
 - 테스트 이미지 내 모든 픽셀의 anomaly score 사용
 
-### Implementation details
+#### Implementation details
 
 - single model
   - feature extractor 파라미터
@@ -165,7 +165,7 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
     - optimizer: AdamP with a cosine annealing scheduler
     - learning rate: 1e-6 with a weight decay of 1e-2
 
-## 3.2 Ablation study
+### 3.2 Ablation study
 
 **coreset subsampling percentage**
 
@@ -194,7 +194,7 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 - 현실 상황에서는 다양한 환경적 요인이 이미지의 품질에 영향을 줄 수 있습니다. 이러한 상황을 실험해보기 위해 데이터에 랜덤하게 data augmentation을 적용해 시뮬레이션을 진행했습니다.
 - ReConPatch가 PatchCore에 비해 data augmentation 여부에 따른 성능 차이가 거의 없는 것을 확인할 수 있습니다.
 
-## 3.3 Anomaly detection on MVTec AD
+### 3.3 Anomaly detection on MVTec AD
 
 ![](/assets/img/ad/res5.png)
 
@@ -216,7 +216,7 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
     - [image size $480\times480$] 99.62 → 99.72 anomaly detection SOTA 성능을 달성했습니다.
     - [image size $320\times320$] 평균 99.67%로 PatchCore의 99.6%보다 더 좋은 성능을 보였습니다. image size를 줄였는데도 PNI가 $480\times480$으로 기록한 성능 99.63%보다 나은 성능을 보였습니다.
 
-## 3.4 Anomaly detection on BTAD
+### 3.4 Anomaly detection on BTAD
 
 ![](/assets/img/ad/res7.png)
 
@@ -227,7 +227,7 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
   - [image-level AUROC] 평균 95.8%로 anomaly detection SOTA 성능을 달성했습니다.
   - [pixel-level AUROC] 평균 97.5%로 PatchCore의 97.3%보다 나은 성능을 보였습니다.
 
-## 3.5 Qualitative analysis
+### 3.5 Qualitative analysis
 
 ![](/assets/img/ad/res8.png)
 
