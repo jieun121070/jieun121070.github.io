@@ -21,10 +21,7 @@ typora-root-url: ..
 - 분포 사이의 유사성을 측정하는 metric
   - VAE는 KL divergence 사용
     - 두 분포 $p$와 $q$가 주어졌을 때, $p$가 $q$에 대해 얼마나 다른지 측정
-    - 확률 분포 $p$와 확률 분포 $q$가 모든 point에서 같을 때 최솟값 0을 가짐
     - KL divergence는 비대칭(asymmetric)
-      - 확률 분포 $p$가 0에 가깝고, 확률 분포 $q$는 0이 아닐 때 q의 효과는 무시됨
-      - 동등하게 중요한 두 분포 사이의 유사도를 측정하고 싶을 때 적합하지 않음
   - (Vanila) GAN은 JS divergence 사용
     - 두 분포 $p$과 $q$가 주어졌을 때, 두 분포의 중간 지점과의 차이를 측정
     - JS divergence 는 대칭(symmetric)
@@ -188,7 +185,7 @@ class Discriminator(nn.Module):
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 - (데이터셋 측면에서의 한계점을 개선) paired dataset이 필요하다는 Pix2Pix의 한계점을 개선함 > **unpaired** image-to-image translation
 - 원본 이미지 $x$의 content를 유지한 상태로 translation이 가능하다는 보장이 없음
-  - 어떤 입력 $x$가 주어져도 taget domain $Y$에 해당하는 하나의 이미지만 출력하면 판별자를 충분히 속일 수 있기 때문 
+  - 어떤 입력 $x$가 주어져도 $x$의 content와 관계없이 taget domain $Y$에 해당하는 하나의 이미지만 출력하면 판별자를 충분히 속일 수 있기 때문 
   - 추가적인 제약 조건 필요 - $G(x)$가 다시 원본 이미지 $x$로 재구성될 수 있도록 함
   - $F(G(x)) \approx x$, $G(F(y)) \approx y$ ($F$와 $G$는 역함수 관계)
 - 한계점
@@ -246,6 +243,7 @@ class Discriminator(nn.Module):
       - conv-block별 kernel 개수: 32, 64, 128, 256, 512
       - fully convolutional net이기 때문에 테스트 시에 noise map의 모양을 바꿔가면서 다양한 크기와 가로세로비를 갖는 이미지를 생성할 수 있음
   - 판별자는 전체 이미지가 아니라 **패치 단위** 판별
+    
     - 초반에는 패치의 크기가 크고, 점점 패치의 크기가 작아짐 > 점진적으로 자세한 정보를 추가
 - 목적함수
   - $\underset{G_n}{\min}\,\underset{D_n}{\max}\,\mathcal{L} \ast {adv}(G_n, D_n)+\alpha \mathcal{L} \ast {rec}(G_n)$
