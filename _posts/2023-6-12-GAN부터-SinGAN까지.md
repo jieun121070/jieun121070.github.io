@@ -169,10 +169,10 @@ class Discriminator(nn.Module):
 ## 5. [Pix2Pix](https://arxiv.org/pdf/1611.07004.pdf) (2017)
 
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
+- Image-to-Image translation는 주어진 이미지의 어떤 attribute를 다른 값으로 바꾸는 것 ex) 성별을 여성에서 남성으로 바꾸는 등
 - conditional GAN을 활용한 image-to-image translation
   - conditional GAN의 일종으로, **이미지 $x$ 자체를 조건으로 입력**
   - 픽셀을 입력받아 픽셀을 예측
-  - image-to-image translation는 주어진 이미지의 어떤 측면을 다른 것으로 바꾸는 것 (성별을 여성에서 남성으로 바꾸는 등)
 - 노이즈 $z$를 사용하지 않기 때문에 거의 deterministic한 결과 생성
 - U-Net 사용
   - skip-connection
@@ -187,8 +187,9 @@ class Discriminator(nn.Module):
 
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 - (데이터셋 측면에서의 한계점을 개선) paired dataset이 필요하다는 Pix2Pix의 한계점을 개선함 > **unpaired** image-to-image translation
-- 원본 이미지 $x$의 content를 유지한 상태로 translation이 가능하다는 보장이 없음  추가적인 제약 조건 필요
-  - $G(x)$가 다시 원본 이미지 $x$로 재구성될 수 있도록 함
+- 원본 이미지 $x$의 content를 유지한 상태로 translation이 가능하다는 보장이 없음
+  - 어떤 입력 $x$가 주어져도 taget domain $Y$에 해당하는 하나의 이미지만 출력하면 판별자를 충분히 속일 수 있기 때문 
+  - 추가적인 제약 조건 필요 - $G(x)$가 다시 원본 이미지 $x$로 재구성될 수 있도록 함
   - $F(G(x)) \approx x$, $G(F(y)) \approx y$ ($F$와 $G$는 역함수 관계)
 - 한계점
   - shape 정보를 포함한 content의 변경이 필요한 경우
