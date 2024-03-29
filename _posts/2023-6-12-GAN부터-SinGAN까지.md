@@ -38,10 +38,10 @@ _GAN architecture_
   - 생성자의 역할은 판별자가 구분하기 어려운, 진짜같은 이미지를 생성하는 것
   - 판별자의 output은 Real(1), Fake(0)
   - loss function
-    - $\underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(x)))]$
-      - 판별자 학습 시 생성자 고정 $\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(x)))]$
+    - $\underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
+      - 판별자 학습 시 생성자 고정 $\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
       - 생성자 학습 시 판별자 고정
-        $\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(x)))]$
+        $\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
       - 위 과정을 반복하는 과정에서 생성자와 판별자가 서로 경쟁하면서 학습
     - 생성자가 만든 이미지가 real인지 fake인지 판별자가 구분할 수 없어서 $D(G(z))$가 0.5에 가까워지는 것이 목표
 - 실험 결과
@@ -98,6 +98,8 @@ class Discriminator(nn.Module):
 ## 2. [Conditional GAN](https://arxiv.org/pdf/1411.1784.pdf) (2014)
 
 - 생성하고자 하는 label $y$를 조건으로 입력
+
+$$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x \vert y)]+E_{z \sim p_{z}(z)}[log(1-D(G(z \vert y)))] $$
 
 ## 3. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2016)
 
