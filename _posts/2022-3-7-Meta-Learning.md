@@ -33,6 +33,7 @@ meta learning은 적은 양의 데이터만으로도 효율적으로 학습할 �
 - **메트릭 기반 meta learning**: 데이터 포인트 간의 유사성이나 차이를 측정하여 데이터 사이의 관계를 이해함으로써 모델이 새로운 task에 더 잘 적응할 수 있도록 만드는 방식
 
 ![](/assets/img/meta/ep.png)
+_Episodic Learning_
 
 episodic learning은 meta learning을 구현하는 방식 중 하나로, 특히 메트릭 기반 meta learning에서 자주 사용됩니다. 이 방식에서는 "episode"라고 불리는 학습의 단위를 사용하여, 각 episode마다 서로 다른 class의 데이터로 구성된 여러 개의 task를 학습합니다. Query Set은 Support Set과 class는 같지만, Support Set에 존재하지 않는 데이터로 구성되어 있는데요. 이러한 방식으로 데이터를 구성하면 실제 테스트 환경을 모방하여 모델 스스로 학습 규칙을 도출할 수 있도록 학습이 진행되기 때문에 일반화 성능을 향상시킬 수 있습니다.
 
