@@ -59,10 +59,15 @@ case (a)에서 $\mathcal{N}_k(i)$와 $\mathcal{N}_k(j)$는 서로 겹치지 않�
   - pairwise similarity로 feature 그룹 간 관계를 파악하기에는 부족함
   - 두 데이터 포인트가 nearest neighbor를 많이 공유할수록 contextual similarity가 높아짐
   - pairwise similarity와 contextual similarity의 linear combination
+ 
     $$w_{ij}=\alpha \cdot w_{ij}^{Pairwise}+(1-\alpha) \cdot w_{ji}^{Contextual}, \alpha \in [0, 1]$$
+
   - pairwise similarity
+ 
     $$w_{ij}^{Pairwise}=e^{-||\bar{z_i}-\bar{z_j}||^2_2/\sigma}$$
+    
   - contextual similarity
+    
     $$\tilde{w_{ij}}^{Contextual}=\begin{cases}\frac{\mathcal{N}_k(i) \cap \mathcal{N}_k(j)}{\mathcal{N}_k(i)}, & j \in \mathcal{N}_k(i) \\ 0, & otherwise \end{cases}$$
 
 #### relaxed contrastive loss
