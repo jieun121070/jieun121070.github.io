@@ -18,7 +18,7 @@ typora-root-url: ..
     - GAN에서 생성자는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습
     - 판별자는 실제 데이터와 생성된 데이터를 구분하는 기능을 학습
     - 생성자의 목적은 판별자를 속이는 것이므로, 생성자는 결국 실제 데이터 분포를 모방하는 데이터를 생성할 수 있는 **함수를 간접적으로 학습**하게 됨
-- 분포 사이의 유사성을 측정하는 metric
+- [분포 사이의 유사성을 측정하는 metric](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)
   - VAE는 KL divergence 사용
     - 두 분포 $p$와 $q$가 주어졌을 때, $p$가 $q$에 대해 얼마나 다른지 측정
     - KL divergence는 비대칭(asymmetric)
