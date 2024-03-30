@@ -120,13 +120,13 @@ $$\bar{s_t}=\frac{s_t-\tilde{s}}{\beta \cdot MAD}$$
 
 #### Dataset
 
-![](/assets/img/ad/mvtec.png)
+![](/assets/img/ad/mvtec.png){: width="500"}
 _MVTec AD_
   - 클래스 15개
   - 학습 데이터 3629개
   - 테스트 데이터 1725개
 
-![](/assets/img/ad/btad.png)
+![](/assets/img/ad/btad.png){: width="500"}
 _BTAD_
   - 클래스 3개
   - 학습 데이터 2540개
