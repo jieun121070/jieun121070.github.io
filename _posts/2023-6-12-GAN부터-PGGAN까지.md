@@ -8,7 +8,7 @@ tags: [GAN]
 typora-root-url: ..
 ---
 
-본 포스트에서는 GAN부터 SinGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
+본 포스트에서는 GAN부터 PGGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
 - 모델링 대상
   - VAE는 explicit distribution을 모델링
@@ -201,7 +201,5 @@ class Discriminator(nn.Module):
   - 이미지의 특징 제어가 어려움
 
 ## Reference
-
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
-
 - [GAN 구조 개요](https://developers.google.com/machine-learning/gan/gan_structure?hl=ko)
