@@ -174,7 +174,5 @@ class Discriminator(nn.Module):
   - 이미지의 특징 제어가 어려움
 
 ## Reference
-
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
-
 - [GAN 구조 개요](https://developers.google.com/machine-learning/gan/gan_structure?hl=ko)

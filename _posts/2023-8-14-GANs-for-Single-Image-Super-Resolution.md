@@ -57,7 +57,5 @@ typora-root-url: ..
     - noise map $z$로 실제 이미지 $x$를 정확히 생성하도록 학습
 
 ## Reference
-
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
-
 - [GAN 구조 개요](https://developers.google.com/machine-learning/gan/gan_structure?hl=ko)
