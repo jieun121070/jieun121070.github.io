@@ -59,7 +59,7 @@ typora-root-url: ..
 - 모델 구조
   - Conditional GAN과 CycleGAN의 구조 활용
   - $G(x,c) \rightarrow y$ generator가 input 이미지 $x$를 target domain label $c$로 생성한 output 이미지 $y$
-  - $D:x \rightarrow \{D_{src}(x), D_{cls}(x)\}$
+  - $D:x \rightarrow {D_{src}(x), D_{cls}(x)}$
     - $D_{src}(x)$ input 이미지 $x$가 real인지 fake인지 분류
     - $D_{cls}(x)$ input 이미지 $x$가 real이라면 어떤 target domain인지 분류
 - 학습 과정
