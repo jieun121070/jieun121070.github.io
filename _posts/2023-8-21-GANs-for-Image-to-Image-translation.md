@@ -8,17 +8,15 @@ tags: [GAN, Pix2Pix, CycleGAN, StarGAN]
 typora-root-url: ..
 ---
 
-### Image-to-Image translation
+**Image-to-Image translation**은 주어진 이미지에서 특정한 attribute의 value를 다른 것으로 바꾸는 task를 말합니다. 예를 들어, 성별을 여성에서 남성으로 바꾸거나 얼굴에서 눈썹만 제거하는 것이 여기에 속합니다. 아래에서 설명하는 논문에서 등장하는 주요 용어를 정리해보면 다음과 같습니다.
 
-- 주어진 이미지의 특정한 attribute를 다른 것으로 바꾸는 것 ex) 성별을 여성에서 남성으로 바꾸거나 얼굴에서 눈썹만 제거
-- attribute - 하나의 이미지에 내재된 의미있는 feature. ex) 머리 색깔, 성별, 나이
-- attribute value - attribute의 특정한 값. ex) 머리 색깔 - black/blond/brown, 성별 - 여성/남성
-- domain - 동일한 attribute value를 공유하는 이미지의 집합
+- **attribute**: 하나의 이미지에 내재된 의미있는 feature ex) 머리 색깔, 성별, 나이
+- **attribute value**: attribute의 특정한 값 ex) 머리 색깔 - black/blond/brown, 성별 - 여성/남성
+- **domain**: 동일한 attribute value를 공유하는 이미지의 집합
 
 ## 1. [Pix2Pix](https://arxiv.org/pdf/1611.07004.pdf) (2017)
 
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
-- Image-to-Image translation는 주어진 이미지의 어떤 attribute를 다른 값으로 바꾸는 것 ex) 성별을 여성에서 남성으로 바꾸는 등
 - conditional GAN을 활용한 image-to-image translation
   - conditional GAN의 일종으로, **이미지 $x$ 자체를 조건으로 입력**
   - 픽셀을 입력받아 픽셀을 예측
@@ -35,7 +33,8 @@ typora-root-url: ..
 ## 2. [CycleGAN](https://arxiv.org/pdf/1703.10593.pdf) (2017)
 
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
-- (데이터셋 측면에서의 한계점을 개선) paired dataset이 필요하다는 Pix2Pix의 한계점을 개선함 > **unpaired** image-to-image translation
+- **unpaired** image-to-image translation
+  - 이전 연구인 Pix2Pix처럼 paired dataset이 필요하지 않음. 데이터셋 측면에서의 한계점을 개선
 - 원본 이미지 $x$의 content를 유지한 상태로 translation이 가능하다는 보장이 없음
   - 어떤 입력 $x$가 주어져도 $x$의 content와 관계없이 taget domain $Y$에 해당하는 하나의 이미지만 출력하면 판별자를 충분히 속일 수 있기 때문 
   - 추가적인 제약 조건 필요 - $G(x)$가 다시 원본 이미지 $x$로 재구성될 수 있도록 함
@@ -58,7 +57,7 @@ typora-root-url: ..
   - **CelebA** - facial attribute transfer (40 labels)
   - **RaFD** - facial expression synthesis (8 labels)
 - 모델 구조
-  - Conditional GAN과 Cycle GAN의 구조 활용
+  - Conditional GAN과 CycleGAN의 구조 활용
   - $G(x,c) \rightarrow y$ generator가 input 이미지 $x$를 target domain label $c$로 생성한 output 이미지 $y$
   - $D:x \rightarrow \{D_{src}(x), D_{cls}(x)\}$
     - $D_{src}(x)$ input 이미지 $x$가 real인지 fake인지 분류
@@ -70,5 +69,4 @@ typora-root-url: ..
 ## Reference
 
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
-
 - [GAN 구조 개요](https://developers.google.com/machine-learning/gan/gan_structure?hl=ko)
