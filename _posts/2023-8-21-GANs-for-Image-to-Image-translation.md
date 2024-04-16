@@ -8,7 +8,7 @@ tags: [GAN, Pix2Pix, CycleGAN, StarGAN]
 typora-root-url: ..
 ---
 
-**Image-to-Image translation**은 주어진 이미지에서 특정한 attribute의 value를 다른 것으로 바꾸는 task를 말합니다. 예를 들어, 성별을 여성에서 남성으로 바꾸거나 얼굴에서 눈썹만 제거하는 것이 여기에 속합니다. 아래에서 설명하는 논문에서 등장하는 주요 용어를 정리해보면 다음과 같습니다.
+**Image-to-Image translation**은 주어진 이미지에서 특정한 attribute의 value를 다른 것으로 바꾸는 task를 말합니다. 예를 들어, 성별을 여성에서 남성으로 바꾸거나 얼굴에서 눈썹만 제거하는 것이 여기에 속합니다. 본 포스트에서 등장하는 주요 용어를 정리해보면 다음과 같습니다.
 
 - **attribute**: 하나의 이미지에 내재된 의미있는 feature ex) 머리 색깔, 성별, 나이
 - **attribute value**: attribute의 특정한 값 ex) 머리 색깔 - black/blond/brown, 성별 - 여성/남성
