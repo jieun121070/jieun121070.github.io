@@ -23,12 +23,14 @@ typora-root-url: ..
 - 노이즈 $z$를 사용하지 않기 때문에 거의 deterministic한 결과 생성
 - U-Net 사용
   - skip-connection
-  - input과 output은 많은 양의 low-level information을 공유함. encoder에서 추출한 information을 decoder에서 활용하도록 함으로써 decoder에서는 추가적인 information을 학습하도록 함 + 학습 난이도를 낮춤
+  - input과 output은 많은 양의 low-level information을 공유함
+  - encoder에서 추출한 information을 decoder에서 활용하도록 함으로써 decoder에서는 추가적인 information을 학습하도록 함
+  - 학습 난이도를 낮춤
 - conditional GAN loss와 L1 loss를 함께 사용
   - L2 loss이 이미지 간 비교에 적용되면 blurry한 결과가 나올 수 있음([참고](https://velog.io/@sjinu/L2-norm-vs-L1-norm))
-- 다양한 Task에 공통적으로 적용할 수 있는 generic approach
+- 다양한 task에 공통적으로 적용할 수 있는 generic approach
 - 한계점
-  - 서로 다른 두 도메인 $X$, $Y$의 데이터들을 한쌍으로 묶은 **paired** dataset 필요
+  - 서로 다른 domain $X$, $Y$의 데이터들을 한쌍으로 묶은 **paired** dataset 필요
 
 ## 2. [CycleGAN](https://arxiv.org/pdf/1703.10593.pdf) (2017)
 
@@ -45,11 +47,11 @@ typora-root-url: ..
 
 ## 3. [StarGAN](https://openaccess.thecvf.com/content_cvpr_2018/papers/Choi_StarGAN_Unified_Generative_CVPR_2018_paper.pdf) (2018)
 
-- 다중 도메인에서 효율적인 image-to-image translation network
-  - 두 개의 도메인 간 translation을 위한 방법론을 제안한 CycleGAN의 한계점을 개선
+- 다중 domain에서 효율적인 image-to-image translation network
+  - 두 개의 domain 간 translation을 위한 방법론을 제안한 CycleGAN의 한계점을 개선
   - 하나의 generator만 사용
-    - CycleGAN을 포함한 기존 연구에서는 다중 도메인 간 translation을 수행하기 위해 여러 개의 generator를 중첩해서 사용해야 했음
-    - $k$개의 도메인을 서로 매핑하기 위해 $k(k-1)$개의 generator가 필요함
+    - CycleGAN을 포함한 기존 연구에서는 다중 domain 간 translation을 수행하기 위해 여러 개의 generator를 중첩해서 사용해야 했음
+    - $k$개의 domain을 서로 매핑하기 위해 $k(k-1)$개의 generator가 필요함
   - 여러 개의 attribute를 한 번에 변경할 수 있음
   - 보다 적은 양의 파라미터를 사용
   - 다양한 domain의 데이터셋을 활용하여 domain에 관계없이 공통적인 feature를 학습할 수 있음
@@ -59,7 +61,7 @@ typora-root-url: ..
 - 모델 구조
   - Conditional GAN과 CycleGAN의 구조 활용
   - $G(x,c) \rightarrow y$ generator가 input 이미지 $x$를 target domain label $c$로 생성한 output 이미지 $y$
-  - $D:x \rightarrow {D_{src}(x), D_{cls}(x)}$
+  - $D:x \rightarrow \{ D_{src}(x), D_{cls}(x) \}$ 
     - $D_{src}(x)$ input 이미지 $x$가 real인지 fake인지 분류
     - $D_{cls}(x)$ input 이미지 $x$가 real이라면 어떤 target domain인지 분류
 - 학습 과정
