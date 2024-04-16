@@ -1,6 +1,6 @@
 ---
-title: "GAN부터 PGGAN까지"
-date: 2023-6-12
+title: "Generative Adversarial Networks"
+date: 2023-8-7
 author: jieun
 math: True
 categories: [Vision]
@@ -8,7 +8,7 @@ tags: [GAN]
 typora-root-url: ..
 ---
 
-본 포스트에서는 GAN부터 SinGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
+본 포스트에서는 GAN부터 PGGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
 - 모델링 대상
   - VAE는 explicit distribution을 모델링
@@ -162,37 +162,10 @@ class Discriminator(nn.Module):
 ## 4. [Wasserstein GAN](https://arxiv.org/pdf/1701.07875.pdf) (2017)
 
 - GAN의 문제점 중 하나인 학습의 불안정성을 개선하기 위해 JS divergence 대신 Wasserstein 거리(Earth-Mover 거리)를 사용
+- WGAN은 weight clipping을 이용해 1-Lipshichtz 조건을 만족하도록 함으로써 안정적인 학습을 유도
+- [WGAN-GP(2017)](https://arxiv.org/pdf/1704.00028.pdf)는 gradient penalty를 이용하여 WGAN의 성능을 개선
 
-## 5. [Pix2Pix](https://arxiv.org/pdf/1611.07004.pdf) (2017)
-
-- [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
-- Image-to-Image translation는 주어진 이미지의 어떤 attribute를 다른 값으로 바꾸는 것 ex) 성별을 여성에서 남성으로 바꾸는 등
-- conditional GAN을 활용한 image-to-image translation
-  - conditional GAN의 일종으로, **이미지 $x$ 자체를 조건으로 입력**
-  - 픽셀을 입력받아 픽셀을 예측
-- 노이즈 $z$를 사용하지 않기 때문에 거의 deterministic한 결과 생성
-- U-Net 사용
-  - skip-connection
-  - input과 output은 많은 양의 low-level information을 공유함. encoder에서 추출한 information을 decoder에서 활용하도록 함으로써 decoder에서는 추가적인 information을 학습하도록 함 + 학습 난이도를 낮춤
-- conditional GAN loss와 L1 loss를 함께 사용
-  - L2 loss이 이미지 간 비교에 적용되면 blurry한 결과가 나올 수 있음([참고](https://velog.io/@sjinu/L2-norm-vs-L1-norm))
-- 다양한 Task에 공통적으로 적용할 수 있는 generic approach
-- 한계점
-  - 서로 다른 두 도메인 $X$, $Y$의 데이터들을 한쌍으로 묶은 **paired** dataset 필요
-
-## 6. [CycleGAN](https://arxiv.org/pdf/1703.10593.pdf) (2017)
-
-- [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
-- (데이터셋 측면에서의 한계점을 개선) paired dataset이 필요하다는 Pix2Pix의 한계점을 개선함 > **unpaired** image-to-image translation
-- 원본 이미지 $x$의 content를 유지한 상태로 translation이 가능하다는 보장이 없음
-  - 어떤 입력 $x$가 주어져도 $x$의 content와 관계없이 taget domain $Y$에 해당하는 하나의 이미지만 출력하면 판별자를 충분히 속일 수 있기 때문 
-  - 추가적인 제약 조건 필요 - $G(x)$가 다시 원본 이미지 $x$로 재구성될 수 있도록 함
-  - $F(G(x)) \approx x$, $G(F(y)) \approx y$ ($F$와 $G$는 역함수 관계)
-- 한계점
-  - shape 정보를 포함한 content의 변경이 필요한 경우
-  - 학습 데이터에 포함되지 않은 사물을 처리하는 경우
-
-## 7. [Progressive Growing of GANs](https://arxiv.org/pdf/1710.10196.pdf) (2017)
+## 5. [Progressive Growing of GANs](https://arxiv.org/pdf/1710.10196.pdf) (2017)
 
 - [official code](https://github.com/tkarras/progressive_growing_of_gans)
 - 처음부터 복잡한 네트워크를 학습하는 것이 아니라, 학습을 진행하는 과정에서 점진적으로 네트워크의 레이어를 붙여 나감

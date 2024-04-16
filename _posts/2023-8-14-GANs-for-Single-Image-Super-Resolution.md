@@ -1,36 +1,31 @@
 ---
-title: "StarGAN부터 DragGAN까지"
-date: 2023-7-10
+title: "GANs for Single Image Super-Resolution"
+date: 2023-8-14
 author: jieun
 math: True
 categories: [Vision]
-tags: [GAN]
+tags: [GAN, SinGAN]
 typora-root-url: ..
 ---
 
-## 1. [StarGAN](https://openaccess.thecvf.com/content_cvpr_2018/papers/Choi_StarGAN_Unified_Generative_CVPR_2018_paper.pdf) (2018)
+**Single Image Super-Resolution(SISR)**은 한 장의 저해상도 이미지를 고해상도 이미지로 변환하는 방법을 연구하는 분야입니다. 일반적으로, upsampling을 통해 저해상도 이미지의 width, height를 키운 다음, Neural Network에 통과시켜 세밀한 정보를 추가한 고해상도 이미지를 생성합니다.
 
-- [official code](https://github.com/yunjey/stargan)
-- 다중 도메인에서 효율적인 image-to-image translation
-
-## 2. [SinGAN](https://arxiv.org/pdf/1905.01164.pdf) (2019)
-
-### Single Image Super-Resolution (SISR)
-
-- 한 장의 저해상도 이미지를 고해상도 이미지로 변환하는 방법을 연구하는 분야
-- 일반적으로, upsampling을 통해 저해상도 이미지의 width, height를 키우고 > Neural Network > 세밀한 정보를 추가한 고해상도 이미지 생성
 - Externally Trained Network (Supervised SISR)
   - 외부의 다수의 이미지를 학습 데이터로 사용
   - 고해상도 이미지로 저해상도 이미지를 만든 다음, 저해상도 이미지를 Neural Network에 입력해서 고해상도 이미지로 복원할 수 있도록 학습 진행
 - 이미지에 자기 반복성(internal recurrence)이 존재하는 경우라면?
   - 반복되는 패치 중 작은 패치의 해상도를 높이고자 할 때, 유사하게 생긴 큰 패치를 참고하면 효과적으로 고해상도 변환 가능
-  - It cannot be found in any external database of examples, no matter how large this dataset is!
+
+> It cannot be found in any external database of examples, no matter how large this dataset is!
+
 - Internally Trained Network (Unsupervised Zero-Shot SISR)
   - **한 장의 이미지만 학습 데이터로 사용**
-    - 한 장의 이미지에 특화된 CNN을 학습해서, 그 이미지에 내재된 feature 정보를 토대로 고해상도 결과를 예측
+  - 한 장의 이미지에 특화된 CNN을 학습해서, 그 이미지에 내재된 feature 정보를 토대로 고해상도 결과를 예측
   - 한계점
     - 학습에 사용된 이미지 외의 다른 이미지에 적용하기 어려움
     - 자기 반복성이 떨어지는 경우에도 적용하기 어려움 ex) 인간의 얼굴
+
+## 1. [SinGAN](https://arxiv.org/pdf/1905.01164.pdf) (2019)
 
 ![](/assets/img/gan/singan.png)
 
