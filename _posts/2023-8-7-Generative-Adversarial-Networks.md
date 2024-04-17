@@ -104,7 +104,7 @@ $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x
 _DCGAN generator architecture_
 
 - GAN은 생성자와 판별자 학습할 때 MLP 구조를 사용했는데, DCGAN은 CNN 구조를 사용
-- GAN보다 고해상도의 이미지를 생성할 수 있었음
+- GAN보다 고해상도의 이미지 생성 가능
 - 판별자와 생성자에서 사용하는 filter
     - 판별자는 Strided Convolution을 사용해 너비와 높이를 감소시킴
     - 생성자는 Transposed Convolution을 사용해 너비와 높이를 증가시킴
