@@ -167,11 +167,26 @@ class Discriminator(nn.Module):
 
 ## 5. [Progressive Growing of GANs](https://arxiv.org/pdf/1710.10196.pdf) (2017)
 
+![](/assets/img/gan/pggan.gif)
 - [official code](https://github.com/tkarras/progressive_growing_of_gans)
-- 처음부터 복잡한 네트워크를 학습하는 것이 아니라, 학습을 진행하는 과정에서 점진적으로 네트워크의 레이어를 붙여 나감
-- 저해상도 > 고해상도
+- 처음부터 복잡한 네트워크를 학습하는 것이 아니라, 저해상도에서 고해상도로 학습을 진행하는 과정에서 점진적으로 네트워크의 레이어를 붙여 나감
 - 한계점
-  - 이미지의 특징 제어가 어려움
+  - 이미지의 특징들이 분리되지 않아 특징 제어가 어려움
+ 
+## 6. [StyleGAN](https://arxiv.org/pdf/1701.07875.pdf) (2018)
+
+- [official code](https://github.com/NVlabs/stylegan)
+- Disentanglement 특성을 향상시켜 이미지의 특징 제어가 어려운 PGGAN의 한계점을 개선함
+    - **Disentanglement**: 데이터의 생성 요소들을 서로 독립적으로 학습하고 제어할 수 있도록 하는 개념
+- 고해상도 얼굴 데이터셋(FFHQ)을 발표
+- StyleGAN의 핵심 아이디어: 매핑 네트워크 (Mapping Network)
+    - 512차원의 $z$ domain에서 $w$ domain으로 매핑을 수행
+    - 가우시안 분포에서 샘플링한 $z$ vector를 사용하지 않고, $w$ vector를 사용하면 linear space에서 특징들을 분리할 수 있음
+- Adaptive Instance Normalization (ADaIN)
+
+## 7. [StyleGAN2](https://arxiv.org/pdf/1912.04958.pdf) (2019)
+
+- [official code](https://github.com/NVlabs/stylegan2-ada-pytorch)
 
 ## Reference
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
