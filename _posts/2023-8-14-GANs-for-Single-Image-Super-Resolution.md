@@ -4,7 +4,7 @@ date: 2023-8-14
 author: jieun
 math: True
 categories: [Vision]
-tags: [GAN, SinGAN]
+tags: [GAN, SinGAN, MZSR]
 typora-root-url: ..
 ---
 
@@ -55,6 +55,8 @@ typora-root-url: ..
     - Markovian discriminator $D_n$: overlapping된 패치가 real인지 fake인지 분류
   - Reconstruction loss $\mathcal{L}_{rec}(G_n)$
     - noise map $z$로 실제 이미지 $x$를 정확히 생성하도록 학습
+   
+## 2. [MZSR](https://openaccess.thecvf.com/content_CVPR_2020/papers/Soh_Meta-Transfer_Learning_for_Zero-Shot_Super-Resolution_CVPR_2020_paper.pdf) (2020)
 
 ## Reference
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
