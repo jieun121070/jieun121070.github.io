@@ -1,6 +1,6 @@
 ---
 title: "GANs for Single Image Super-Resolution"
-date: 2023-8-14
+date: 2023-9-4
 author: jieun
 math: True
 categories: [Vision]
@@ -31,7 +31,7 @@ typora-root-url: ..
 
 - [official code](https://github.com/tamarott/SinGAN)
 - 한 장의 이미지만을 사용해 GAN 네트워크를 학습
-- 총 $N+1$개의 가벼운 개별 GAN 학습
+- 총 $N+1$개의 가벼운 개별 GAN 학습 (PGGAN은 하나의 네트워크)
   - 생성자
     - Residual Learning을 이용해 초반에는 대략적인(coarse) 정보 > 점차 세밀한(fine) 정보를 추가
       - 생성자는 noise $z_n$와 이전 단계 output $\tilde{x}_{n+1}$을 입력으로 받게 됨

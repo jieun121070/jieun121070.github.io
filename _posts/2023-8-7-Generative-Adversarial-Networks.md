@@ -4,11 +4,11 @@ date: 2023-8-7
 author: jieun
 math: True
 categories: [Vision]
-tags: [GAN, WGAN, PGGAN, StyleGAN]
+tags: [GAN, WGAN]
 typora-root-url: ..
 ---
 
-본 포스트에서는 GAN부터 StyleGAN까지 GAN 모델들을 간략하게 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
+본 포스트에서는 GAN부터 WGAN까지 GAN 계열 모델의 발전 과정을 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
 - 모델링 대상
   - VAE는 explicit distribution을 모델링
@@ -179,7 +179,7 @@ class Discriminator(nn.Module):
 - 처음부터 복잡한 네트워크를 학습하는 것이 아니라, 저해상도에서 고해상도로 학습을 진행하는 과정에서 점진적으로 네트워크의 레이어를 붙여 나감
 - 한계점
   - 이미지의 특징들이 분리되지 않아 특징 제어가 어려움
- 
+
 ## 6. [StyleGAN](https://arxiv.org/pdf/1701.07875.pdf) (2018)
 
 - [official code](https://github.com/NVlabs/stylegan)

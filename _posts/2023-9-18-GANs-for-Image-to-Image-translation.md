@@ -1,6 +1,6 @@
 ---
 title: "GANs for Image to Image translation"
-date: 2023-8-21
+date: 2023-9-18
 author: jieun
 math: True
 categories: [Vision]
