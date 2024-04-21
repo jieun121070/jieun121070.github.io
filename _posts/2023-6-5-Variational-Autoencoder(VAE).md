@@ -53,17 +53,14 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 
 $q_{\theta}(z \vert x)$가 $p_{\theta}(z \vert x)$에 최대한 가깝도록 만들어야 하는데, 이 때 두 분포 사이의 거리를 측정하는 [KL divergence](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)를 사용할 수 있습니다. 즉, $$D_{KL}(q_{\theta}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$를 최소화하는 것과 같습니다.
 
-$
-\begin{align*}
-D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z|x)} dz \\
+$$\begin{align*}D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z|x)} dz \\
 &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)p_{\theta}(x)}{p_{\theta}(z,x)} dz \\
 &= \int q_{\phi}(z|x) \log \frac{p_{\theta}(x|z) q_{\phi}(z|x)}{p_{\theta}(z,x)} dz \\
 &= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z,x)} dz \\
 &= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(x|z)p_{\theta}(z)} dz \\
 &= \log p_{\theta}(x) + E_{z \sim q_{\phi}(z|x)} \left[ \log \frac{q_{\phi}(z|x)}{p_{\theta}(z)} - \log p_{\theta}(x|z) \right] \\
 &= \log p_{\theta}(x) + D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) - E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right]
-\end{align*}
-$
+\end{align*}$$
 
 위 수식의 결과를 정리해보면 다음과 같습니다.
 
@@ -71,7 +68,7 @@ $$\log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) = \mathb
 
 위 수식의 좌변은 VAE 학습 과정에서 최대화하고자 하는 것입니다. 관찰된 데이터 $x$가 모델에 의해 생성될 log likelihood $\log p_{\theta}(x)$는 최대화하고자 하고, $q_{\theta}(z \vert x)$와 $p_{\theta}(z \vert x)$ 사이의 거리  $$D_{KL}(q_{\theta}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$는 최소화하고자 하기 때문입니다. 따라서 위 수식에 음수를 취해 loss function으로 사용합니다.
 
-$\begin{align*}L_{VAE}(\theta, \phi) &= -\log p_{\theta}(x) + D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \\ &= -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{KL}(q_{\phi}(z|x) \vert\vert p(z))\end{align*}$
+$$\begin{align*}L_{VAE}(\theta, \phi) &= -\log p_{\theta}(x) + D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \\ &= -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{KL}(q_{\phi}(z|x) \vert\vert p(z))\end{align*}$$
 
 Variational Bayesian 방법론에서 이 loss function은 ELBO(evidence lower bound)로 알려져 있습니다. 이름에 lower bound가 사용된 이유는 KL divergence가 항상 0 이상의 값을 가지기 때문에 $-L_{VAE}$가 $\log p_{\theta}(x)$의 lower bound가 되기 때문입니다.
 
