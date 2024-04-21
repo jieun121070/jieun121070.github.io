@@ -15,9 +15,9 @@ typora-root-url: ..
     - VAE는 입력 데이터의 **잠재 공간에 대한 확률 분포를 명시적으로 모델링**
     - encoder는 입력 데이터를 기반으로 잠재 공간에서의 평균(mean)과 분산(variance)을 출력하고, 이 평균과 분산을 사용해 잠재 공간에서 샘플링을 수행하여 새로운 데이터를 생성
   - GAN은 implicit distribution을 모델링 (VAE 보다 좀 더 practical)
-    - GAN에서 생성자는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습
-    - 판별자는 실제 데이터와 생성된 데이터를 구분하는 기능을 학습
-    - 생성자의 목적은 판별자를 속이는 것이므로, 생성자는 결국 실제 데이터 분포를 모방하는 데이터를 생성할 수 있는 **함수를 간접적으로 학습**하게 됨
+    - GAN에서 생성기는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습
+    - 판별기는 실제 데이터와 생성된 데이터를 구분하는 기능을 학습
+    - 생성기의 목적은 판별기를 속이는 것이므로, 생성기는 결국 실제 데이터 분포를 모방하는 데이터를 생성할 수 있는 **함수를 간접적으로 학습**하게 됨
 - [분포 사이의 유사성을 측정하는 metric](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)
   - VAE는 KL divergence 사용
     - 두 분포 $p$와 $q$가 주어졌을 때, $p$가 $q$에 대해 얼마나 다른지 측정
@@ -31,16 +31,16 @@ typora-root-url: ..
 ![](/assets/img/gan/gan.png)
 _GAN architecture_
 
-- 생성자와 판별자 두 개의 네트워크 학습
-  - 생성자의 역할은 판별자가 구분하기 어려운, 진짜같은 이미지를 생성하는 것
-  - 판별자의 output은 Real(1), Fake(0)
+- 생성기와 판별기 두 개의 네트워크 학습
+  - 생성기의 역할은 판별기가 구분하기 어려운, 진짜같은 이미지를 생성하는 것
+  - 판별기의 output은 Real(1), Fake(0)
   - loss function
     - $\underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
-      - 판별자 학습 시 생성자 고정 $\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
-      - 생성자 학습 시 판별자 고정
+      - 판별기 학습 시 생성기 고정 $\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
+      - 생성기 학습 시 판별기 고정
         $\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
-      - 위 과정을 반복하는 과정에서 생성자와 판별자가 서로 경쟁하면서 학습
-    - 생성자가 만든 이미지가 real인지 fake인지 판별자가 구분할 수 없어서 $D(G(z))$가 0.5에 가까워지는 것이 목표
+      - 위 과정을 반복하는 과정에서 생성기와 판별기가 서로 경쟁하면서 학습
+    - 생성기가 만든 이미지가 real인지 fake인지 판별기가 구분할 수 없어서($p_{data}=p_g$) 판별기의 output이 0.5에 가까워지는 것이 목표
 - 실험 결과
   - 학습 데이터를 단순히 암기한 것이 아님
   - 흐릿하지 않고 또렷한 이미지를 생성할 수 있음
@@ -103,11 +103,11 @@ $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x
 ![](/assets/img/gan/dcgan.png)
 _DCGAN generator architecture_
 
-- GAN은 생성자와 판별자 학습할 때 MLP 구조를 사용했는데, DCGAN은 CNN 구조를 사용
+- GAN은 생성기와 판별기 학습할 때 MLP 구조를 사용했는데, DCGAN은 CNN 구조를 사용
 - GAN보다 고해상도의 이미지 생성 가능
-- 판별자와 생성자에서 사용하는 filter
-    - 판별자는 Strided Convolution을 사용해 너비와 높이를 감소시킴
-    - 생성자는 Transposed Convolution을 사용해 너비와 높이를 증가시킴
+- 판별기와 생성기에서 사용하는 filter
+    - 판별기는 Strided Convolution을 사용해 너비와 높이를 감소시킴
+    - 생성기는 Transposed Convolution을 사용해 너비와 높이를 증가시킴
 
 ```python
 class Generator(nn.Module):
