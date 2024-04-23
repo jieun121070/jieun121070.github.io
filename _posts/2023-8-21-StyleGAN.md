@@ -1,5 +1,5 @@
 ---
-title: "[Paper Review] A Style-Based Generator Architecture for Generative Adversarial Networks"
+title: "[Paper Review] StyleGAN"
 date: 2023-8-21
 author: jieun
 math: True
@@ -16,7 +16,7 @@ typora-root-url: ..
 - 한계점
   - 이미지의 특징들이 분리되지 않아 특징 제어가 어려움
 
-## 2. [StyleGAN](https://arxiv.org/pdf/1701.07875.pdf) (2018)
+## 2. [StyleGAN](https://arxiv.org/pdf/1812.04948.pdf) (2018)
 
 - [official code](https://github.com/NVlabs/stylegan)
 
@@ -35,7 +35,7 @@ typora-root-url: ..
     _StyleGAN generator architecture_
 
     - **Mapping Network**
-        
+      
         ![](/assets/img/gan/stylegan1.png)
         
         - 8개의 layer로 구성된 Mapping Network $f$를 사용해 512 차원의 latent vector $z$를 domain $\mathcal{Z}$에서 domain $\mathcal{W}$로 매핑
