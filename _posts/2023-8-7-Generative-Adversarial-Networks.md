@@ -32,7 +32,6 @@ typora-root-url: ..
 _GAN architecture_
 
 - 모델 구조
-  
   - 생성기와 판별기 두 개의 네트워크 학습
   - 생성기의 역할은 판별기가 구분하기 어려운, 진짜같은 이미지를 생성하는 것
   - 판별기의 output은 Real(1), Fake(0)
@@ -43,10 +42,8 @@ _GAN architecture_
         $\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
       - 위 과정을 반복하는 과정에서 생성기와 판별기가 서로 경쟁하면서 학습
     - 생성기가 만든 이미지가 real인지 fake인지 판별기가 구분할 수 없어서($p_{data}=p_g$) 판별기의 output이 0.5에 가까워지는 것이 목표
-  
 - 실험 결과
   - 학습 데이터를 단순히 암기한 것이 아님
-  
   - 흐릿하지 않고 또렷한 이미지를 생성할 수 있음
   
     ![](/assets/img/gan/gan1.png)
@@ -113,11 +110,8 @@ $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x
 _DCGAN generator architecture_
 
 - GAN은 생성기와 판별기 학습할 때 MLP 구조를 사용했는데, DCGAN은 CNN 구조를 사용
-
 - GAN보다 고해상도의 이미지 생성 가능
-
 - 모델 구조
-
     - 생성기
         - 표준 정규분포로부터 랜덤 샘플링된 100 차원의 vector $z$를 입력받음
         - fully connected layer를 통과시켜서 $4 \times 4 \times 1024$ 차원의 vector를 생성
@@ -127,14 +121,12 @@ _DCGAN generator architecture_
         - activation function
             - 출력 layer에는 Tanh, 그 외에는 ReLU 사용
             - -1과 1사이의 출력 layer output을 0과 255 사이의 값으로 변환
-
     - 판별기
       - 생성기의 output(가짜 이미지)과 실제 이미지를 입력받음
       - **strided convolution**를 사용해 너비와 높이를 감소시킴 (downsampling)
       - activation function
         - 출력 layer에서는 Sigmoid, 그 외에는 Leaky ReLU 사용
         - 출력 layer의 최종 output은 Real(1), Fake(0)
-
 - 실험 결과
 
 ![](/assets/img/gan/dcgan2.png)
