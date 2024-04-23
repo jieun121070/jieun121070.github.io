@@ -43,18 +43,19 @@ typora-root-url: ..
         - [official code](https://github.com/xunhuang1995/AdaIN-style)
         - instance normalization
             - 주어진 feature map의 각 pixel $x_i$에 대해 각 channel의 feature map을 정규화하는 방법. 아래 식에서 $\mu_X$는 feature map $X$의 평균, $\sigma_X$는 feature map $X$의 표준편차
-            $$\text{IN}(x_i)=\frac{x_i-\mu_X}{\sqrt{\sigma^2_X+\epsilon}}$$
+            
+              $$\text{IN}(x_i)=\frac{x_i-\mu_X}{\sqrt{\sigma^2_X+\epsilon}}$$
         - Adaptive Instance Normalization (ADaIN)
             - 학습시킬 파라미터가 없다는 장점이 있음
             - **입력 이미지의 통계적 특성을 style vector와 유사하게 만들어 style을 적용하는 것**
-            - 먼저, 입력된 feature map의 평균과 분산을 각각 0과 1로 정규화.그 다음 해당 feature map의 평균을 style vector의 평균으로 조정하고, 입력 이미지의 표준편차를 style vector의 표준편차로 스케일링. 아래 식에서 $y_{s,i}$는 style vector의 표준편차이고, $y_{b,i}$는 style vector의 평균
-
-                $$\text{AdaIN}(x_i,y)=y_{s,i}(\frac{x_i-\mu(x_i)}{\sigma(x_i)})+y_{b,i}$$
-
-        - ADaIN이 사용된 feed-forward 방식의 style transfer network
-
-            ![](/assets/img/gan/adain.png)
-
+    - 먼저, 입력된 feature map의 평균과 분산을 각각 0과 1로 정규화.그 다음 해당 feature map의 평균을 style vector의 평균으로 조정하고, 입력 이미지의 표준편차를 style vector의 표준편차로 스케일링. 아래 식에서 $y_{s,i}$는 style vector의 표준편차이고, $y_{b,i}$는 style vector의 평균
+        
+        $$\text{AdaIN}(x_i,y)=y_{s,i}(\frac{x_i-\mu(x_i)}{\sigma(x_i)})+y_{b,i}$$
+        
+- ADaIN이 사용된 feed-forward 방식의 style transfer network
+        
+    ![](/assets/img/gan/adain.png)
+        
             - `encoder`(fixed VGG-19)가 이미지의 content와 style을 인코딩하고, `ADaIN layer`는 encoder의 output을 입력받아 feature space에서 style transfer를 수행함
             - `decoder`는 `ADaIN layer`의 output을 image space로 변환함
             - content loss $\mathcal{L}_c$와 style loss $\mathcal{L}_s$를 계산하기 위해 동일한 `encoder` 사용
