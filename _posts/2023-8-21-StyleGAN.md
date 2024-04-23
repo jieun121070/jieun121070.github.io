@@ -45,6 +45,7 @@ typora-root-url: ..
             - 주어진 feature map의 각 pixel $x_i$에 대해 각 channel의 feature map을 정규화하는 방법. 아래 식에서 $\mu_X$는 feature map $X$의 평균, $\sigma_X$는 feature map $X$의 표준편차
             
               $$\text{IN}(x_i)=\frac{x_i-\mu_X}{\sqrt{\sigma^2_X+\epsilon}}$$
+              
         - Adaptive Instance Normalization (ADaIN)
             - 학습시킬 파라미터가 없다는 장점이 있음
             - **입력 이미지의 통계적 특성을 style vector와 유사하게 만들어 style을 적용하는 것**
