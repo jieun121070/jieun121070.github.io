@@ -31,7 +31,9 @@ typora-root-url: ..
 ![](/assets/img/gan/gan.png)
 _GAN architecture_
 
-- 생성기와 판별기 두 개의 네트워크 학습
+- 모델 구조
+  
+  - 생성기와 판별기 두 개의 네트워크 학습
   - 생성기의 역할은 판별기가 구분하기 어려운, 진짜같은 이미지를 생성하는 것
   - 판별기의 output은 Real(1), Fake(0)
   - loss function
@@ -41,9 +43,16 @@ _GAN architecture_
         $\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$
       - 위 과정을 반복하는 과정에서 생성기와 판별기가 서로 경쟁하면서 학습
     - 생성기가 만든 이미지가 real인지 fake인지 판별기가 구분할 수 없어서($p_{data}=p_g$) 판별기의 output이 0.5에 가까워지는 것이 목표
+  
 - 실험 결과
   - 학습 데이터를 단순히 암기한 것이 아님
+  
   - 흐릿하지 않고 또렷한 이미지를 생성할 수 있음
+  
+    ![](/assets/img/gan/gan1.png)
+  
+    ![](/assets/img/gan/gan2.png)
+  
   - latent vector 사이의 interpolation으로도 있을 법한 이미지를 생성할 수 있음
 
 ```python
@@ -104,10 +113,39 @@ $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x
 _DCGAN generator architecture_
 
 - GAN은 생성기와 판별기 학습할 때 MLP 구조를 사용했는데, DCGAN은 CNN 구조를 사용
+
 - GAN보다 고해상도의 이미지 생성 가능
-- 판별기와 생성기에서 사용하는 filter
-    - 판별기는 Strided Convolution을 사용해 너비와 높이를 감소시킴
-    - 생성기는 Transposed Convolution을 사용해 너비와 높이를 증가시킴
+
+- 모델 구조
+
+    - 생성기
+        - 표준 정규분포로부터 랜덤 샘플링된 100 차원의 vector $z$를 입력받음
+        - fully connected layer를 통과시켜서 $4 \times 4 \times 1024$ 차원의 vector를 생성
+        - activation map 형태(height 4, width 4, channel 1024)로 Reshape
+        - **transposed convolution**를 사용해 너비와 높이를 증가시킴 (upsampling)
+        - 최종적으로 RGB 형태(height 64, width 64, channel 3)의 output 산출
+        - activation function
+            - 출력 layer에는 Tanh, 그 외에는 ReLU 사용
+            - -1과 1사이의 출력 layer output을 0과 255 사이의 값으로 변환
+
+    - 판별기
+      - 생성기의 output(가짜 이미지)과 실제 이미지를 입력받음
+      - **strided convolution**를 사용해 너비와 높이를 감소시킴 (downsampling)
+      - activation function
+        - 출력 layer에서는 Sigmoid, 그 외에는 Leaky ReLU 사용
+        - 출력 layer의 최종 output은 Real(1), Fake(0)
+
+- 실험 결과
+
+![](/assets/img/gan/dcgan2.png)
+
+- 임의의 두 vector z_1, z_2를 interpolation한 vector들을 생성기에 입력해 결과 이미지를 나열했을 때, 부드러운 transition이 나타나는 것을 확인할 수 있음
+
+![](/assets/img/gan/dcgan1.png)
+
+- 사람의 얼굴에서 나타나는 다양한 특성을 적절하게 인코딩함
+  - 웃는 여성 이미지를 만드는 vector들의 평균 값(smiling woman)에서 무표정한 여성 이미지를 만드는 vector들의 평균 값(neutral woman)을 빼면, 여성이라는 특성은 지워지고 웃는다는 특성만 남음
+  - 여기에 무표정한 남성 이미지를 만드는 vector들의 평균 값(neutral man)을 더해 생성기에 입력하면 웃는 남성 이미지가 생성됨
 
 ```python
 class Generator(nn.Module):
