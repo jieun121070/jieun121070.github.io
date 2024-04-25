@@ -104,7 +104,7 @@ class Discriminator(nn.Module):
 
 $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x \vert y)]+E_{z \sim p_{z}(z)}[log(1-D(G(z \vert y)))] $$
 
-## 3. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2016)
+## 3. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2015)
 
 ![](/assets/img/gan/dcgan.png)
 _DCGAN generator architecture_

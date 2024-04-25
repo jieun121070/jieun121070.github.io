@@ -8,17 +8,19 @@ tags: [GAN, SinGAN, MZSR]
 typora-root-url: ..
 ---
 
-**Single Image Super-Resolution(SISR)**은 한 장의 저해상도 이미지를 고해상도 이미지로 변환하는 방법을 연구하는 분야입니다. 일반적으로, upsampling을 통해 저해상도 이미지의 width, height를 키운 다음, Neural Network에 통과시켜 세밀한 정보를 추가한 고해상도 이미지를 생성합니다.
+**Single Image Super-Resolution(SISR)**은 한 장의 저해상도 이미지를 고해상도 이미지로 변환하는 방법을 연구하는 분야입니다. 일반적으로, upsampling을 통해 저해상도 이미지의 width, height를 키운 다음, Neural Network에 통과시켜 세밀한 정보를 추가한 고해상도 이미지를 생성합니다. SISR은 학습 방법에 따라 아래와 같이 나누어 볼 수 있습니다.
 
-- Externally Trained Network (Supervised SISR)
+- **Externally Trained Network (Supervised SISR)**
+  
   - 다수의 고해상도-저해상도 이미지 쌍을 학습 데이터로 사용합니다.
   - 고해상도 이미지로 저해상도 이미지를 만든 다음, 저해상도 이미지를 Neural Network에 입력해서 고해상도 이미지로 복원할 수 있도록 학습을 진행합니다.
-- Internally Trained Network (Unsupervised Zero-Shot SISR)
-  - **한 장의 이미지만 학습 데이터로 사용**해서 해당 이미지에 특화된 CNN을 학습합니다. 그 이미지에 내재된 feature 정보를 토대로 고해상도 결과를 예측합니다.
-
-    ![](/assets/img/gan/sisr.png)
-
-    - 위 이미지에는 여러 개의 유사한 발코니가 있어서 작은 발코니의 해상도를 높일 때, 큰 발코니를 참고할 수 있는데요. 이러한 경우, 이미지에 자기 반복성(internal recurrence)이 존재한다고 말합니다.
+- **Internally Trained Network (Unsupervised Zero-Shot SISR)**
+  
+- **한 장의 이미지만 학습 데이터로 사용**해서 해당 이미지에 특화된 CNN을 학습합니다. 그 이미지에 내재된 feature 정보를 토대로 고해상도 결과를 예측합니다.
+  
+  ![](/assets/img/gan/sisr.png)
+  
+    - 위 이미지에는 여러 개의 유사한 발코니가 있어서 작은 발코니의 해상도를 높일 때, 큰 발코니를 참고할 수 있는데요. 이러한 경우, 이미지에 **자기 반복성(internal recurrence)**이 존재한다고 말합니다.
     - 여기에서 작은 발코니의 작은 난간과 같은 세부 사항은 외부 데이터베이스에는 존재하지 않는 정보입니다. 이 정보는 오로지 같은 이미지 내에서만 발견할 수 있습니다. 즉, 외부 데이터로만 훈련된 모델은 성능에 한계가 있습니다. 이러한 경우에는 외부에서 훈련된 최신 Super-Resolution (SR) 방법보다 이미지의 내부적인 정보가 더 강력한 예측력을 가지고 있기 때문에, 이를 효과적으로 활용하는 것이 중요합니다.
   - 한계점
     - 학습에 사용된 이미지 외의 다른 이미지에 적용하기 어렵습니다.
