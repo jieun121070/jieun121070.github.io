@@ -45,7 +45,7 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 - Prior $p_{\theta^*}(z)$에서 $z^{(i)}$를 샘플링
 - 조건부 확률 $p_{\theta^*}(x \vert z=z^{(i)})$에서 real data point처럼 보이는 $x^{(i)}$를 생성
 
-이렇게 구성된 모델을 학습시키기 위해서는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터 $\theta$를 찾아야 합니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. Posterior density $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 새로운 함수 $q_{\theta}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사시키는 방법으로 이러한 문제를 해결하는 모델이 바로 VAE입니다. 여기에서 $q_{\theta}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
+이렇게 구성된 모델을 학습시키기 위해서는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터 $\theta$를 찾아야 합니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. Posterior density $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 이러한 문제를 해결하기 위해 **새로운 함수 $q_{\theta}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사**시키는 모델이 바로 VAE입니다. 여기에서 $q_{\theta}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
 
 ![](/assets/img/gan/vae.png)
 
