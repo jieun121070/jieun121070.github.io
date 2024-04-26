@@ -34,6 +34,8 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 
 ## 2. Variational Autoencoder
 
+![](/assets/img/gan/vae_architecture.png)
+
 앞서 설명한 바와 같이, VAE는 생성 모델의 일종으로 Autoencoder와는 목적이 다릅니다. Autoencoder는 input을 고정된 vector로 매핑하지만 VAE는 input을 분포 $p_{\theta}$로 매핑하고자 합니다. input을 $x$라 하고 latent encoding vector를 $z$라 하면 둘 사이의 관계는 다음과 같이 나타낼 수 있습니다.
 
 - Prior $p_{\theta}(z)$
