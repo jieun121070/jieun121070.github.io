@@ -199,8 +199,12 @@ class Discriminator(nn.Module):
 ## 4. [Wasserstein GAN](https://arxiv.org/pdf/1701.07875.pdf) (2017)
 
 - GAN의 문제점 중 하나인 학습의 불안정성을 개선하기 위해 JS divergence 대신 Wasserstein 거리(Earth-Mover 거리)를 사용
-- WGAN은 weight clipping을 이용해 **1-Lipshichtz 조건**을 만족하도록 함으로써 안정적인 학습을 유도
+  - $y$ 값으로 0과 1이 아니라 -1과 1을 사용
+  - 판별기의 출력 layer에서 Sigmoid를 제거하여 output을 $[0, 1]$ 범위로 제한하지 않고, $[-\infty, \infty]$ 범위의 어떤 값이든 될 수 있음
+- WGAN은 **1-Lipshichtz 조건**을 만족하도록 함으로써 안정적인 학습을 유도
+  - 비평자의 weight를 $[-0.01, 0.01]$ 범위로 제한하는 weight clipping 방법을 사용
   - Lipshichtz 함수는 임의의 두 지점의 기울기가 어떤 상숫값 이상 증가하지 않는 함수. 이 상수가 1일 때 1-Lipshichtz 함수
+  - 거의 모든 점에서 연속적으로 미분 가능
   - 임의의 두 입력 이미지 $x_1$와 $x_2$에 대해 다음 부등식을 만족하도록 하는 것
   - $\vert x_1 - x_2 \vert$는 두 이미지 픽셀의 평균적인 절댓값 차이
   - $\vert D(x_1) - D(x_2) \vert$는 비평자 예측 간의 절댓값 차이
