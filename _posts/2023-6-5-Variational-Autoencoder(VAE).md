@@ -14,7 +14,7 @@ typora-root-url: ..
 
 ![](/assets/img/gan/ae.png)
 
-Autoencoder는 encoder과 decoder로 구성된 모델이며, input과 output이 동일합니다. 고차원의 input을 저차원으로 압축했다가 다시 원래 input으로 복원하는 과정을 거칩니다. input을 다시 원래대로 잘 복원하기 위해서는 저차원으로 압축한 feature(code)가 핵심적인 정보를 담고 있어야 합니다. Autoencoder는 feature를 최대한 잘 압축하는 방향으로 학습됩니다. 즉, Autoencoder의 목적은 새로운 데이터를 생성하는 것이 아니라 차원 축소(manifold learning)입니다.
+Autoencoder는 encoder과 decoder로 구성된 모델이며, input과 output이 동일합니다. 고차원의 input을 저차원으로 압축했다가 다시 원래 input으로 복원하는 과정을 거칩니다. loss function으로는 input과 output 사이의 **recontruction error**를 사용합니다. 이 loss function을 최소화하기 위해 저차원으로 압축한 feature(code)가 핵심적인 정보를 담도록 학습됩니다. 즉, Autoencoder의 목적은 새로운 데이터를 생성하는 것이 아니라 차원 축소(manifold learning)입니다.
 
 ### Manifold learning
 
@@ -76,7 +76,7 @@ Variational Bayesian 방법론에서 이 loss function은 ELBO(evidence lower bo
 
 $$-L_{VAE} = \log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \parallel p_{\theta}(z|x)) \leq \log p_{\theta}(x)$$
 
-ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다. VAE에서 loss function은 이 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다.
+ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다. VAE에서 loss function은 이 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다. 여기에 Autoencoder에서 사용한 reconstruction error을 더해 loss function으로 사용합니다.
 
 이처럼 VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에 대한 최적화에 그친다는 한계가 있습니다. 다음 포스트에서 다룰 예정인 [GAN](https://jieun121070.github.io/posts/Generative-Adversarial-Networks/)은 VAE와 달리 implicit distribution을 모델링하는, likelihood-free 모델입니다.
 
