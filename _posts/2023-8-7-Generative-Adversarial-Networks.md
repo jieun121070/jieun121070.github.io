@@ -250,7 +250,7 @@ Mode collapse는 GAN을 학습할 때 발생하는 주요 문제들 중 하나�
 
 $$\begin{align*} W_1(p_{data},p_g) &= \inf_{\gamma \in \Pi(p_{data},p_g)} \mathbb{E}_{(x,y)\sim\gamma}[\|x - y\|] \\ &= \sup_{\vert\vert f \vert\vert_L \leq1} [E_{x \sim p_r}[f(x)]-E_{y \sim p_g}[f(x)]] \end{align*}$$
 
-- WGAN은 weight를 $[-0.01, 0.01]$ 범위로 제한하는 **weight clipping** 방법을 사용해 1-Lipshichtz 조건을 만족하도록 함으로써 안정적인 학습을 유도
+- weight를 $[-0.01, 0.01]$ 범위로 제한하는 **weight clipping** 방법을 사용해 1-Lipshichtz 조건을 만족하도록 함으로써 안정적인 학습을 유도
   - Lipshichtz 함수는 임의의 두 지점의 기울기가 어떤 상숫값 이상 증가하지 않는 함수(이 상수가 1일 때 1-Lipshichtz 함수). 거의 모든 점에서 연속적으로 미분 가능
 
     ![](/assets/img/gan/Lipschitz_Visualisierung.gif){: width="400"}
@@ -265,7 +265,7 @@ $$ \frac{ \vert D(x_1) - D(x_2) \vert }{ \vert x_1 - x_2 \vert } \le 1 $$
 ### 5-3. [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) (2017)
 
 - WGAN은 weight clipping을 사용했기 때문에 학습 속도가 너무 느리다는 한계점이 있음
-- WGAN-GP는 gradient penalty를 이용하여 WGAN의 성능을 개선
+- WGAN-GP는 **gradient penalty**를 이용하여 WGAN의 성능을 개선
 
 ## Reference
 - [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
