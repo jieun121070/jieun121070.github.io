@@ -224,7 +224,8 @@ Mode collapse는 GAN을 학습할 때 발생하는 주요 문제들 중 하나�
 
   - $f(\theta_G, \theta_D)$는 단순 convex, concave 함수가 아닐 확률이 높고, 이 경우 greedy한 gradient method를 사용하면 local optimum에 빠지기 쉬움
 
--  $\theta_D^\ast$ 대신에 $\theta_D^k$를 사용하는 것이 unrolled gan의 핵심
+- $\theta_D^\ast$ 대신에 $\theta_D^k$를 사용하는 것이 unrolled gan의 핵심
+
   - 현실적으로 최적의 판별기 $\theta_D^\ast$를 구하는 것은 어려우므로, 판별기를 k번 업데이트한 $\theta_D^k$를 사용하는 것
 
     $$f(\theta_G, \theta_D^\ast(\theta_G)):f_K(\theta_G,\theta_D)=f(\theta_G, \theta_D^K(\theta_G, \theta_D))$$
