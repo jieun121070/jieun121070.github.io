@@ -8,25 +8,30 @@ tags: [GAN, WGAN]
 typora-root-url: ..
 ---
 
-본 포스트에서는 GAN부터 WGAN까지 GAN 계열 모델의 발전 과정을 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
+본 포스트에서는 GAN부터 WGAN-GP까지 GAN 계열 모델의 발전 과정을 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN 모델에 대해 소개하기에 앞서 지난 포스트에서 다루었던, GAN과 같은 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
-- 모델링 대상
-  - VAE는 explicit distribution을 모델링
-    - VAE는 입력 데이터의 **잠재 공간에 대한 확률 분포를 명시적으로 모델링**
-    - encoder는 입력 데이터를 기반으로 잠재 공간에서의 평균(mean)과 분산(variance)을 출력하고, 이 평균과 분산을 사용해 잠재 공간에서 샘플링을 수행하여 새로운 데이터를 생성
-  - GAN은 implicit distribution을 모델링 (VAE 보다 좀 더 practical)
-    - GAN에서 생성기는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습
-    - 판별기는 실제 데이터와 생성된 데이터를 구분하는 기능을 학습
-    - 생성기의 목적은 판별기를 속이는 것이므로, 생성기는 결국 실제 데이터 분포를 모방하는 데이터를 생성할 수 있는 **함수를 간접적으로 학습**하게 됨
-- [분포 사이의 유사성을 측정하는 metric](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)
-  - VAE는 KL divergence 사용
-    - 두 분포 $p$와 $q$가 주어졌을 때, $p$가 $q$에 대해 얼마나 다른지 측정
-    - KL divergence는 비대칭(asymmetric)
-  - (Vanila) GAN은 JS divergence 사용
-    - 두 분포 $p$과 $q$가 주어졌을 때, 두 분포의 중간 지점과의 차이를 측정
-    - JS divergence 는 대칭(symmetric)
+## GAN과 VAE 비교
 
-## 1. [GAN](https://arxiv.org/pdf/1406.2661.pdf) (2014)
+### 모델링 대상
+
+- VAE는 explicit distribution을 모델링
+  - VAE는 입력 데이터의 **잠재 공간에 대한 확률 분포를 명시적으로 모델링**
+  - encoder는 입력 데이터를 기반으로 잠재 공간에서의 평균(mean)과 분산(variance)을 출력하고, 이 평균과 분산을 사용해 잠재 공간에서 샘플링을 수행하여 새로운 데이터를 생성
+- GAN은 implicit distribution을 모델링 (VAE 보다 좀 더 practical)
+  - GAN에서 생성기는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습
+  - 판별기는 실제 데이터와 생성된 데이터를 구분하는 기능을 학습
+  - 생성기의 목적은 판별기를 속이는 것이므로, 생성기는 결국 실제 데이터 분포를 모방하는 데이터를 생성할 수 있는 **함수를 간접적으로 학습**하게 됨
+
+### [분포 사이의 유사성을 측정하는 metric](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)
+
+- VAE는 KL divergence 사용
+  - 두 분포 $p$와 $q$가 주어졌을 때, $p$가 $q$에 대해 얼마나 다른지 측정
+  - KL divergence는 비대칭(asymmetric)
+- (Vanila) GAN은 JS divergence 사용
+  - 두 분포 $p$과 $q$가 주어졌을 때, 두 분포의 중간 지점과의 차이를 측정
+  - JS divergence 는 대칭(symmetric)
+
+## [GAN](https://arxiv.org/pdf/1406.2661.pdf) (2014)
 
 ![](/assets/img/gan/gan.png)
 _GAN architecture_
@@ -98,13 +103,13 @@ class Discriminator(nn.Module):
         return validity
 ```
 
-## 2. [Conditional GAN](https://arxiv.org/pdf/1411.1784.pdf) (2014)
+## [Conditional GAN](https://arxiv.org/pdf/1411.1784.pdf) (2014)
 
 - 생성하고자 하는 label $y$를 조건으로 입력
 
 $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x \vert y)]+E_{z \sim p_{z}(z)}[log(1-D(G(z \vert y)))] $$
 
-## 3. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2015)
+## [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2015)
 
 ![](/assets/img/gan/dcgan.png)
 _DCGAN generator architecture_
@@ -196,23 +201,73 @@ class Discriminator(nn.Module):
         return validity
 ```
 
-## 4. [Wasserstein GAN](https://arxiv.org/pdf/1701.07875.pdf) (2017)
+## Mode collapse
 
-- GAN의 문제점 중 하나인 학습의 불안정성을 개선하기 위해 JS divergence 대신 Wasserstein 거리(Earth-Mover 거리)를 사용
+Mode collapse는 GAN을 학습할 때 발생하는 주요 문제들 중 하나입니다. 이 문제는 생성자가 판별자보다 뛰어난 경우에 발생하는데요. 판별자의 성능이 좋지 않을 때, 생성기가 판별기를 쉽게 속일 수 있는 몇 개의 이미지를 찾아낸 다음에는 그 이상 다양한 이미지를 생성할 수 없게 되는 상태를 말합니다. 판별기가 구분할 수 없는 이미지를 생성하는 것이 생성기의 목적인데, 이 목적을 달성했으니 더이상 학습할 동기가 없어지는 것입니다. 또한 이 경우에는 loss function의 gradient가 0에 가까운 값이 되므로 이 상태에서 벗어날 수 없게 됩니다. 이 문제를 해결하기 위해 다양한 모델들이 제안되었는데요. 본 포스트에서는 Unrolled GAN, WGAN과 WGAN-GP를 다뤄보겠습니다.
+
+### [Unrolled GAN](https://arxiv.org/pdf/1611.02163) (2017)
+
+![](/assets/img/gan/unrolled.png)
+
+- optimal point $\theta^*=\{\theta_G^*, \theta_D^*\}$에 도달하기 어려운 이유
+
+  - GAN의 학습 과정은 결국  $\theta_D^*$에 의해 최대화된 함수 $f$를 최소화하는 $\theta_G^*$를 찾는 과정
+
+    $$\theta_G^*=\arg\underset{\theta_G}{\min}\underset{\theta_D}{\max}f(\theta_G, \theta_D)=\arg\underset{\theta_G}{\min}f(\theta_G, \theta_D^*(\theta_G))$$
+
+  - 다시 말해, $\theta_D^*$를 찾아야 $\theta_G^*$를 찾을 수 있는데 $\theta_D^*$는 고정된 것이 아니라 $\theta_G$에 따라 변함
+
+    $$\theta_D^*(\theta_G) = \arg\underset{\theta_D}{\max}f(\theta_G, \theta_D)$$
+
+  - 많은 시간과 자원을 들여서 $\theta_D^*$를 찾았다고 하더라도, 이는 $\theta_G$로 찾은 것이지 $\theta_G^*$로 찾은 것이 아님
+
+    $$\theta_D^*(\theta_G) \ne \theta_D^*(\theta_G^*)$$
+
+  - $f(\theta_G, \theta_D)$는 단순 convex, concave 함수가 아닐 확률이 높고, 이 경우 greedy한 gradient method를 사용하면 local optimum에 빠지기 쉬움
+
+-  $\theta_D^*$ 대신에 $\theta_D^k$를 사용하는 것이 unrolled gan의 핵심
+
+  - 현실적으로 최적의 판별기 $\theta_D^*$를 구하는 것은 어려우므로, 판별기를 k번 업데이트한 $\theta_D^k$를 사용하는 것
+
+    $$f(\theta_G, \theta_D^*(\theta_G)):f_K(\theta_G,\theta_D)=f(\theta_G, \theta_D^K(\theta_G, \theta_D))$$
+
+  - 생성기와 판별기를 한 번씩 순서대로 업데이트 하는 것이 아니라, 판별기를 $k$번 업데이트($\theta_D^k$)하고 생성기를 업데이트한 다음, 다시 판별기를 $k$번 업데이트 하고 생성기를 업데이트하는 과정을 반복.
+
+    $$\theta_D^{k+1}=\theta_D^k+\eta^k\frac{df(\theta_G, \theta_D^k)}{d\theta_D^k}$$
+
+  - $k$가 무한대로 가면, 이론적으로는 $\theta_D^\infty \rightarrow \theta_D^*$
+
+    $$\theta_D^*(\theta_G)=\underset{k \rightarrow \infty}{\lim}\theta_D^k$$
+
+### [Wasserstein GAN](https://arxiv.org/pdf/1701.07875.pdf) (2017)
+
+- GAN의 loss fucntions으로 JS divergence 대신 **Wasserstein distance(Earth-Mover distance)**를 사용
   - $y$ 값으로 0과 1이 아니라 -1과 1을 사용
   - 판별기의 출력 layer에서 Sigmoid를 제거하여 output이 $[0, 1]$ 범위로 제한되지 않고, $[-\infty, \infty]$ 범위의 어떤 값이든 될 수 있음
-- WGAN은 **1-Lipshichtz 조건**을 만족하도록 함으로써 안정적인 학습을 유도
-  - 판별기의 weight를 $[-0.01, 0.01]$ 범위로 제한하는 weight clipping 방법을 사용
-  - Lipshichtz 함수는 임의의 두 지점의 기울기가 어떤 상숫값 이상 증가하지 않는 함수. 이 상수가 1일 때 1-Lipshichtz 함수
-  - 거의 모든 점에서 연속적으로 미분 가능
+- GAN의 loss function을 Wasserstein distance formula로 바꾸는 방법
+  - Wasserstein distance는 $\gamma$를 잘 선택해서 이동 비용을 최소화하는 최적화 문제
+  - Wasserstein distance의 primal form이 아니라 dual form을 활용할 수 있음
+  - Kantorovich-Rubinstein Theorem
+
+$$\begin{align*} W_1(p_{data},p_g) &= \inf_{\gamma \in \Pi(p_{data},p_g)} \mathbb{E}_{(x,y)\sim\gamma}[\|x - y\|] \\ &= \sup_{\vert\vert f \vert\vert_L \leq1} [E_{x \sim p_r}[f(x)]-E_{y \sim p_g}[f(x)]] \end{align*}$$
+
+- WGAN은 weight를 $[-0.01, 0.01]$ 범위로 제한하는 **weight clipping** 방법을 사용해 1-Lipshichtz 조건을 만족하도록 함으로써 안정적인 학습을 유도
+
+  - Lipshichtz 함수는 임의의 두 지점의 기울기가 어떤 상숫값 이상 증가하지 않는 함수(이 상수가 1일 때 1-Lipshichtz 함수). 거의 모든 점에서 연속적으로 미분 가능
+
+    ![](/assets/img/gan/Lipschitz_Visualisierung.gif){: width="400"}
+
   - 임의의 두 입력 이미지 $x_1$와 $x_2$에 대해 다음 부등식을 만족하도록 하는 것
+
   - $\vert x_1 - x_2 \vert$는 두 이미지 픽셀의 평균적인 절댓값 차이
+
   - $\vert D(x_1) - D(x_2) \vert$는 판별기 예측 간의 절댓값 차이
+
   - 즉, 두 이미지 사이에서 판별기의 예측이 변화하는 비율의 절댓값이 어디에서나 최대 1이어야 함
 
 $$ \frac{ \vert D(x_1) - D(x_2) \vert }{ \vert x_1 - x_2 \vert } \le 1 $$
 
-## 5. [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) (2017)
+### [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) (2017)
 
 - WGAN은 weight clipping을 사용했기 때문에 학습 속도가 너무 느리다는 한계점이 있음
 - WGAN-GP는 gradient penalty를 이용하여 WGAN의 성능을 개선
