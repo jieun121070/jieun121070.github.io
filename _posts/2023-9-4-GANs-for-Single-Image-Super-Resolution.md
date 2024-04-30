@@ -8,15 +8,16 @@ tags: [GAN, SinGAN, MZSR]
 typora-root-url: ..
 ---
 
-**Single Image Super-Resolution(SISR)**은 한 장의 저해상도 이미지를 고해상도 이미지로 변환하는 방법을 연구하는 분야입니다. 일반적으로, upsampling을 통해 저해상도 이미지의 width, height를 키운 다음, Neural Network에 통과시켜 세밀한 정보를 추가한 고해상도 이미지를 생성합니다. SISR은 학습 방법에 따라 아래와 같이 나누어 볼 수 있습니다.
+**Single Image Super-Resolution(SISR)**은 한 장의 저해상도 이미지를 고해상도 이미지로 변환하는 방법을 연구하는 분야입니다. 일반적으로, upsampling을 통해 저해상도 이미지의 width, height를 키운 다음, Neural Network에 통과시켜 세밀한 정보를 추가한 고해상도 이미지를 생성합니다. SISR은 학습 방법에 따라 아래와 같이 나누어 볼 수 있습니다. 본 포스트에서는 Unsupervised Zero-Shot SISR 모델 중 SinGAN과 MZSR에 대해 정리해 보겠습니다.
 
 - **Externally Trained Network (Supervised SISR)**
   
   - 다수의 고해상도-저해상도 이미지 쌍을 학습 데이터로 사용합니다.
   - 고해상도 이미지로 저해상도 이미지를 만든 다음, 저해상도 이미지를 Neural Network에 입력해서 고해상도 이미지로 복원할 수 있도록 학습을 진행합니다.
+  
 - **Internally Trained Network (Unsupervised Zero-Shot SISR)**
   
-- **한 장의 이미지만 학습 데이터로 사용**해서 해당 이미지에 특화된 CNN을 학습합니다. 그 이미지에 내재된 feature 정보를 토대로 고해상도 결과를 예측합니다.
+  - **한 장의 이미지만 학습 데이터로 사용**해서 해당 이미지에 특화된 CNN을 학습합니다. 그 이미지에 내재된 feature 정보를 토대로 고해상도 결과를 예측합니다.
   
   ![](/assets/img/gan/sisr.png)
   
