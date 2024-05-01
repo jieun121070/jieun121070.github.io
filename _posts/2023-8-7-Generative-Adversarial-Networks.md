@@ -47,6 +47,7 @@ $$\underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)
 판별기 학습 시에는 생성기를 고정시키고, 반대로 생성기 학습 시에는 판별기를 고정시킵니다.
 
 $$\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$$
+
 $$\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$$
 
 위 과정을 반복하면서 생성기와 판별기가 서로 경쟁하면서 학습합니다. 최종적으로는, 생성기가 만든 이미지가 진짜인지 가짜인지 판별기가 구분할 수 없어서($p_{data}=p_g$) 판별기의 output이 0.5에 가까워지는 것이 목표인데요. 이 과정을 좀 더 자세히 설명해보면 다음과 같습니다.
