@@ -14,7 +14,18 @@ typora-root-url: ..
 - **attribute value**: attribute의 특정한 값 ex) 머리 색깔 - black/blond/brown, 성별 - 여성/남성
 - **domain**: 동일한 attribute value를 공유하는 이미지의 집합
 
-## 1. [Pix2Pix](https://arxiv.org/pdf/1611.07004.pdf) (2017)
+## 1. [Conditional GAN](https://arxiv.org/pdf/1411.1784.pdf) (2014)
+
+![](/assets/img/gan/cgan.png)
+
+_Conditional GAN architecture_
+
+- 생성하고자 하는 label $y$를 조건으로 입력하는 모델. label $y$는 one-hot encoding되어 모델에 입력
+- 생성하고자 하는 이미지의 유형을 제어할 수 있음. 예를 들어 성별을 제어하고자 하는 경우, 여성의 얼굴을 생성하려면 $y$에 vector [0, 1]을 입력하고 남성의 얼굴을 생성하려면 [1, 0]을 입력
+
+$$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x \vert y)]+E_{z \sim p_{z}(z)}[log(1-D(G(z \vert y)))] $$
+
+## 2. [Pix2Pix](https://arxiv.org/pdf/1611.07004.pdf) (2017)
 
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 - conditional GAN을 활용한 image-to-image translation
@@ -32,7 +43,7 @@ typora-root-url: ..
 - 한계점
   - 서로 다른 domain $X$, $Y$의 데이터들을 한쌍으로 묶은 **paired** dataset 필요
 
-## 2. [CycleGAN](https://arxiv.org/pdf/1703.10593.pdf) (2017)
+## 3. [CycleGAN](https://arxiv.org/pdf/1703.10593.pdf) (2017)
 
 - [official code](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix)
 - **unpaired** image-to-image translation
@@ -45,7 +56,7 @@ typora-root-url: ..
   - shape 정보를 포함한 content의 변경이 필요한 경우
   - 학습 데이터에 포함되지 않은 사물을 처리하는 경우
 
-## 3. [StarGAN](https://openaccess.thecvf.com/content_cvpr_2018/papers/Choi_StarGAN_Unified_Generative_CVPR_2018_paper.pdf) (2018)
+## 4. [StarGAN](https://openaccess.thecvf.com/content_cvpr_2018/papers/Choi_StarGAN_Unified_Generative_CVPR_2018_paper.pdf) (2018)
 
 - 다중 domain에서 효율적인 image-to-image translation network
   - 두 개의 domain 간 translation을 위한 방법론을 제안한 CycleGAN의 한계점을 개선

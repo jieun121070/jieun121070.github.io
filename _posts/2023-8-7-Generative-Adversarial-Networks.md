@@ -70,63 +70,7 @@ _GAN 학습 과정_
 
 - latent vector 사이의 interpolation으로도 있을 법한 이미지를 생성할 수 있습니다.
 
-```python
-class Generator(nn.Module):
-    def __init__(self):
-        super(Generator, self).__init__()
-
-        def block(in_feat, out_feat, normalize=True):
-            layers = [nn.Linear(in_feat, out_feat)]
-            if normalize:
-                layers.append(nn.BatchNorm1d(out_feat, 0.8))
-            layers.append(nn.LeakyReLU(0.2, inplace=True))
-            return layers
-
-        self.model = nn.Sequential(
-            *block(opt.latent_dim, 128, normalize=False),
-            *block(128, 256),
-            *block(256, 512),
-            *block(512, 1024),
-            nn.Linear(1024, int(np.prod(img_shape))),
-            nn.Tanh()
-        )
-
-    def forward(self, z):
-        img = self.model(z)
-        img = img.view(img.size(0), *img_shape)
-        return img
-
-class Discriminator(nn.Module):
-    def __init__(self):
-        super(Discriminator, self).__init__()
-
-        self.model = nn.Sequential(
-            nn.Linear(int(np.prod(img_shape)), 512),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(512, 256),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid(),
-        )
-
-    def forward(self, img):
-        img_flat = img.view(img.size(0), -1)
-        validity = self.model(img_flat)
-
-        return validity
-```
-
-## 3. [Conditional GAN](https://arxiv.org/pdf/1411.1784.pdf) (2014)
-
-![](/assets/img/gan/cgan.png)
-
-_Conditional GAN architecture_
-
-Conditional GAN은 생성하고자 하는 label $y$를 조건으로 입력하는 모델입니다. label $y$는 one-hot encoding되어 모델에 입력됩니다. 이런 방식으로 GAN을 확장하면, 생성하고자 하는 이미지의 유형을 제어할 수 있습니다. 예를 들어 성별을 제어하고자 하는 경우, 여성의 얼굴을 생성하려면 $y$에 vector [0, 1]을 입력하고 남성의 얼굴을 생성하려면 [1, 0]을 입력하는 것입니다.
-
-$$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x \vert y)]+E_{z \sim p_{z}(z)}[log(1-D(G(z \vert y)))] $$
-
-## 4. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2015)
+## 3. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2015)
 
 ![](/assets/img/gan/dcgan.png)
 _DCGAN generator architecture_
@@ -169,68 +113,11 @@ _DCGAN generator architecture_
 
 - 위 결과는 DCGAN이 얼굴에서 나타나는 다양한 특성을 적절하게 인코딩했음을 보여줍니다. 웃는 여성 이미지를 만드는 vector들의 평균 값(smiling woman)에서 무표정한 여성 이미지를 만드는 vector들의 평균 값(neutral woman)을 빼면, 여성이라는 특성은 지워지고 웃는다는 특성만 남습니다. 여기에 무표정한 남성 이미지를 만드는 vector들의 평균 값(neutral man)을 더해 생성기에 입력하면 웃는 남성 이미지가 생성됩니다.
 
-```python
-class Generator(nn.Module):
-    def __init__(self):
-        super(Generator, self).__init__()
-
-        self.init_size = opt.img_size // 4
-        self.l1 = nn.Sequential(nn.Linear(opt.latent_dim, 128 * self.init_size ** 2))
-
-        self.conv_blocks = nn.Sequential(
-            nn.BatchNorm2d(128),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(128, 128, 3, stride=1, padding=1),
-            nn.BatchNorm2d(128, 0.8),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(128, 64, 3, stride=1, padding=1),
-            nn.BatchNorm2d(64, 0.8),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Conv2d(64, opt.channels, 3, stride=1, padding=1),
-            nn.Tanh(),
-        )
-
-    def forward(self, z):
-        out = self.l1(z)
-        out = out.view(out.shape[0], 128, self.init_size, self.init_size)
-        img = self.conv_blocks(out)
-        return img
-
-class Discriminator(nn.Module):
-    def __init__(self):
-        super(Discriminator, self).__init__()
-
-        def discriminator_block(in_filters, out_filters, bn=True):
-            block = [nn.Conv2d(in_filters, out_filters, 3, 2, 1), nn.LeakyReLU(0.2, inplace=True), nn.Dropout2d(0.25)]
-            if bn:
-                block.append(nn.BatchNorm2d(out_filters, 0.8))
-            return block
-
-        self.model = nn.Sequential(
-            *discriminator_block(opt.channels, 16, bn=False),
-            *discriminator_block(16, 32),
-            *discriminator_block(32, 64),
-            *discriminator_block(64, 128),
-        )
-
-        # The height and width of downsampled image
-        ds_size = opt.img_size // 2 ** 4
-        self.adv_layer = nn.Sequential(nn.Linear(128 * ds_size ** 2, 1), nn.Sigmoid())
-
-    def forward(self, img):
-        out = self.model(img)
-        out = out.view(out.shape[0], -1)
-        validity = self.adv_layer(out)
-
-        return validity
-```
-
-## 5. Mode collapse
+## 4. Mode collapse
 
 Mode collapse는 GAN을 학습할 때 발생하는 주요 문제들 중 하나입니다. 이 문제는 **생성자가 판별자보다 뛰어난 경우**에 발생하는데요. 판별자의 성능이 좋지 않을 때, 생성기가 판별기를 쉽게 속일 수 있는 몇 개의 이미지를 찾아낸 다음에는 그 이상 다양한 이미지를 생성할 수 없게 되는 상태를 말합니다. 판별기가 구분할 수 없는 이미지를 생성하는 것이 생성기의 목적인데, 이 목적을 달성했으니 더이상 학습할 동기가 없어지는 것입니다. 또한 이 경우에는 loss function의 gradient가 0에 가까운 값이 되므로 이 상태에서 벗어날 수 없게 됩니다. 이 문제를 해결하기 위해 강력한 판별자를 학습시키는 다양한 모델들이 제안되었는데요. 본 포스트에서는 Unrolled GAN, WGAN과 WGAN-GP를 다뤄보겠습니다.
 
-### 5-1. [Unrolled GAN](https://arxiv.org/pdf/1611.02163) (2017)
+### 4-1. [Unrolled GAN](https://arxiv.org/pdf/1611.02163) (2017)
 
 ![](/assets/img/gan/unrolled.png)
 
@@ -263,7 +150,7 @@ Mode collapse는 GAN을 학습할 때 발생하는 주요 문제들 중 하나�
 
     $$\theta_D^\ast(\theta_G)=\underset{k \rightarrow \infty}{\lim}\theta_D^k$$
 
-### 5-2. [Wasserstein GAN](https://arxiv.org/pdf/1701.07875.pdf) (2017)
+### 4-2. [Wasserstein GAN](https://arxiv.org/pdf/1701.07875.pdf) (2017)
 
 - GAN의 고질적인 문제인 Mode collapse와 불안정한 학습 문제를 해결하기 위해, loss fucntions으로 JS divergence 대신 **Wasserstein distance(Earth-Mover distance)**를 사용
   - $y$ 값으로 0과 1이 아니라 -1과 1을 사용
@@ -287,7 +174,7 @@ $$\begin{align*} W_1(p_{data},p_g) &= \inf_{\gamma \in \Pi(p_{data},p_g)} \mathb
 
 $$ \frac{ \vert D(x_1) - D(x_2) \vert }{ \vert x_1 - x_2 \vert } \le 1 $$
 
-### 5-3. [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) (2017)
+### 4-3. [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) (2017)
 
 - WGAN은 weight clipping을 사용했기 때문에 학습 속도가 너무 느리다는 한계점이 있음
 - WGAN-GP는 **gradient penalty**를 이용하여 WGAN의 성능을 개선
