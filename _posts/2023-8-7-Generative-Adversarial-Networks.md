@@ -47,12 +47,12 @@ $$\underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)
 판별기 학습 시에는 생성기를 고정시키고, 반대로 생성기 학습 시에는 판별기를 고정시킵니다.
 
 $$\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x)]+E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$$
+
 $$\underset{G}{\min}\,V(D, G)=E_{z \sim p_{z}(z)}[log(1-D(G(z)))]$$
 
 위 과정을 반복하면서 생성기와 판별기가 서로 경쟁하면서 학습합니다. 최종적으로는, 생성기가 만든 이미지가 진짜인지 가짜인지 판별기가 구분할 수 없어서($p_{data}=p_g$) 판별기의 output이 0.5에 가까워지는 것이 목표인데요. 이 과정을 좀 더 자세히 설명해보면 다음과 같습니다.
 
 ![](/assets/img/gan/gan_ob.png)
-
 _GAN 학습 과정_
 
 검정 점선은 실제 분포 $p_{data}$, 초록 실선은 가짜 분포 $p_{g}$, 파란 점선은 판별기의 분류 결과를 나타냅니다. (a) 학습 초기에는 판별기가 충분한 학습을 하지 못해서 주어진 이미지의 진위 여부를 불안정하게 예측합니다. 어느 정도 학습이 진행되면, (b) 판별기가 실제 데이터와 가짜 데이터를 잘 분류할 수 있게 되고, (c) 생성기도 학습 초기보다는 실제 데이터와 유사한 이미지를 생성합니다. (b)와 (c)가 반복되며 학습이 진행되다가 (d) 최종적으로 가짜 이미지의 분포가 실제 이미지의 분포와 동일해지면($p_{g}=p_{data}$) 판별기가 두 분포를 구분하지 못하고, 모든 데이터 포인트 $x$에서 0.5를 출력하게 됩니다($D(x)=0.5$).
@@ -71,7 +71,6 @@ _GAN 학습 과정_
 - latent vector 사이의 interpolation으로도 있을 법한 이미지를 생성할 수 있습니다.
 
 ## 3. [Deep Convolutional GAN](https://arxiv.org/pdf/1511.06434.pdf) (2015)
-
 ![](/assets/img/gan/dcgan.png)
 _DCGAN generator architecture_
 
@@ -101,7 +100,6 @@ _DCGAN generator architecture_
 저자들이 DCGAN 학습에 사용한 데이터셋은 아래와 같습니다.
 
 - **LSUN (Large-scale Scene Understanding) Dataset**: 특히 LSUN 데이터셋의 'bedrooms' 카테고리가 사용되었습니다. 이 데이터셋은 약 300만 개의 이미지를 포함하고 있으며, 주로 방의 이미지로 구성되어 있습니다.
-
 - **Imagenet-1K**: 32x32 크기로 center crop한 이미지를 사용했습니다.
 - **Faces Dataset**: 인터넷에서 무작위로 수집한 사람들의 이름을 기반으로 한 35만 개의 얼굴 이미지로 구성되어 있습니다.
 
@@ -114,7 +112,6 @@ _DCGAN generator architecture_
 - 위 결과는 DCGAN이 얼굴에서 나타나는 다양한 특성을 적절하게 인코딩했음을 보여줍니다. 웃는 여성 이미지를 만드는 vector들의 평균 값(smiling woman)에서 무표정한 여성 이미지를 만드는 vector들의 평균 값(neutral woman)을 빼면, 여성이라는 특성은 지워지고 웃는다는 특성만 남습니다. 여기에 무표정한 남성 이미지를 만드는 vector들의 평균 값(neutral man)을 더해 생성기에 입력하면 웃는 남성 이미지가 생성됩니다.
 
 ## 4. Mode collapse
-
 Mode collapse는 GAN을 학습할 때 발생하는 주요 문제들 중 하나입니다. 이 문제는 **생성자가 판별자보다 뛰어난 경우**에 발생하는데요. 판별자의 성능이 좋지 않을 때, 생성기가 판별기를 쉽게 속일 수 있는 몇 개의 이미지를 찾아낸 다음에는 그 이상 다양한 이미지를 생성할 수 없게 되는 상태를 말합니다. 판별기가 구분할 수 없는 이미지를 생성하는 것이 생성기의 목적인데, 이 목적을 달성했으니 더이상 학습할 동기가 없어지는 것입니다. 또한 이 경우에는 loss function의 gradient가 0에 가까운 값이 되므로 이 상태에서 벗어날 수 없게 됩니다. 이 문제를 해결하기 위해 강력한 판별자를 학습시키는 다양한 모델들이 제안되었는데요. 본 포스트에서는 Unrolled GAN, WGAN과 WGAN-GP를 다뤄보겠습니다.
 
 ### 4-1. [Unrolled GAN](https://arxiv.org/pdf/1611.02163) (2017)

@@ -20,7 +20,7 @@ typora-root-url: ..
 
 _Conditional GAN architecture_
 
-- 생성하고자 하는 label $y$를 조건으로 입력하는 모델. label $y$는 one-hot encoding되어 모델에 입력
+- 생성하고자 하는 label $y$를 조건으로 입력하는 모델. label $y$는 one-hot encoding 형태로 모델에 입력
 - 생성하고자 하는 이미지의 유형을 제어할 수 있음. 예를 들어 성별을 제어하고자 하는 경우, 여성의 얼굴을 생성하려면 $y$에 vector [0, 1]을 입력하고 남성의 얼굴을 생성하려면 [1, 0]을 입력
 
 $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x \vert y)]+E_{z \sim p_{z}(z)}[log(1-D(G(z \vert y)))] $$
