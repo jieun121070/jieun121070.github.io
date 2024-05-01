@@ -17,7 +17,6 @@ typora-root-url: ..
 ## 1. [Conditional GAN](https://arxiv.org/pdf/1411.1784.pdf) (2014)
 
 ![](/assets/img/gan/cgan.png)
-
 _Conditional GAN architecture_
 
 - 생성하고자 하는 label $y$를 조건으로 입력하는 모델. label $y$는 one-hot encoding 형태로 모델에 입력
