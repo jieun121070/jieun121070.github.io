@@ -8,6 +8,8 @@ tags: [GAN, ProGAN, StyleGAN]
 typora-root-url: ..
 ---
 
+본 포스트에서는 NVIDIA에서 발표한 이미지 생성 모델 StyleGAN에 대해 알아보려고 합니다. StyleGAN은 이미지의 특징 제어 관점에서 높은 성능을 달성한 모델인데요. StyleGAN에 대해 알아보기 전에, StyleGAN의 토대가 된 모델인 ProGAN을 살펴보겠습니다. ProGAN 역시 NVIDIA에서 발표한 모델로, ProGAN에서 생성자만 바뀐 모델이 StyleGAN입니다.
+
 ## 1. [Progressive Growing of GANs](https://arxiv.org/pdf/1710.10196.pdf) (2017)
 
 ![](/assets/img/gan/pggan.gif)
@@ -45,7 +47,7 @@ typora-root-url: ..
             - 주어진 feature map의 각 pixel $x_i$에 대해 각 channel의 feature map을 정규화하는 방법. 아래 식에서 $\mu_X$는 feature map $X$의 평균, $\sigma_X$는 feature map $X$의 표준편차
             
               $$\text{IN}(x_i)=\frac{x_i-\mu_X}{\sqrt{\sigma^2_X+\epsilon}}$$
-              
+            
         - Adaptive Instance Normalization (ADaIN)
             - 학습시킬 파라미터가 없다는 장점이 있음
             - **입력 이미지의 통계적 특성을 style vector와 유사하게 만들어 style을 적용하는 것**
@@ -67,7 +69,7 @@ typora-root-url: ..
 
 - [official code](https://github.com/NVlabs/stylegan2-ada-pytorch)
 - StyleGAN의 한계점
-  - 물방울 모양 같은 부자연스러운 부분이 자주 발생했는데, 이는 ADaIN 때문에 발생
+  - 물방울이 번진 것 같은 부자연스러운 부분이 자주 발생했는데, 이는 ADaIN 때문에 발생
     - Normalization이 Feature map의 정보를 파괴
     - 확률적 다양성을 구현하기 위해 도입된 Noise가 ADaIN 직전에 더해져 영향력이 비일관적
 
