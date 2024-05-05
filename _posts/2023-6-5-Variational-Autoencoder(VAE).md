@@ -47,13 +47,15 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 - Prior $p_{\theta^*}(z)$에서 $z^{(i)}$를 샘플링
 - 조건부 확률 $p_{\theta^*}(x \vert z=z^{(i)})$에서 real data point처럼 보이는 $x^{(i)}$를 생성
 
-이렇게 구성된 모델을 학습시키기 위해서는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터 $\theta$를 찾아야 합니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. Posterior density $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 이러한 문제를 해결하기 위해 **새로운 함수 $q_{\theta}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사**시키는 모델이 바로 VAE입니다. 여기에서 $q_{\theta}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
+이렇게 구성된 모델을 학습시키기 위해서는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터 $\theta$를 찾아야 합니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. Posterior density $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 이러한 문제를 해결하기 위해 **새로운 함수 $q_{\phi}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사**시키는 모델이 바로 VAE입니다. 여기에서 $q_{\phi}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
 
 ![](/assets/img/gan/vae.png)
 
 
 
-다시 말해, $q_{\theta}(z \vert x)$가 $p_{\theta}(z \vert x)$에 최대한 가깝도록 만들어야 합니다. 이 때, 다음과 같이 두 분포 사이의 거리를 측정하는 [KL divergence](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)를 사용해 $$D_{KL}(q_{\theta}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$를 최소화하는 문제로 바꿀 수 있습니다.
+### Loss Function
+
+다시 말해, $q_{\phi}(z \vert x)$가 $p_{\theta}(z \vert x)$에 최대한 가깝도록 만들어야 합니다. 이 때, 다음과 같이 두 분포 사이의 거리를 측정하는 [KL divergence](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)를 사용해 $$D_{KL}(q_{\phi}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$를 최소화하는 문제로 바꿀 수 있습니다.
 
 $$\begin{align*}D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z|x)} dz \\
 &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)p_{\theta}(x)}{p_{\theta}(z,x)} dz \\
@@ -72,11 +74,19 @@ $$\log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) = \mathb
 
 $$\begin{align*}L_{VAE}(\theta, \phi) &= -\log p_{\theta}(x) + D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \\ &= -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{KL}(q_{\phi}(z|x) \vert\vert p(z))\end{align*}$$
 
-Variational Bayesian 방법론에서 이 loss function은 ELBO(evidence lower bound)로 알려져 있습니다. 이름에 lower bound가 사용된 이유는 KL divergence가 항상 0 이상의 값을 가지기 때문에 $-L_{VAE}$가 $\log p_{\theta}(x)$의 lower bound가 되기 때문입니다.
+Variational Bayesian 방법론에서 이 loss function은 **ELBO(evidence lower bound)**로 알려져 있습니다. 이름에 lower bound가 사용된 이유는 KL divergence가 항상 0 이상의 값을 가지기 때문에 $-L_{VAE}$가 $\log p_{\theta}(x)$의 lower bound가 되기 때문입니다.
 
 $$-L_{VAE} = \log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \leq \log p_{\theta}(x)$$
 
-ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다. VAE에서 loss function은 이 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다.
+위 식을 다시 써보면 아래와 같이 나타낼 수 있습니다.
+
+$$\text{ELBO}(\phi)=\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] - D_{KL}(q_{\phi}(z|x) \vert\vert p(z)) \leq \log p_{\theta}(x) $$
+
+$$L_{VAE}(\theta, \phi) = -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{KL}(q_{\phi}(z|x) \vert\vert p(z))$$
+
+ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다. VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다.
+
+loss function $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 Reconstruction Error입니다. 현재 샘플링 함수에 대한 negative log likelihood로, Autoencoder 관점에서 보면 input $x$에 대한 복원 오차이기 때문입니다. 두번째 항은 현재 샘플링 함수에 대한 추가 조건으로, Regularization 항입니다.
 
 이처럼 VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에 대한 최적화에 그친다는 한계가 있습니다. 다음 포스트에서 다룰 예정인 [GAN](https://jieun121070.github.io/posts/Generative-Adversarial-Networks/)은 VAE와 달리 implicit distribution을 모델링하는, likelihood-free 모델입니다.
 
