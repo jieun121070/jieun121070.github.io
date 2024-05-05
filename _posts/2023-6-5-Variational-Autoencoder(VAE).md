@@ -84,9 +84,9 @@ $$\text{ELBO}(\phi)=\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] - D_
 
 $$L_{VAE}(\theta, \phi) = -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{KL}(q_{\phi}(z|x) \vert\vert p(z))$$
 
-ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다. VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다.
+ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다.
 
-loss function $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 Reconstruction Error입니다. 현재 샘플링 함수에 대한 negative log likelihood로, Autoencoder 관점에서 보면 input $x$에 대한 복원 오차이기 때문입니다. 두번째 항은 현재 샘플링 함수에 대한 추가 조건으로, Regularization 항입니다.
+VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다. $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 Reconstruction Error입니다. 현재 샘플링 함수에 대한 negative log likelihood로, Autoencoder 관점에서 보면 input $x$에 대한 복원 오차이기 때문입니다. 두번째 항은 현재 샘플링 함수에 대한 추가 조건으로, Regularization 항입니다.
 
 이처럼 VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에 대한 최적화에 그친다는 한계가 있습니다. 다음 포스트에서 다룰 예정인 [GAN](https://jieun121070.github.io/posts/Generative-Adversarial-Networks/)은 VAE와 달리 implicit distribution을 모델링하는, likelihood-free 모델입니다.
 
