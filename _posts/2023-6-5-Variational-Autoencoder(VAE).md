@@ -36,7 +36,7 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 
 ![](/assets/img/gan/vae_architecture.png)
 
-앞서 설명한 바와 같이, VAE는 생성 모델의 일종으로 Autoencoder와는 목적이 다릅니다. Autoencoder는 input을 고정된 vector로 매핑하지만 VAE는 input을 분포 $p_{\theta}$로 매핑하고자 합니다. input을 $x$라 하고 latent encoding vector를 $z$라 하면 둘 사이의 관계는 다음과 같이 나타낼 수 있습니다.
+앞서 설명한 바와 같이, VAE는 생성 모델의 일종으로 Autoencoder와는 목적이 다릅니다. VAE는 실제 데이터 분포를 잘 학습해서 진짜처럼 보이는 새로운 데이터를 생성할 수 있는 probabilistic decoder $p_\theta(x \vert z)$를 얻고자 합니다. 이를 위해 probabilistic encoder $q_\theta(z \vert x)$를 통해 input $x$를 분포로 매핑합니다. 앞서 Autoencoder의 encoder가 input을 고정된 vector로 매핑했던 것과는 다릅니다. input을 $x$라 하고 latent vector를 $z$라 하면 둘 사이의 관계는 다음과 같이 나타낼 수 있습니다.
 
 - Prior $p_{\theta}(z)$
 - Likelihood $p_{\theta}(x \vert z)$
@@ -47,7 +47,7 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 - Prior $p_{\theta^*}(z)$에서 $z^{(i)}$를 샘플링
 - 조건부 확률 $p_{\theta^*}(x \vert z=z^{(i)})$에서 real data point처럼 보이는 $x^{(i)}$를 생성
 
-이렇게 구성된 모델을 학습시키기 위해서는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터 $\theta$를 찾아야 합니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. Posterior density $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 이러한 문제를 해결하기 위해 **새로운 함수 $q_{\phi}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사**시키는 모델이 바로 VAE입니다. 여기에서 $q_{\phi}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
+최적의 파라미터 $\theta^*$는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터입니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. Posterior density $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 이러한 문제를 해결하기 위해 **새로운 함수 $q_{\phi}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사**시키는 모델이 바로 VAE입니다. 여기에서 $q_{\phi}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
 
 ![](/assets/img/gan/vae.png)
 
@@ -55,7 +55,7 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 
 ### Loss Function
 
-다시 말해, $q_{\phi}(z \vert x)$가 $p_{\theta}(z \vert x)$에 최대한 가깝도록 만들어야 합니다. 이 때, 다음과 같이 두 분포 사이의 거리를 측정하는 [KL divergence](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)를 사용해 $$D_{KL}(q_{\phi}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$를 최소화하는 문제로 바꿀 수 있습니다.
+$q_{\phi}(z \vert x)$를 $p_{\theta}(z \vert x)$에 근사시키는 것은 곧 $q_{\phi}(z \vert x)$가 $p_{\theta}(z \vert x)$에 최대한 가깝도록 만드는 것입니다. 따라서, 다음과 같이 두 분포 사이의 거리를 측정하는 [KL divergence](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)를 사용해 $$D_{KL}(q_{\phi}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$를 최소화하는 문제로 바꿀 수 있습니다.
 
 $$\begin{align*}D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z|x)} dz \\
 &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)p_{\theta}(x)}{p_{\theta}(z,x)} dz \\
@@ -86,9 +86,21 @@ $$L_{VAE}(\theta, \phi) = -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z
 
 ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다.
 
-VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다. $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 Reconstruction Error입니다. 현재 샘플링 함수에 대한 negative log likelihood로, Autoencoder 관점에서 보면 $x$를 encoder $q$에 입력했을 때 decoder $p$가 $x$를 얼마나 잘 복원했는지를 나타내는 복원 오차이기 때문입니다. 두번째 항은 현재 샘플링 함수에 대한 추가 조건으로, Regularization 항입니다.
+VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다. $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 **Reconstruction Error**입니다. latent vector $z$로부터 input $x$를 얼마나 잘 복원하는지 측정하는 데 사용됩니다. 두번째 항은 **Regularization** 항입니다. encoder의 출력 $q_\phi(z \vert x)$과 prior $p_{\theta}(z)$ 간의 차이가 작아지도록 함으로써 VAE를 통해 생성된 latent vector $z$가 prior $p_{\theta}(z)$를 따르도록 강제하는 역할을 합니다.
 
-이처럼 VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에 대한 최적화에 그친다는 한계가 있습니다. 다음 포스트에서 다룰 예정인 [GAN](https://jieun121070.github.io/posts/Generative-Adversarial-Networks/)은 VAE와 달리 implicit distribution을 모델링하는, likelihood-free 모델입니다.
+### Reparameterization Trick
+
+VAE의 loss function에서 기댓값을 계산하는 항은 latent vector $z$의 분포로부터 샘플을 뽑는 과정을 포함합니다. 다시 말해, encoder를 통해 input $x$로부터 얻은 분포 $q_\phi(z \vert x)$에서 $z$를 샘플링하여 decoder가 이를 기반으로 데이터를 재구성하고, 그에 대한 loss를 계산합니다. 그런데 샘플링은 확률적 과정(stochastic process)이기 때문에 gradient를 계산할 수 없습니다. 무작위성이 포함되어 있어 동일한 input에도 output이 달라질 수 있으므로, 명확한 함수적 관계를 찾기가 어렵기 때문입니다. VAE에서는 이를 해결하기 위해 Reparameterization Trick을 사용합니다.
+
+![](/assets/img/gan/vae_trick.png)
+
+VAE에서 input $x$에 대해 encoder가 $z$의 조건부 분포 $q_\phi(z \vert x)$를 모델링합니다. 일반적으로 이 분포는 평균 $\mu$와 분산 $\sigma^2$를 갖는 가우시안 분포로 가정합니다. 즉, encoder는 input $x$로부터 $\mu$와 $\sigma$를 출력합니다. 이 때, Reparameterization Trick을 사용해 $z$를 다음과 같이 표현합니다.
+
+$$z=\mu+\sigma \odot \epsilon$$
+
+여기에서 $\epsilon$은 표준 정규 분포에서 샘플링된 노이즈로써, 역전파할 때 gradient 계산에 영향을 주지 않습니다. 이처럼 $z$의 샘플링 과정에서 발생하는 확률적 변동성을 모델의 파라미터 $\mu$와 $\sigma$로 reparameterization함으로써 gradient를 효과적으로 계산하고 역전파할 수 있게 됩니다.
+
+VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에 대한 최적화에 그친다는 한계가 있습니다. 다음 포스트에서 다룰 예정인 [GAN](https://jieun121070.github.io/posts/Generative-Adversarial-Networks/)은 VAE와 달리 implicit distribution을 모델링하는, likelihood-free 모델입니다.
 
 ## Reference
 
