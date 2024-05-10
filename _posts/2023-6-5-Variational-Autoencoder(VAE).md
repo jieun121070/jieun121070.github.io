@@ -49,17 +49,6 @@ manifold learning은 고차원 데이터를 저차원에 매핑하는 차원 축
 
 input $x$와 latent vector $z$의 joint distribution $p(x,z)$에서 $x$의 marginal distribution $p(x)$를 구하려면 $z$의 모든 가능한 값에 대해 $p(x,z)$를 적분해야 합니다. $p(x,z)=p_{\theta}(z)p_{\theta}(x \vert z)$이므로, 최적의 파라미터 $\theta^*$는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터입니다. 그런데 모든 $z$에 대해서 $p_{\theta}(z)p_{\theta}(x \vert z)$를 계산해서 더하는 것은 너무 많은 비용이 듭니다. 사후 확률 $p_{\theta}(z \vert x)=p_{\theta}(x \vert z)p_{\theta}(z)/p_{\theta}(x)$도 계산하는 것이 불가능합니다. 이러한 문제를 해결하기 위해 VAE는 `variational inference` 방법을 사용합니다. `variational inference`는 사후 확률 분포를 직접 계산하는 대신, 더 간단한 형태의 분포로 사후 확률을 근사시키는 방법입니다. 즉, **새로운 함수 $q_{\phi}(z \vert x)$를 도입해 $p_{\theta}(z \vert x)$에 근사**시켜 문제를 해결하는 것입니다. 여기에서 $q_{\phi}(z \vert x)$가 encoder이고, $p_{\theta}(x \vert z)$가 decoder입니다.
 
-$$\begin{align*}\log p_{\theta}(x) &= \log \int p_{\theta}(x,z) dz \\
-&= \log \int q_{\phi}(x \vert z) \frac{p_{\theta}(x,z)}{q_{\phi}(x \vert z)} dz \\
-&\ge \int q_{\phi}(x \vert z) \log\frac{p_{\theta}(x,z)}{q_{\phi}(x \vert z)} dz \\
-&\ge \int q_{\phi}(x \vert z) \log p_{\theta}(x,z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z) \log p_{\theta}(x \vert z)p_{\theta}(z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z) \{\log p_{\theta}(x \vert z)+\log p_{\theta}(z)\} - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z)\log p_{\theta}(x \vert z) + q_{\phi}(x \vert z)p_{\theta}(z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z)\log p_{\theta}(x \vert z) - q_{\phi}(x \vert z)\log \frac{q_{\phi}(x \vert z)}{p_{\theta}(z)} dz \\
-&\ge E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right] - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) \\
-\end{align*}$$
-
 ![](/assets/img/gan/vae.png)
 
 ### Loss Function
@@ -86,6 +75,17 @@ $$\begin{align*}L_{VAE}(\theta, \phi) &= -\log p_{\theta}(x) + D_{KL}(q_{\phi}(z
 Variational Bayesian 방법론에서 이 loss function은 **ELBO(evidence lower bound)**로 알려져 있습니다. 이름에 lower bound가 사용된 이유는 KL divergence가 항상 0 이상의 값을 가지기 때문에 $-L_{VAE}$가 $\log p_{\theta}(x)$의 lower bound가 되기 때문입니다.
 
 $$-L_{VAE} = \log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \leq \log p_{\theta}(x)$$
+
+$$\begin{align*}\log p_{\theta}(x) &= \log \int p_{\theta}(x,z) dz \\
+&= \log \int q_{\phi}(x \vert z) \frac{p_{\theta}(x,z)}{q_{\phi}(x \vert z)} dz \\
+&\ge \int q_{\phi}(x \vert z) \log\frac{p_{\theta}(x,z)}{q_{\phi}(x \vert z)} dz \\
+&\ge \int q_{\phi}(x \vert z) \log p_{\theta}(x,z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
+&\ge \int q_{\phi}(x \vert z) \log p_{\theta}(x \vert z)p_{\theta}(z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
+&\ge \int q_{\phi}(x \vert z) \{\log p_{\theta}(x \vert z)+\log p_{\theta}(z)\} - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
+&\ge \int q_{\phi}(x \vert z)\log p_{\theta}(x \vert z) + q_{\phi}(x \vert z)p_{\theta}(z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
+&\ge \int q_{\phi}(x \vert z)\log p_{\theta}(x \vert z) - q_{\phi}(x \vert z)\log \frac{q_{\phi}(x \vert z)}{p_{\theta}(z)} dz \\
+&\ge E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right] - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) \\
+\end{align*}$$
 
 위 식을 다시 써보면 아래와 같이 나타낼 수 있습니다.
 
