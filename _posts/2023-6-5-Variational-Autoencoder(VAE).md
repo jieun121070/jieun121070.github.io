@@ -95,7 +95,9 @@ $$L_{VAE}(\theta, \phi) = -\mathbb{E}_{z \sim q_{\phi}(z|x)}[\log p_{\theta}(x|z
 
 ELBO는 모델이 데이터를 얼마나 잘 재현할 수 있는지를 나타내는 지표로, 이 값이 높을수록 모델이 실제 데이터 분포를 더 정확히 학습했다고 볼 수 있습니다. ELBO를 최대화하는 것은, 결과적으로 $\log p_{\theta}(x)$를 최대화하는 것으로 이어지며, 이는 데이터를 잘 생성하는 모델의 성능을 의미합니다.
 
-VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다. $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 **Reconstruction Error**입니다. latent vector $z$로부터 input $x$를 얼마나 잘 복원하는지 측정하는 데 사용됩니다. 두번째 항은 **Regularization** 항입니다. encoder의 출력 $q_\phi(z \vert x)$과 사전 확률 $p_{\theta}(z)$ 간의 차이가 작아지도록 함으로써 VAE를 통해 생성된 latent vector $z$가 사전 확률 $p_{\theta}(z)$를 따르도록 강제하는 역할을 하는데요. 이는 앞서 살펴본 Autoencoder에는 없던 제약 조건입니다. VAE에서는 이 Regularization 항을 통해 latent space를 연속적으로 만듭니다. 이를 통해 임의의 두 vector $z_1$, $z_2$를 interpolation한 vector들을 decoder에 입력해 결과 이미지를 나열했을 때, 있을 법한 이미지들이 생성되며 부드러운 transition이 나타나는 것을 확인할 수 있습니다.
+VAE에서 loss function $L_{VAE}(\theta, \phi)$은 ELBO를 최대화하는 방향으로 $\theta$와 $\phi$를 업데이트함으로써, 궁극적으로 생성된 데이터의 log likelihood를 최대화합니다. $L_{VAE}(\theta, \phi)$에서 첫번째 항이 의미하는 것은 **Reconstruction Error**입니다. latent vector $z$로부터 input $x$를 얼마나 잘 복원하는지 측정하는 데 사용됩니다.
+
+두번째 항은 **Regularization** 항입니다. encoder의 출력 $q_\phi(z \vert x)$과 사전 확률 $p_{\theta}(z)$ 간의 차이가 작아지도록 함으로써 VAE를 통해 생성된 latent vector $z$가 사전 확률 $p_{\theta}(z)$를 따르도록 강제하는 역할을 하는데요. 이는 앞서 살펴본 Autoencoder에는 없던 제약 조건입니다. Autoencoder는 Reconstruction Error를 최소화하도록 학습할 뿐이고 latent vector $z$가 특정한 분포를 따르지 않습니다. 반면에 VAE에서는 이 Regularization 항을 통해 **latent space를 연속적으로** 만듭니다. latent space가 연속적이라는 것은 데이터의 변형이나 보간 시에 의미있는 결과를 생성할 수 있도록 latent space가 잘 구조화되어 있음을 의미합니다. 임의의 두 vector $z_1$, $z_2$를 interpolation한 vector들을 decoder에 입력해 결과 이미지를 나열해보면 있을 법한 이미지들이 생성되며 부드러운 transition이 나타나는 것을 확인할 수 있습니다. 이러한 특성은 VAE가 데이터 생성 task에서 강력한 도구가 되는 이유 중 하나입니다.
 
 ### Reparameterization Trick
 
