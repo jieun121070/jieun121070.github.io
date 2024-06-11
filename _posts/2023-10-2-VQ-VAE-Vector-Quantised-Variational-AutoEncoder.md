@@ -1,5 +1,5 @@
 ---
-title: "VQ-VAE: Vector Quantised-Variational AutoEncoder"
+title: "[Paper Review] VQ-VAE: Vector Quantised-Variational AutoEncoder"
 date: 2023-10-2
 author: jieun
 math: True
@@ -8,7 +8,7 @@ tags: [VAE, VQ-VAE]
 typora-root-url: ..
 ---
 
-VQ-VAE는 **VAE와 discrete latent representation을 결합**한 모델입니다. continuous representation을 학습하는 VAE 모델과 비슷한 성능을 보이면서 discrete distribution의 유연성도 가지고 있는 모델인데요. VQ-VAE에 대해 자세히 알아 보기에 앞서, VAE와의 차이점을 정리해보면 다음과 같습니다.
+VQ-VAE는 **[VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 discrete latent representation을 결합**한 모델입니다. continuous representation을 학습하는 VAE 모델과 비슷한 성능을 보이면서 discrete distribution의 유연성도 가지고 있는 모델인데요. VQ-VAE에 대해 자세히 알아 보기에 앞서, VAE와의 차이점을 정리해보면 다음과 같습니다.
 
 |                | VQ-VAE                  | VAE                         |
 | -------------- | ----------------------- | --------------------------- |
@@ -31,7 +31,7 @@ $$p(x)= \prod_{i=1}^{n^2}p(x_i \vert x_1, …, x_{i-1})$$
 
 - [**텍스트**] 문장의 각 단어가 이전 단어들에 의존하여 생성됩니다.
 
-## 모델 구조
+## 1. 모델 구조
 
 
 
@@ -39,16 +39,16 @@ $$p(x)= \prod_{i=1}^{n^2}p(x_i \vert x_1, …, x_{i-1})$$
 
 
 
-### Discrete Latent variables
+### 1.1 Discrete Latent variables
 
 latent embedding space $e \in R^{K \times D}$
 
 - $K$는 discrete latent space의 크기 $e_i \in R^D, i \in 1, 2, … K$
 - $D$는 각각의 latent embedding vector $e_i$의 차원 크기
 
-### Learning
+### 1.2 Learning
 
-#### Forward Computation
+#### 1.2.1 Forward Computation
 
 - `step 1` encoder는 input 이미지 $x$를 입력받아서 continuous representation $z_e(x)$를 출력합니다.
 - `step 2` continuous representation $z_e(x)$는 Vector Quantization를 통해 embedding space $e$에서 가장 가까운 embedding vector $z_q(x)$로 매핑됩니다. $z_q(x)$가 사전에 정의된 codebook vector 중 가장 가까운 vector로 변환되는 것입니다.
@@ -57,12 +57,12 @@ $$z_q(x)=e_k, \text{where } k= \arg\min_j \vert\vert z_e(x)-e_j \vert\vert _2$$
 
 - `step 3` decoder는 $z_q(x)$를 입력받아서 input 이미지 $x$를 복원합니다.
 
-#### Backward Computation
+#### 1.2.2 Backward Computation
 
 - `step 1` loss function $L$의 gradient $\bigtriangledown_zL$는 decoder input $z_q(x)$에 대해 계산됩니다.
 - `step 2` gradient $\bigtriangledown_zL$는 그대로 복사되어 encoder output $z_e(x)$에 전달됩니다. Vector Quantization 과정이 불연속적이어서 직접적인 gradient 계산이 불가능하기 때문에 이러한 방식을 사용합니다. encoder의 output representation과 decoder의 input이 동일한 $D$ 차원의 space를 공유하고 있기 때문에, gradients는 reconstruction error를 낮추기 위해 encoder가 output representation를 어떻게 변화시켜야 하는지에 대한 유용한 정보를 포함하고 있습니다. 즉, encoder는 gradient 정보를 사용하여 input 이미지를 더 잘 표현할 수 있도록 학습합니다.
 
-#### loss function
+#### 1.2.3 loss function
 
 $$L = \log p(x | z_q(x)) + \| \text{sg}[z_e(x)] - e \|^2_2 + \beta \| z_e(x) - \text{sg}[e] \|^2_2 $$
 

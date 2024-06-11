@@ -184,5 +184,4 @@ VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에
 - [How to Use Autoencoders for Image Denoising](https://www.omdena.com/blog/denoising-autoencoders)
 - [From Autoencoder to Beta-VAE](https://lilianweng.github.io/posts/2018-08-12-vae/)
 - [오토인코더의 모든 것](https://www.youtube.com/watch?v=o_peo6U7IRM)
-
 - [VAE pytorch code](https://github.com/Jackson-Kang/Pytorch-VAE-tutorial/blob/master/01_Variational_AutoEncoder.ipynb)
