@@ -4,7 +4,7 @@ date: 2023-9-18
 author: jieun
 math: True
 categories: [Vision]
-tags: [GAN, Pix2Pix, CycleGAN, StarGAN]
+tags: [GAN, Conditional-GAN, Pix2Pix, CycleGAN, StarGAN]
 typora-root-url: ..
 ---
 
@@ -77,8 +77,3 @@ $$ \underset{G}{\min}\,\underset{D}{\max}\,V(D, G)=E_{x \sim p_{data}(x)}[logD(x
 - 학습 과정
 
 ![](/assets/img/gan/stargan.png)
-
-## Reference
-
-- [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)
-- [GAN 구조 개요](https://developers.google.com/machine-learning/gan/gan_structure?hl=ko)
