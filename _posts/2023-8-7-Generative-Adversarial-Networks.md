@@ -10,7 +10,7 @@ typora-root-url: ..
 
 딥러닝 기반 생성 모델이 등장하기 전에는 주로 `Markov chain`과 같은 통계적인 방법에 의존해 데이터의 분포를 모델링하고, sample을 생성했습니다. 이 모델들은 이미지와 텍스트같이 복잡한 분포를 가진 데이터들을 모델링하는데 한계가 있었는데요. VAE, GAN과 같은 딥러닝 기반 생성 모델들은 neural network로 구성되어 있어 backpropagation으로 학습할 수 있고, 데이터를 보다 풍부하게 표현할 수 있습니다.
 
-본 포스트에서는 GAN부터 WGAN-GP까지 GAN 계열 모델의 발전 과정을 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN을 소개하기에 앞서 GAN과 같은 딥러닝 기반 생성 모델의 일종인[VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
+본 포스트에서는 GAN부터 WGAN-GP까지 GAN 계열 모델의 발전 과정을 훑어보면서 각 모델의 한계점과 이전 모델보다 나아진 점들을 짚어보려고 합니다. GAN을 소개하기에 앞서 GAN과 같은 딥러닝 기반 생성 모델의 일종인 [VAE](https://jieun121070.github.io/posts/Variational-Autoencoder(VAE)/)와 GAN의 차이점에 대해 알아보겠습니다.
 
 ## 1. GAN과 VAE 비교
 
