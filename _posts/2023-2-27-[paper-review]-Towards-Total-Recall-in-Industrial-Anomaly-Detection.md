@@ -8,8 +8,7 @@ tags: [Anomaly-Detection, PatchCore]
 typora-root-url: ..
 ---
 
-PatchCore는 [SPADE](https://jieun121070.github.io/posts/paper-review-Sub-Image-Anomaly-Detection-with-Deep-Pyramid-Correspondences/)와 [PaDiM](https://jieun121070.github.io/posts/paper-review-PaDiM-a-Patch-Distribution-Modeling-Framework-for-Anomaly-Detection-and-Localization/)의 특징을 합친 모델로, SPADE의 `Gallery`와 비슷한 역할을 하는 `Memory Bank`를 사용합니다. 또한 PaDiM처럼 patch level 접근법을 사용하는데, 이웃한 pixel feature들을 묶어서 patch feature를 만드는 것이 특징입니다. 테스트 시에 테스트 이미지의 patch feature들과 `Memory Bank`에 저장된 patch feature들의 거리를 계산하여 비교하기 때문에, 정상 이미지의 특징을 압축하여 표현할 수 있는 고품질의 `Memory Bank`를 구성하는 것이 무엇보다 중요한 모델입니다. 본 포스트에서는 PatchCore가 이상탐지를 진행하는 과정과 함께 MVTec 데이터셋으로 모델 성능을 평가한 결과를 살펴보겠습니다.
-f
+PatchCore는 [SPADE](https://jieun121070.github.io/posts/paper-review-Sub-Image-Anomaly-Detection-with-Deep-Pyramid-Correspondences/)와 [PaDiM](https://jieun121070.github.io/posts/paper-review-PaDiM-a-Patch-Distribution-Modeling-Framework-for-Anomaly-Detection-and-Localization/)의 특징을 합친 모델로, SPADE의 `Gallery`와 비슷한 역할을 하는 `Memory Bank`를 사용합니다. 또한 PaDiM처럼 patch level 접근법을 사용하는데, 이웃한 pixel feature들을 묶어서 patch feature를 만든다는 것이 PaDiM과의 차이점입니다. 테스트 시에 테스트 이미지의 patch feature들과 `Memory Bank`에 저장된 patch feature들의 거리를 계산하여 비교하기 때문에, 정상 이미지의 특징을 압축하여 표현할 수 있는 고품질의 `Memory Bank`를 구성하는 것이 무엇보다 중요한 모델입니다. 본 포스트에서는 PatchCore가 이상탐지를 진행하는 과정과 함께 MVTec 데이터셋으로 모델 성능을 평가한 결과를 살펴보겠습니다.
 
 
 ## 이상탐지 진행 과정
