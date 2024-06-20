@@ -8,8 +8,8 @@ tags: [Anomaly-Detection, PatchCore]
 typora-root-url: ..
 ---
 
-PatchCore는 SPADE와 PaDiM의 특징을 합친 모델입니다. SPADE의 `Gallery`와 비슷한 역할을 하는 `Memory Bank`를 사용하고, PaDiM처럼 patch level 접근법을 사용합니다. 특히 이웃한 pixel feature들을 묶어서 patch feature를 구성하는 것이 특징입니다. 본 포스트에서는 PatchCore가 이상탐지를 진행하는 과정과 함께 MVTec 데이터셋으로 모델 성능을 평가한 결과를 살펴보겠습니다.
-
+PatchCore는 [SPADE](https://jieun121070.github.io/posts/paper-review-Sub-Image-Anomaly-Detection-with-Deep-Pyramid-Correspondences/)와 [PaDiM](https://jieun121070.github.io/posts/paper-review-PaDiM-a-Patch-Distribution-Modeling-Framework-for-Anomaly-Detection-and-Localization/)의 특징을 합친 모델로, SPADE의 `Gallery`와 비슷한 역할을 하는 `Memory Bank`를 사용합니다. 또한 PaDiM처럼 patch level 접근법을 사용하는데, 이웃한 pixel feature들을 묶어서 patch feature를 만드는 것이 특징입니다. 테스트 시에 테스트 이미지의 patch feature들과 `Memory Bank`에 저장된 patch feature들의 거리를 계산하여 비교하기 때문에, 정상 이미지의 특징을 압축하여 표현할 수 있는 고품질의 `Memory Bank`를 구성하는 것이 무엇보다 중요한 모델입니다. 본 포스트에서는 PatchCore가 이상탐지를 진행하는 과정과 함께 MVTec 데이터셋으로 모델 성능을 평가한 결과를 살펴보겠습니다.
+f
 
 
 ## 이상탐지 진행 과정
@@ -37,7 +37,7 @@ $$\phi_{i,j}= \in \mathbb{R}^{h^* \times w^* \times c^*}$$
 
 ![](/assets/img/ad/mb.jpg)
 
-두 번째 단계는 `Memory Bank` $\mathcal{M}$를 구성하는 단계입니다. 첫 번째 단계에서 생성한 모든 patch feature로  `Memory Bank`를 구성하면 굉장히 큰 저장 공간이 필요할 것입니다. 그리고 test 과정에서는 test 이미지의 patch feature들을 `Memory Bank`의 patch feature와 비교해야 하는데, `Memory Bank`가 지나치게 크면 많은 연산 시간이 소요되어 소요되어 현실적으로 사용하기가 어렵습니다.
+두 번째 단계는 `Memory Bank` $\mathcal{M}$를 구성하는 단계입니다. 첫 번째 단계에서 생성한 모든 patch feature로  `Memory Bank`를 구성하면 굉장히 큰 저장 공간이 필요할 것입니다. 그리고 테스트 과정에서는 테스트 이미지의 patch feature들을 `Memory Bank`의 patch feature와 비교해야 하는데, `Memory Bank`가 지나치게 크면 많은 연산 시간이 소요되어 소요되어 현실적으로 사용하기가 어렵습니다.
 
 이러한 이유로 본 논문에서는 `Coreset Subsampling` 기법을 사용하여 전체 데이터셋을 잘 대표할 수 있는 핵심 patch feature만 추출해 `Memory Bank`를 구성합니다. 이렇게 하면 저장 공간을 절약하고 계산 효율성도 높일 수 있습니다. sampling에는 `greedy coreset selection` 방법을 사용하는데요. 이를 의미하는 아래 수식을 좀 더 자세히 살펴보겠습니다.
 
@@ -51,7 +51,7 @@ $$m_i \leftarrow \arg max_{m \in {\mathcal{M} - \mathcal{M_C}}}\min_{n \in \math
 
 마지막 단계는 이전 단계에서 구한 `Memory Bank` $\mathcal{M}$을 사용하여 image-level anomaly score $s$를 구하는 것입니다.
 
-- `Step 1` test 이미지 $x^{test}$의 patch feature들 $m^{test} \in \mathcal{P}(x^{test})$과 `Memory Bank` $\mathcal{M}$에 속한 정상 patch feature들 $m \in \mathcal{M}$ 사이의 거리를 모두 구합니다.
+- `Step 1` 테스트 이미지 $x^{test}$의 patch feature들 $m^{test} \in \mathcal{P}(x^{test})$과 `Memory Bank` $\mathcal{M}$에 속한 정상 patch feature들 $m \in \mathcal{M}$ 사이의 거리를 모두 구합니다.
 - `Step 2` $m^{test}$별 거리 최솟값을 찾습니다.
 - `Step 3` Step 2를 최대화하는 $m^{test}$와 $m$을 찾습니다. ($m^{test, \ast}, m^\ast$)
 - `Step 4` Step 3에서 구한 $m^{test, \ast}, m^\ast$을 통해 maximum distance score $s^*$을 구합니다.
