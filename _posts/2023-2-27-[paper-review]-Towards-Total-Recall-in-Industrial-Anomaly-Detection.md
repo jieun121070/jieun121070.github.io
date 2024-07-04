@@ -119,7 +119,7 @@ _PatchCore 실험 결과: anomaly segmentation(PRO)_
 
 - coreset subsampling을 수행하지 않으면(PatchCore-100%) SPADE보다 성능은 높지만 inference time이 더 오래 소요됩니다.
 - PatchCore-10%는 PaDiM보다 성능은 높지만 inference time이 더 오래 소요됩니다.
-- coreset subsampling을 수행하지 않고, IVFPQ를 수행하면 성능이 떨어지고, (특히 image-level anomaly detection 성능이 하락) inference time도 PatchCore-1%보다 더 오래 소요됩니다. 하지만 그럼에도 여전히 SPADE, PaDiM보다는 성능이 높다는 것을 확인할 수 있습니다. coreset과 approximate nearest neighbour(ANN) 방법을 조합하면 dataset이 큰 경우에 inference time을 줄이면서도 어느 정도 성능을 유지할 수 있는데요. 본 논문의 저자들은 IVF 기반의 ANN 기법인 [Faiss](https://github.com/facebookresearch/faiss)를 사용했습니다.
+- coreset subsampling을 수행하지 않고, IVFPQ를 수행하면 성능이 떨어지고, (특히 image-level anomaly detection 성능이 하락) inference time도 PatchCore-1%보다 더 오래 소요됩니다. 하지만 그럼에도 여전히 SPADE, PaDiM보다는 성능이 높다는 것을 확인할 수 있습니다. coreset과 approximate nearest neighbour(ANN) 방법을 조합하면 dataset이 큰 경우에 inference time을 줄이면서도 어느 정도 성능을 유지할 수 있는데요. 본 논문의 저자들은 [Faiss](https://github.com/facebookresearch/faiss) 라이브러리에서 제공하는 IVF 기반 ANN 기법을 사용했습니다. Faiss는 Facebook AI Research에서 개발한 오픈 소스 라이브러리입니다.
 
 ## Reference
 
