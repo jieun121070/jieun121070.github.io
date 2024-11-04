@@ -73,7 +73,7 @@ ONNX로 모델을 변환한 후에는 다음과 같은 방법을 통해 모델�
 
 ### 1. FP16 변환
 
-- 모델을 [FP16(half precision)](https://jieun121070.github.io/posts/Mixed-Precision과-Half-Precision)으로 변환하면 모델 크기와 메모리 사용량을 절반으로 줄일 수 있습니다.
+- 모델을 [FP16(half precision)](https://jieun121070.github.io/posts/Mixed-Precision%EA%B3%BC-Half-Precision/)으로 변환하면 모델 크기와 메모리 사용량을 절반으로 줄일 수 있습니다.
 - `onnxconverter_common.float16.convert_float_to_float16`를 사용하여 ONNX 모델의 가중치를 FP16으로 변환할 수 있습니다. 하지만, 정밀도 손실이 발생할 수 있으므로 성능 저하 여부를 확인해야 합니다.
 
 ```python
