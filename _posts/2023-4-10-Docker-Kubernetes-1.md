@@ -3,7 +3,7 @@ title: "Docker/Kubernetes의 이해 - 1"
 date: 2023-4-10
 author: jieun
 math: True
-categories: [AutoML]
+categories: [Model-Serving]
 tags: [Docker, Kubernetes]
 typora-root-url: ..
 ---
