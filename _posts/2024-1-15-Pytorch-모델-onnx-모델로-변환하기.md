@@ -31,7 +31,7 @@ torch.onnx.export(torch_model,               # 실행될 모델
 
 ## 입출력 텐서의 특정 차원을 동적으로 설정하기
 
-ONNX는 기본적으로 입력 크기가 고정되어 있어야 합니다. 만약 모델이 동적 크기의 입력을 처리해야 한다면, `dynamic_axes`를 설정해야 합니다. `dynamic_axes`는 ONNX로 변환할 때 입력과 출력 텐서의 특정 차원을 동적으로 설정할 수 있는 기능입니다. 즉, 특정 차원의 크기를 고정하지 않고 변할 수 있도록 설정하여 다양한 입력 크기에 대해 모델을 유연하게 사용할 수 있게 합니다. 이를 통해 변환된 ONNX 모델이 다양한 배치 크기(batch size)나 이미지 크기 등을 처리할 수 있게 됩니다.
+ONNX는 기본적으로 입력 크기가 고정되어 있어야 합니다. 만약 모델이 동적 크기의 입력을 처리해야 한다면, `dynamic_axes`를 설정해야 합니다. `dynamic_axes`는 ONNX로 변환할 때 입력과 출력 텐서의 특정 차원을 동적으로 설정할 수 있는 기능입니다. 즉, 특정 차원의 크기를 고정하지 않고 변할 수 있도록 설정하여 다양한 입력 크기에 대해 모델을 유연하게 사용할 수 있게 합니다. 이를 통해 변환된 ONNX 모델이 다양한 배치 크기(batch size)나 이미지 크기 등을 처리할 수 있게 됩니다.  
 
 어떤 모델이 입력으로 `(batch_size, channels, height, width)` 형태의 이미지를 받을 때, 이미지 크기와 배치 크기를 동적으로 변할 수 있도록 설정하고 싶다면 다음과 같이 작성할 수 있습니다.
 
@@ -44,7 +44,7 @@ dynamic_axes = {
 
 ## ONNX에서 지원하지 않는 연산을 사용하는 경우
 
-ONNX는 다양한 프레임워크의 연산을 지원하지만, 모든 연산이 ONNX 표준에 포함된 것은 아닙니다. 변환하려는 모델에 ONNX에서 지원되지 않는 연산이 포함되어 있다면 변환 시 오류가 발생할 수 있습니다. 예를 들어 ONNX는 `torch.nn.SyncBatchNorm` 연산을 직접 지원하지 않습니다. 이런 경우, ONNX로 모델을 내보내기 위해서는 `SyncBatchNorm`을 `BatchNorm2d`로 변환해야 합니다.
+ONNX는 다양한 프레임워크의 연산을 지원하지만, 모든 연산을 지원하지는 않습니다. 변환하려는 모델에 ONNX에서 지원하지 않는 연산이 포함되어 있다면 변환 시 오류가 발생할 수 있습니다. 예를 들어 ONNX는 `torch.nn.SyncBatchNorm` 연산을 직접 지원하지 않습니다. 이런 경우, ONNX로 모델을 내보내기 위해서는 아래와 같이 `SyncBatchNorm`을 `BatchNorm2d`로 변환해야 합니다.
 
 ```python
 def _convert_batchnorm(module):
@@ -67,6 +67,8 @@ def _convert_batchnorm(module):
     del module
     return module_output
 ```
+  
+ONNX opset 버전별 지원하는 연산은 [이곳](https://onnx.ai/onnx/operators/)에서 확인할 수 있는데요. ONNX의 opset 버전은 ONNX의 버전과는 다르다는 점을 주의해야 합니다. [이곳](https://onnxruntime.ai/docs/reference/compatibility.html)에서 ONNX 버전과 opset 버전의 호환성을 체크하는 것이 좋습니다.
 
 ## 모델 경량화
 
