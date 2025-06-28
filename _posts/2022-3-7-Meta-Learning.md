@@ -64,7 +64,7 @@ $$
 
 - `step 5` 위 과정을 여러 episode에 걸쳐 반복하면서 $\lambda$를 최적화합니다. **여러 episode의 경험을 공통 파라미터 $\lambda$에 축적하여 few-shot 상황에서 빠르고 robust하게 학습을 가능하게 만드는 것입니다.**
 
-위와 같이 neural network 없이도 meta learning을 구현할 수는 있지만, neural network를 활용하면 그 효과를 증폭시킬 수 있습니다. 다음 포스트에서는 neural network를 사용한 메트릭 기반 meta learning 모델에 대해 알아보겠습니다.
+위와 같이 neural network 없이도 meta learning을 구현할 수는 있지만, neural network를 활용하면 그 효과를 증폭시킬 수 있습니다. 다음 포스트에서는 neural network를 사용해 메트릭 기반 meta learning을 구현하는 **Deep metric learning**에 대해 알아보겠습니다.
 
 
 
