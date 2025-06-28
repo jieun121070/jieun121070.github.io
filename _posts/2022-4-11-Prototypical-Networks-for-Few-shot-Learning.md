@@ -38,7 +38,7 @@ $$d(\mathbf{a}, \mathbf{b}) = \| \mathbf{a} - \mathbf{b} \|_2^2$$
 
 ### 4. $f(\cdot)$ 파라미터 업데이트
 
-softmax 결과 $p(y=k| \mathbf{x})$와 query 샘플의 **정답 레이블** $y$를 비교해서 cross-entropy loss를 계산해서 neural network $f(\cdot)$의 파라미터를 업데이트합니다. 매 episode마다 2~4 과정을 반복하면서 feature extractor $f(\cdot)$는 더 나은 embedding space를 만들도록 학습됩니다.
+softmax 결과 $p(y=k \| \mathbf{x})$와 query 샘플의 **정답 레이블** $y$를 비교해서 cross-entropy loss를 계산해서 neural network $f(\cdot)$의 파라미터를 업데이트합니다. 매 episode마다 2~4 과정을 반복하면서 feature extractor $f(\cdot)$는 더 나은 embedding space를 만들도록 학습됩니다.
 
 ![](/assets/img/meta/prototypicalnet.png)
 _Prototypical networks in the few-shot and zero-shot scenarios._
@@ -51,7 +51,7 @@ Euclidean distance와 Cosine similarity는 주어진 vector들 사이의 유사�
   - 두 벡터의 **방향(angle)**이 얼마나 유사한지 보는 지표
   - 크기는 무시하고 각도만 비교
 
-$$ \text{cosine similarity}(a,b)=\frac{a \cdot b}{||a|| \cdot ||b||}$$
+$$\text{cosine similarity}(a,b)=\frac{a \cdot b}{||a|| \cdot ||b||}$$
 
 - Euclidean distance
   - 두 벡터 간의 **직선 거리**를 측정
