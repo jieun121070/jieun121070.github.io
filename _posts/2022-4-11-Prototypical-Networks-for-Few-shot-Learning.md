@@ -8,11 +8,7 @@ tags: [Meta-Learning, Deep-metric-learning]
 typora-root-url: ..
 ---
 
-
-
-이번 포스트에서는 **Deep metric learning**에 속하는 모델들 중 하나인 [**Prototypical Networks(2017)**](https://arxiv.org/abs/1703.05175)에 대해 알아보겠습니다. [지난 포스트](https://jieun121070.github.io/posts/Meta-Learning/)의 말미에서 간단히 설명한 바와 같이, Deep metric learning은 nueral network를 사용한 메트릭 기반 meta learning을 가리킵니다. 얼굴 인식, 화자 인식, 이미지 검색 등 여러 task에서 사용되고 있는 방식인데요. 모델 구조는 다양하지만, neural network를 사용해 이미지나 음성 데이터의 embedding vector를 학습하고, 샘플들 간의 embedding 거리를 계산하여 유사성과 비유사성을 학습한다는 점은 동일합니다.
-
-오늘 소개할 Prototypical Networks는 단순하지만 강력한 성능을 보여주는 모델입니다. 이름처럼 **각 클래스별 prototype** 을 계산하여 새로운 샘플이 어떤 클래스에 속하는지를 판단하는 방식을 사용합니다.
+[지난 포스트](https://jieun121070.github.io/posts/Meta-Learning/)에 이어서 nueral network를 사용한 메트릭 기반 meta learning에 대해 알아보겠습니다. 오늘 소개할 [**Prototypical Networks(2017)**](https://arxiv.org/abs/1703.05175)는 단순하지만 강력한 성능을 보여주는 모델입니다. 이름처럼 **각 클래스별 prototype** 을 계산하여 새로운 샘플이 어떤 클래스에 속하는지를 판단하는 방식을 사용합니다.
 
 ## 학습 진행 과정
 
