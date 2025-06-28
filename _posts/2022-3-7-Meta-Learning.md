@@ -41,17 +41,24 @@ episodic learning은 meta learning을 구현하는 방식 중 하나로, 특히 
 
 많이들 알고 계신 logistic regression을 사용해 episodic learning을 구현하는 것도 가능합니다.
 
-1. $N$-way $K$-shot episode를 샘플링해서 데이터셋을 준비합니다.
+1. N-way K-shot episode를 샘플링해서 데이터셋을 준비합니다.
 2. Support Set으로 모델을 학습합니다. weight matrix $W$와 bias vector $b$는 episode 별로 학습되는 파라미터입니다. regularization 계수 $\lambda$를 모든 episode에서 공유하는 파라미터로 설정해 보겠습니다. 맨 처음에는 $\lambda$를 임의의 값으로 초기화합니다.
 
-$P(y = c \mid \mathbf{x}) = \frac{\exp(\mathbf{w}_c^\top \mathbf{x} + b_c)}{\sum_{c'} \exp(\mathbf{w}_{c'}^\top \mathbf{x} + b_{c'})}$
+$$
+P(y = c \mid \mathbf{x}) =
+\frac{\exp\bigl(\mathbf{w}_c^\top \mathbf{x} + b_c)}{\sum_{c}\exp(\mathbf{w}_{c}^\top \mathbf{x} + b_{c})}
+$$
 
-$L = -\frac{1}{N \cdot K} \sum_{i} \log P(y_i \mid \mathbf{x}_i)+\frac{\lambda}{2}||w||^2$
+$$
+L = -\frac{1}{N \cdot K} \sum_{i} \log P(y_i \mid \mathbf{x}_i)+\frac{\lambda}{2}||w||^2
+$$
 
 3. 학습한 모델로 Query set의 class를 예측하고 loss $L$을 계산합니다.
 4. $\lambda$에 대해 gradient descent를 수행하여 $\lambda$를 업데이트 합니다. $\eta$는 gradient를 얼마나 크게 반영할지 결정하는 learning rate입니다.
 
-$\lambda  \leftarrow  \lambda - \eta \cdot \frac{\partial L_{\text{query}}(\lambda)}{\partial \lambda}$
+$$
+\lambda  \leftarrow  \lambda - \eta \cdot \frac{\partial L_{\text{query}}(\lambda)}{\partial \lambda}
+$$
 
 5. 위 과정을 여러 episode에 걸쳐 반복하면서 $\lambda$를 최적화합니다. **여러 episode의 경험을 공통 파라미터 $\lambda$에 축적하여 few-shot 상황에서 빠르고 robust하게 학습을 가능하게 만드는 것입니다.**
 
