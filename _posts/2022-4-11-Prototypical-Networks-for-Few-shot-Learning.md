@@ -1,5 +1,5 @@
 ---
-title: "Prototypical Networks for Few-shot Learning"
+title: "[Paper Review] Prototypical Networks for Few-shot Learning"
 date: 2022-4-11
 author: jieun
 math: True
