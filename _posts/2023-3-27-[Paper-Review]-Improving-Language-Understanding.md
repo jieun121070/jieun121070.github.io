@@ -120,15 +120,10 @@ Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식�
   ![](/assets/img/llm/ln.png)
 
 - 마지막 self-attention block 뒤에 layer normalization 추가
-
 - initialization 변경
-
 - residual layer의 가중치 스케일링 (스케일링 팩터는 $\frac{1}{\sqrt{N}}$이고, $N$은 residual layer의 개수)
-
 - vocabulary size를 50,257로 확장
-
 - context size를 512개의 토큰에서 1024개의 토큰으로 증가시킴
-
 - batch size로 512 사용
 
 
