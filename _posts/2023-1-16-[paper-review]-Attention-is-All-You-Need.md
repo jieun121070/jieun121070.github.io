@@ -3,7 +3,7 @@ title: "[Paper Review] Attention is All You Need"
 date: 2023-1-16
 author: jieun
 math: True
-categories: [NLP]
+categories: [Language-Model]
 tags: [Transformer, Attention, Self-Attention]
 typora-root-url: ..
 ---

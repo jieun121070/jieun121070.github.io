@@ -3,7 +3,7 @@ title: "[Paper Review] ELMo: Deep contextualized word representations"
 date: 2023-3-20
 author: jieun
 math: True
-categories: [NLP]
+categories: [Language-Model]
 tags: [LSTM, ELMo]
 typora-root-url: ..
 ---

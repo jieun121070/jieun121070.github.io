@@ -1,9 +1,9 @@
 ---
 title: "Language Model: n-gram에서 RNN으로의 발전"
 date: 2023-1-2
-categories: [NLP]
 author: jieun
 math: True
+categories: [Language-Model]
 tags: [Language-Model, n-gram, LSTM, RNN]
 typora-root-url: ..
 ---

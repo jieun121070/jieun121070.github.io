@@ -3,7 +3,7 @@ title: "GPT-1, GPT-2"
 date: 2023-3-27
 author: jieun
 math: True
-categories: [NLP]
+categories: [Language-Model]
 tags: [Transformer, GPT]
 typora-root-url: ..
 ---
@@ -113,14 +113,22 @@ Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식�
 
 
 
-### 모델 수정 사항 (GPT-1 > GPT-2)
+### GPT-1과의 비교
 
-- layer normalization의 위치를 각각의 sub-block의 input으로 변경
+- layer normalization의 위치를 multi-head attention과 feed-forward network 앞으로 변경
+
+  ![](/assets/img/llm/ln.png)
+
 - 마지막 self-attention block 뒤에 layer normalization 추가
+
 - initialization 변경
+
 - residual layer의 가중치 스케일링 (스케일링 팩터는 $\frac{1}{\sqrt{N}}$이고, $N$은 residual layer의 개수)
+
 - vocabulary size를 50,257로 확장
+
 - context size를 512개의 토큰에서 1024개의 토큰으로 증가시킴
+
 - batch size로 512 사용
 
 

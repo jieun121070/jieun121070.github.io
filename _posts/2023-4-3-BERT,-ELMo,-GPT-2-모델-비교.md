@@ -3,7 +3,7 @@
 date: 2023-4-3
 author: jieun
 math: True
-categories: [NLP]
+categories: [Language-Model]
 tags: [GPT, ELMo, BERT, Transformer]
 typora-root-url: ..
 ---
