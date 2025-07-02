@@ -1,5 +1,5 @@
 ---
-title: "GPT-1, GPT-2"
+title: "GPT-2: Language Models are Unsupervised Multitask Learners"
 date: 2023-3-27
 author: jieun
 math: True
@@ -10,11 +10,11 @@ typora-root-url: ..
 
 ## Introduction
 
-NLP 모델을 개발할 때, 일반적으로 unlabeled 데이터셋은 충분하지만 특정 task를 학습시키기 위한 labeled 데이터셋은 부족하다는 문제가 있습니다. GPT-1은 이 문제를 해결하기 위해 `unsupervised pre-training`과 `supervised fine-tuning`을 결합하여 사용하는 `semi-supervised learning` 방식을 사용합니다. 따라서 대용량의 unlabeled 데이터셋과 target task를 학습할 적당량의 labeled 데이터셋이 있을 때 사용 가능한 모델입니다. 이 때, 두 데이터셋의 domain은 같지 않아도 무방합니다. GPT-1는 이러한 과정을 통해 약간의 adaptation만으로 다양한 task에 적용할 수 있는 범용적인 representation을 학습하고자 했습니다.
+NLP 모델을 개발할 때, 일반적으로 unlabeled 데이터셋은 충분하지만 특정 task를 학습시키기 위한 labeled 데이터셋은 부족하다는 문제가 있습니다. **GPT-1**은 이 문제를 해결하기 위해 `unsupervised pre-training`과 `supervised fine-tuning`을 결합하여 사용하는 `semi-supervised learning` 방식을 사용합니다. 따라서 대용량의 unlabeled 데이터셋과 target task를 학습할 적당량의 labeled 데이터셋이 있을 때 사용 가능한 모델입니다. 이 때, 두 데이터셋의 domain은 같지 않아도 무방합니다. GPT-1는 이러한 과정을 통해 약간의 adaptation만으로 다양한 task에 적용할 수 있는 범용적인 representation을 학습하고자 했습니다.
 
-하지만 fine-tuning을 수행할 때 모델은 데이터 분포의 미세한 변화에 민감할 수밖에 없습니다. 또한 결과적으로 target task에 특화된 모델을 학습하게 됩니다. 일반화 성능이 떨어진다는 한계점이 여전히 남아 있는 것입니다. 후속 논문([Radford et al., 2018](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf))에서 저자들은 하나의 domain 데이터셋으로 하나의 task를 학습하는 구조가 일반화 성능을 저해하는 주요 요인임을 지적했습니다. 그리고 `Multitask Learning`을 통해 fine-tuning 과정이 더이상 필요하지 않은 모델인 GPT-2를 제안했습니다. GPT-2는 target task를 수행하기 위해 일일이 라벨링을 하고, 재학습시킬 필요없이 다양한 task에 광범위하게 적용할 수 있습니다. GPT-2의 모델 구조는 GPT-1과 거의 동일합니다.
+하지만 fine-tuning을 수행할 때 모델은 데이터 분포의 미세한 변화에 민감할 수밖에 없습니다. 또한 결과적으로 target task에 특화된 모델을 학습하게 됩니다. 일반화 성능이 떨어진다는 한계점이 여전히 남아 있는 것입니다. 후속 논문([Radford et al., 2018](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf))에서 저자들은 하나의 domain 데이터셋으로 하나의 task를 학습하는 구조가 일반화 성능을 저해하는 주요 요인임을 지적했습니다. 그리고 `Multitask Learning`을 통해 fine-tuning에 대한 의존성을 크게 낮춘 모델인 **GPT-2**를 제안했습니다. GPT-2의 모델 구조는 GPT-1과 거의 동일합니다.
 
-본 포스트에서는 GPT-1 모델 구조의 특징을 자세히 살펴보고, GPT-1에 비해 GPT-2에서 개선된 점은 무엇인지 알아보겠습니다.
+본 포스트에서는 GPT 모델 구조의 특징을 자세히 살펴보고, GPT-1에 비해 GPT-2에서 개선된 점은 무엇인지 알아보겠습니다.
 
 
 
@@ -51,7 +51,7 @@ $$P(u)=softmax(h_nW_e^T)$$
 
 다음으로는 supervised model로 labeled 데이터셋 $\mathcal{C}$를 학습하여 fine-tuning을 수행합니다. 이 때, 데이터셋 $\mathcal{C}$의 데이터들은 일련의 토큰들 $x^1,...,x^m$과 해당 sequence의 label $y$로 이루어져 있습니다.
 
-$$p(y|x^1,...,x^m)=softmax(h_l^mW_y)$$
+$$p(y|x^1,...,x^m)=\text{softmax}(h_l^mW_y)$$
 
 $$L_2(\mathcal{C})=\sum_{(x,y)}\log P(y|x^1,...,x^m)$$
 
@@ -83,7 +83,7 @@ GPT-1(위 표에서는 Finetuned Transformer LM으로 표기)은 대부분의 �
 ![](/assets/img/bert/bert_result.PNG)
 _BERT 실험 결과_
 
-GPT-1 이후 등장한 [BERT](https://jieun121070.github.io/posts/BERT/)는 대부분의 NLP task에서 최고의 성능을 보였습니다. 하지만 BERT 역시 GPT-1처럼 fine-tuning 과정이 필요한 모델입니다. GPT-2는 모델 사이즈와 학습 데이터 양을 크게 증가시켜 fine-tuning 없이 사용 가능한 범용 모델을 제안합니다. 
+GPT-1 이후 등장한 [BERT](https://jieun121070.github.io/posts/BERT/)는 대부분의 NLP task에서 최고의 성능을 보였습니다. 하지만 BERT 역시 GPT-1처럼 fine-tuning 과정이 필요한 모델입니다. GPT-2는 모델 사이즈와 학습 데이터 양을 크게 증가시켜 fine-tuning 의존성을 크게 낮춘 범용 모델을 제안합니다. 
 
 | <center>Layers</center> | <center>$d_{model}$</center> | <center>GPT-1</center> | <center>BERT</center> | <center>GPT-2</center> |
 | ----------------------- | ---------------------------- | ---------------------- | --------------------- | ---------------------- |
@@ -96,7 +96,7 @@ GPT-1 이후 등장한 [BERT](https://jieun121070.github.io/posts/BERT/)는 대�
 
 ### 학습 데이터셋
 
-Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식을 사용합니다. 이 때문에 조건부 확률 $p(output \vert input)$을 추정하는 것이 아니라, $p(output \vert input, task)$를 추정하는 문제가 됩니다.
+Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식을 사용합니다. 이 때문에 조건부 확률 $p(\text{output} \vert \text{input})$을 추정하는 것이 아니라, $p(\text{output} \vert \text{input}, \text{task})$를 추정하는 문제가 됩니다.
 
 ![](/assets/img/bert/gpt-2-input-1.jpg)![](/assets/img/bert/gpt-2-input-2.jpg)
 
@@ -115,7 +115,7 @@ Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식�
 
 ### GPT-1과의 비교
 
-- layer normalization의 위치를 multi-head attention과 feed-forward network 앞으로 변경
+- layer normalization의 위치 변경 (Pre-LN)
 
   ![](/assets/img/llm/ln.png)
 

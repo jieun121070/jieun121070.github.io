@@ -1,5 +1,5 @@
 ---
-ㄷtitle: "BERT, ELMo, GPT-2 모델 비교"
+title: "BERT, ELMo, GPT-2 모델 비교"
 date: 2023-4-3
 author: jieun
 math: True
@@ -14,10 +14,10 @@ typora-root-url: ..
 
 ![](/assets/img/bert/comparison.PNG)
 
-|                    |          ELMo           |                      BERT                      |                   GPT-2                    |
-| :----------------: | :---------------------: | :--------------------------------------------: | :----------------------------------------: |
-| 기본적인 모델 구조 | bidirectional<br />LSTM |            Transformer<br />encoder            |          Transformer<br />decoder          |
-|   pre-trained LM   |  bidirectional<br />LM  | Masked LM<br />& Next Sentence Prediction(NSP) | Multitask Learning<br />방식으로 학습한 LM |
+|                    |          ELMo           |                      BERT                      |                       GPT-2                       |
+| :----------------: | :---------------------: | :--------------------------------------------: | :-----------------------------------------------: |
+| 기본적인 모델 구조 | bidirectional<br />LSTM |            Transformer<br />encoder            |             Transformer<br />decoder              |
+|   pre-trained LM   |  bidirectional<br />LM  | Masked LM<br />& Next Sentence Prediction(NSP) | Multitask Learning<br />방식으로 학습한 Causal LM |
 
 아래 그래프들은 세 모델의 embedding vector 특성 차이를 비교한 것입니다. 가로 축은 Transformer layer 또는 ELMo의 layer를, 세로 축은 유사도를 나타냅니다.
 
