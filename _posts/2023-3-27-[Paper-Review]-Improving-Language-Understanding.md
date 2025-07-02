@@ -1,5 +1,5 @@
 ---
-title: "GPT-2: Language Models are Unsupervised Multitask Learners"
+title: "[Paper Review] GPT-2: Language Models are Unsupervised Multitask Learners"
 date: 2023-3-27
 author: jieun
 math: True
