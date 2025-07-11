@@ -25,8 +25,8 @@ description: >- # used by seo meta and the atom feed
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://jieun121070.github.io"
 
-github:
-  username: jieun121070 # change to your github username
+# github:
+#   username: jieun121070 # change to your github username
 
 # twitter:
 #   username: twitter_username # change to your twitter username
@@ -34,12 +34,11 @@ github:
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: jieun choi
-  email: jieun121070@gmail.com # change to your email address
+  name: Chips.AI
+  # email: jieun121070@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
     # - https://twitter.com/username # change to your twitter homepage
-    - https://github.com/jieun121070 # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
