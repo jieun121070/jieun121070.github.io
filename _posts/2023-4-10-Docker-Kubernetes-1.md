@@ -1,5 +1,5 @@
 ---
-title: "Docker/Kubernetes의 이해 - 1"
+title: "Docker/Kubernetes의 이해 (1)"
 date: 2023-4-10
 author: jieun
 math: True

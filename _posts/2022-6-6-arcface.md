@@ -14,29 +14,29 @@ typora-root-url: ..
 
 ![](/assets/img/arcface/arcface.png)
 
-`Step 1` Backbone network(ResNet)을 사용해 feature를 추출합니다.
+- `Step 1` Backbone network(ResNet)을 사용해 feature를 추출합니다.
 
-`Step 2` feature vector $\mathbf{x}$를 L2 정규화해서 크기가 항상 1인 vector로 만듭니다. 이를 통해 softmax에서 vector의 크기(norm) 대신 **각도(angle)**로 클래스를 구분할 수 있게 됩니다.
+- `Step 2` feature vector $\mathbf{x}$를 L2 정규화해서 크기가 항상 1인 vector로 만듭니다. 이를 통해 softmax에서 vector의 크기(norm) 대신 **각도(angle)**로 클래스를 구분할 수 있게 됩니다.
 
 $$\hat{\mathbf{x}} = \frac{\mathbf{x}}{\| \mathbf{x} \|}$$
 
-`Step 3` 각 class별 weight vector $\mathbf{W}_k$도 L2 정규화합니다.
+- `Step 3` 각 class별 weight vector $\mathbf{W}_k$도 L2 정규화합니다.
 
 $$\hat{\mathbf{W}} = \frac{\mathbf{W}}{\| \mathbf{W} \|}$$
 
-`Step 4` 정규화된 feature vector와 각 class weight 사이의 각도 $\theta$를 구합니다.
+- `Step 4` 정규화된 feature vector와 각 class weight 사이의 각도 $\theta$를 구합니다.
 
 $$\cos(\theta_k)=\hat{\mathbf{W}}_k^\top \hat{\mathbf{x}}$$
 
-`Step 5` 정답 class에만 angular margin $m$을 더합니다.
+- `Step 5` 정답 class에만 angular margin $m$을 더합니다.
 
 $$\cos(\theta_y+m)$$
 
-`Step 6` 각도를 cosine으로 표현하면 값 범위가 $[−1,1]$로 너무 작아져서 gradient가 약해질 수 있기 때문에 scaling factor $s$를 곱합니다.
+- `Step 6` 각도를 cosine으로 표현하면 값 범위가 $[−1,1]$로 너무 작아져서 gradient가 약해질 수 있기 때문에 scaling factor $s$를 곱합니다.
 
 $$s \cdot \cos(\theta_y+m)$$
 
-`Step 7`  최종 logit을 softmax에 넣어 cross-entropy loss를 계산합니다.
+- `Step 7`  최종 logit을 softmax에 넣어 cross-entropy loss를 계산합니다.
 
 $$p_y = \frac {e^{s \cdot \cos(\theta_y + m)}} {e^{s \cdot \cos(\theta_y + m)} + \sum_{j \ne y} e^{s \cdot \cos(\theta_j)}}$$
 
@@ -44,7 +44,7 @@ loss는 아래처럼 계산합니다.
 
 $$L=−\log(p_y)$$
 
-`Step 8` cross-entropy loss로 gradient 계산해서 Backbone network와 $\mathbf{W}$를 모두 업데이트합니다. 결과적으로 **같은 사람끼리는 더 가깝고, 다른 사람끼리는 더 멀어지도록** feature embedding이 학습됩니다.
+- `Step 8` cross-entropy loss로 gradient 계산해서 Backbone network와 $\mathbf{W}$를 모두 업데이트합니다. 결과적으로 **같은 사람끼리는 더 가깝고, 다른 사람끼리는 더 멀어지도록** feature embedding이 학습됩니다.
 
 ## 2. 핵심 아이디어: angular margin
 
