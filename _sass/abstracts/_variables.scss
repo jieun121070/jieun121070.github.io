@@ -1,5 +1,13 @@
 /* sidebar */
 
+$sidebar-bg: #000 !default;
+$sidebar-border-color: #333 !default;
+$sidebar-hover-bg: #333 !default;
+$sidebar-active-color: #fff !default;
+$sidebar-btn-color: #fff !default;
+$sidebar-btn-bg: #333 !default;
+$site-title-color: #fff !default;
+$site-subtitle-color: #ccc !default;
 $sidebar-width: 260px !default; /* the basic width */
 $sidebar-width-large: 300px !default; /* screen width: >= 1650px */
 $sb-btn-gap: 0.8rem !default;

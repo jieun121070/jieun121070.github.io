@@ -22,22 +22,19 @@ typora-root-url: ..
 
 ## 기존 연구인 sensitivity 와의 차별점
 - sensitivity는 LRP와 달리 slope decomposition (gradient-based)
-
 - sensitivity의 relevance score $R$은 이미지 픽셀 각각의 변화가 분류 결과를 얼마나 증가 혹은 감소시키는지 (얼마나 sensitive한지) 나타냄
-
 - 분류 결과(value) 자체를 설명하는 것이 아니라 분류 function의 variation을 설명
-  $$
-  f(\mathbf{x}) \;=\;
-  \underbrace{f(\tilde{\mathbf{x}})}_{0}
-  \;+\;
-  \sum_{i=1}^{d}
-  \underbrace{\left.
-        \frac{\partial f}{\partial x_i}
-      \right|_{\mathbf{x}= \tilde{\mathbf{x}}}
-      \bigl(x_i - \tilde{x}_i\bigr)}_{R_i}
-  \;+\;
-  \underbrace{O\!\bigl(\mathbf{x}\mathbf{x}^{\top}\bigr)}_{0}
-  $$
+
+$$f(\mathbf{x}) \;=\;
+\underbrace{f(\tilde{\mathbf{x}})}_{0}
+\;+\;
+\sum_{i=1}^{d}
+\underbrace{\left.
+      \frac{\partial f}{\partial x_i}
+    \right|_{\mathbf{x}= \tilde{\mathbf{x}}}
+    \bigl(x_i - \tilde{x}_i\bigr)}_{R_i}
+\;+\;
+\underbrace{O\!\bigl(\mathbf{x}\mathbf{x}^{\top}\bigr)}_{0}$$
 
 ![](/assets/img/on-pixel-wise-explanations/img4.jpg)
 
