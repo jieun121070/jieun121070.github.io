@@ -37,7 +37,7 @@ latent embedding space $e \in R^{K \times D}$
 #### 2.1 Forward Computation
 
 - `Step 1` encoder는 input 이미지 $x$를 입력받아서 continuous representation $z_e(x)$를 출력합니다.
-- `Step 2` continuous representation $z_e(x)$는 Vector Quantization를 통해 embedding space $e$에서 가장 가까운 embedding vector $z_q(x)$로 매핑됩니다. $z_q(x)$가 사전에 정의된 codebook vector 중 가장 가까운 vector로 변환되는 것입니다.
+- `Step 2` continuous representation $z_e(x)$는 Vector Quantization를 통해 embedding space $e$에서 가장 가까운 embedding vector $z_q(x)$로 매핑됩니다. $z_q(x)$가 사전에 정의된 codebook vector 중 가장 가까운 vector로 변환되는 것입니다. codebook은 encoder와 decoder가 공유하는 lookup table 같은 개념입니다.
 
 $$z_q(x)=e_k, \text{where } k= \arg\min_j \vert\vert z_e(x)-e_j \vert\vert _2$$
 
@@ -56,6 +56,7 @@ $$L = \log p(x | z_q(x)) + \| \text{sg}[z_e(x)] - e \|^2_2 + \beta \| z_e(x) - \
 - 두번째 항은 embedding vector $e_i$를 encoder output $z_e(x)$로 이동시키기 위한 $l_2$ error로, code book을 업데이트하는 데에만 사용됩니다.
 - 세번째 항은 commitment loss입니다.
 - decoder는 첫번째 항에서, encoder는 첫번째 항과 세번째 항에서, embedding은 두번째 항에서 최적화됩니다.
+- sg는 stop-gradient로, 각자 자기 영역만 업데이트하게 해서 gradient 흐름이 꼬이지 않도록 합니다.
 
 ### 3. Prior
 
