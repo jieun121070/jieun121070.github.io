@@ -20,7 +20,7 @@ typora-root-url: ..
 
 
 ![](/assets/img/diffusion/vqvae.png)
-
+_VQ-VAE architecture_
 
 
 ### 1. Discrete Latent variables
@@ -82,8 +82,7 @@ VQ-VAE의 학습 자체는 prior 없이 이루어집니다. 그리고 decoder에
 $$p(x)= \prod_{i=1}^{n^2}p(x_i \vert x_1, …, x_{i-1})$$
 
 ![](/assets/img/diffusion/pixelcnn.png)
-
-_PixelCNN_
+_PixelCNN architecture_
 
 ## 2. 모델 학습
 
