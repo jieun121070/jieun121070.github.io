@@ -12,7 +12,7 @@ typora-root-url: ..
 
 NLP 모델을 개발할 때, 일반적으로 unlabeled 데이터셋은 충분하지만 특정 task를 학습시키기 위한 labeled 데이터셋은 부족하다는 문제가 있습니다. **GPT-1**은 이 문제를 해결하기 위해 `unsupervised pre-training`과 `supervised fine-tuning`을 결합하여 사용하는 `semi-supervised learning` 방식을 사용합니다. 따라서 대용량의 unlabeled 데이터셋과 target task를 학습할 적당량의 labeled 데이터셋이 있을 때 사용 가능한 모델입니다. 이 때, 두 데이터셋의 domain은 같지 않아도 무방합니다. GPT-1는 이러한 과정을 통해 약간의 adaptation만으로 다양한 task에 적용할 수 있는 범용적인 representation을 학습하고자 했습니다.
 
-하지만 fine-tuning을 수행할 때 모델은 데이터 분포의 미세한 변화에 민감할 수밖에 없습니다. 또한 결과적으로 target task에 특화된 모델을 학습하게 됩니다. 일반화 성능이 떨어진다는 한계점이 여전히 남아 있는 것입니다. 후속 논문([Radford et al., 2018](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf))에서 저자들은 하나의 domain 데이터셋으로 하나의 task를 학습하는 구조가 일반화 성능을 저해하는 주요 요인임을 지적했습니다. 그리고 `Multitask Learning`을 통해 fine-tuning에 대한 의존성을 크게 낮춘 모델인 **GPT-2**를 제안했습니다. GPT-2의 모델 구조는 GPT-1과 거의 동일합니다.
+하지만 fine-tuning을 수행할 때 모델은 데이터 분포의 미세한 변화에 민감할 수밖에 없습니다. 또한 결과적으로 target task에 특화된 모델을 학습하게 됩니다. 일반화 성능이 떨어진다는 한계점이 여전히 남아 있는 것입니다. 후속 논문([Radford et al., 2018](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf))에서 저자들은 하나의 domain 데이터셋으로 하나의 task를 학습하는 구조가 일반화 성능을 저해하는 주요 요인임을 지적했습니다. 그래서 과거 토큰들로 다음 토큰을 예측하는 causal LM만 학습하고, 테스트 시에는 task에 대한 설명 덧붙임으로써 fine-tuning 의존성을 크게 낮춘 **GPT-2**를 제안했습니다. GPT-2의 모델 구조는 GPT-1과 거의 동일합니다.
 
 본 포스트에서는 GPT 모델 구조의 특징을 자세히 살펴보고, GPT-1에 비해 GPT-2에서 개선된 점은 무엇인지 알아보겠습니다.
 
@@ -96,10 +96,6 @@ GPT-1 이후 등장한 [BERT](https://jieun121070.github.io/posts/BERT/)는 대�
 
 ### 학습 데이터셋
 
-Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식을 사용합니다. 이 때문에 조건부 확률 $p(\text{output} \vert \text{input})$을 추정하는 것이 아니라, $p(\text{output} \vert \text{input}, \text{task})$를 추정하는 문제가 됩니다.
-
-![](/assets/img/bert/gpt-2-input-1.jpg)![](/assets/img/bert/gpt-2-input-2.jpg)
-
 선행연구들과 GPT-2에서 pre-training 시 사용한 데이터셋을 비교해보면 다음과 같습니다.
 
 | Model |                        Dataset                         |             Type             |                             Size                             |
@@ -111,7 +107,9 @@ Introduction에서 언급한 바와 같이, GPT-2는 `Multitask Learning`방식�
 
 > The key insight was that the model continued to get more and more accurate as it became bigger, reaching state of the art. This might seem unsurprising, but other language models, such as BERT, start to become less accurate at a certain point in data size.
 
+Introduction에서 언급한 바와 같이, GPT-2는 테스트 시에 task에 대한 설명을 덧붙입니다. 예를 들어, input 앞에 `“English text = French text\nEnglish text = ...\nFrench text = ”` 같은 문자열을 붙여 번역 taks임을 암시합니다. 이 때문에 조건부 확률 $p(\text{output} \vert \text{input})$을 추정하는 것이 아니라, $p(\text{output} \vert \text{input}, \text{task})$를 추정하는 문제가 됩니다.
 
+![](/assets/img/bert/gpt-2-input-1.jpg)![](/assets/img/bert/gpt-2-input-2.jpg)
 
 ### GPT-1과의 비교
 
