@@ -43,6 +43,5 @@ typora-root-url: ..
 # Reference
 
 - [How Contextual are Contextualized Word Representations?](https://ai.stanford.edu/blog/contextual/)
-
 - [how-bert-and-gpt-models-change-the-game-for-nlp](https://www.ibm.com/blog/how-bert-and-gpt-models-change-the-game-for-nlp/)
 

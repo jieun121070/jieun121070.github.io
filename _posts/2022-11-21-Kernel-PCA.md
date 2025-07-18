@@ -3,7 +3,7 @@ title: "Kernel PCA"
 date: 2022-11-21
 author: jieun
 math: True
-categories: [Data-Analysis]
+categories: [Machine-Learning]
 tags: [PCA, Kernel-PCA, Dimensionality-Reduction]
 typora-root-url: ..
 ---
