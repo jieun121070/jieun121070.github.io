@@ -17,7 +17,7 @@ typora-root-url: ..
 ### 1-1. 모델링 대상
 
 - VAE는 explicit distribution을 모델링
-  - VAE는 입력 데이터의 잠재 공간 $z$에 대한 사전 확률 분포 $p(z)$를 명시적으로 설정하고, 입력 $x$에 대해 사후 분포 $q(z|x)$를 학습
+  - VAE는 입력 데이터의 잠재 공간 $z$에 대한 사전 확률 분포 $p(z)$를 명시적으로 설정하고, 입력 $x$에 대해 사후 분포 $q(z \mid x)$를 학습
   - encoder는 입력 데이터를 기반으로 잠재 공간에서의 평균(mean)과 분산(variance)을 출력하고, 이 평균과 분산을 사용해 잠재 공간에서 샘플링을 수행하여 새로운 데이터를 생성
 - GAN은 implicit distribution을 모델링 (VAE 보다 좀 더 practical)
   - GAN에서 생성기는 임의의 noise 벡터를 받아 실제 데이터와 유사한 데이터를 생성하는 함수를 학습
