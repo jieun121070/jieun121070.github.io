@@ -100,7 +100,7 @@ $q_{\phi}(z \vert x)$를 $p_{\theta}(z \vert x)$에 근사시키는 것은 곧 $
 $$\begin{align*}D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z|x)} dz \\
 &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)p_{\theta}(x)}{p_{\theta}(z,x)} dz \qquad (\because p_\theta(z|x)=p_\theta(x,z)/p_\theta(x)) \\
 &= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z,x)} dz \\
-&= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(x|z)p_{\theta}(z)} dz \qquad (\because p_\theta(x,z)=p_\theta(x|z)/p_\theta(z)) \\
+&= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(x|z)p_{\theta}(z)} dz \qquad (\because p_\theta(x,z)=p_\theta(x|z)p_\theta(z)) \\
 &= \log p_{\theta}(x) + E_{z \sim q_{\phi}(z|x)} \left[ \log \frac{q_{\phi}(z|x)}{p_{\theta}(z)} - \log p_{\theta}(x|z) \right] \\
 &= \log p_{\theta}(x) + D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) - E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right]
 \end{align*}$$
@@ -121,10 +121,10 @@ $$\begin{align*}\log p_{\theta}(x) &= \log \int p_{\theta}(x,z) dz \\
 &= \log \int q_{\phi}(z \vert x) \frac{p_{\theta}(x,z)}{q_{\phi}(z \vert x)} dz \\
 &\ge \int q_{\phi}(z \vert x) \log\frac{p_{\theta}(x,z)}{q_{\phi}(z \vert x)} dz \\
 &\ge \int q_{\phi}(z \vert x) \log p_{\theta}(x,z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
-&\ge \int q_{\phi}(z \vert x) \log p_{\theta}(z \vert x)p_{\theta}(z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
-&\ge \int q_{\phi}(z \vert x) \{\log p_{\theta}(z \vert x)+\log p_{\theta}(z)\} - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
-&\ge \int q_{\phi}(z \vert x)\log p_{\theta}(z \vert x) + q_{\phi}(z \vert x)\log p_{\theta}(z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
-&\ge \int q_{\phi}(z \vert x)\log p_{\theta}(z \vert x) - q_{\phi}(z \vert x)\log \frac{q_{\phi}(z \vert x)}{p_{\theta}(z)} dz \\
+&\ge \int q_{\phi}(z \vert x) \log p_{\theta}(x \vert z)p_{\theta}(z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x) \{\log p_{\theta}(x \vert z)+\log p_{\theta}(z)\} - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x)\log p_{\theta}(x \vert z) + q_{\phi}(z \vert x)\log p_{\theta}(z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x)\log p_{\theta}(x \vert z) - q_{\phi}(z \vert x)\log \frac{q_{\phi}(z \vert x)}{p_{\theta}(z)} dz \\
 &\ge E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right] - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) \\
 \end{align*}$$
 
