@@ -44,7 +44,7 @@ VAE는 생성 모델의 일종으로 Autoencoder와는 목적이 다릅니다. *
 - Likelihood $p_{\theta}(x \vert z)$
 - 사후 확률 $p_{\theta}(z \vert x)$
 
-Autoencoder가 구하고자 하는 $p_\theta(x)$를 계산하려면 가능한 모든 $z$에 대해 $p(x,z)$를 적분해야 합니다. $p(x,z)=p_{\theta}(z)p_{\theta}(x \vert z)$이므로, 최적의 파라미터 $\theta^\ast$는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터입니다. 최적의 파라미터 $\theta^\ast$를 구했다고 가정하면, 아래와 같은 순서를 따라 새로운 데이터 $x$를 생성할 수 있습니다.
+VAE가 구하고자 하는 $p_\theta(x)$를 계산하려면 가능한 모든 $z$에 대해 $p(x,z)$를 적분해야 합니다. $p(x,z)=p_{\theta}(z)p_{\theta}(x \vert z)$이므로, 최적의 파라미터 $\theta^\ast$는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터입니다. 최적의 파라미터 $\theta^\ast$를 구했다고 가정하면, 아래와 같은 순서를 따라 새로운 데이터 $x$를 생성할 수 있습니다.
 
 - 사전 확률 $p_{\theta^*}(z)$에서 $z^{(i)}$를 샘플링
 - 조건부 확률 $p_{\theta^*}(x \vert z=z^{(i)})$에서 real data point처럼 보이는 $x^{(i)}$를 생성
