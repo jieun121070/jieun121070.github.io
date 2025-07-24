@@ -118,13 +118,13 @@ Variational Bayesian 방법론에서 이 loss function은 **ELBO(evidence lower 
 $$-L_{VAE} = \log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \leq \log p_{\theta}(x)$$
 
 $$\begin{align*}\log p_{\theta}(x) &= \log \int p_{\theta}(x,z) dz \\
-&= \log \int q_{\phi}(x \vert z) \frac{p_{\theta}(x,z)}{q_{\phi}(x \vert z)} dz \\
-&\ge \int q_{\phi}(x \vert z) \log\frac{p_{\theta}(x,z)}{q_{\phi}(x \vert z)} dz \\
-&\ge \int q_{\phi}(x \vert z) \log p_{\theta}(x,z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z) \log p_{\theta}(x \vert z)p_{\theta}(z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z) \{\log p_{\theta}(x \vert z)+\log p_{\theta}(z)\} - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z)\log p_{\theta}(x \vert z) + q_{\phi}(x \vert z)p_{\theta}(z) - q_{\phi}(x \vert z) \log q_{\phi}(x \vert z) dz \\
-&\ge \int q_{\phi}(x \vert z)\log p_{\theta}(x \vert z) - q_{\phi}(x \vert z)\log \frac{q_{\phi}(x \vert z)}{p_{\theta}(z)} dz \\
+&= \log \int q_{\phi}(z \vert x) \frac{p_{\theta}(x,z)}{q_{\phi}(z \vert x)} dz \\
+&\ge \int q_{\phi}(z \vert x) \log\frac{p_{\theta}(x,z)}{q_{\phi}(z \vert x)} dz \\
+&\ge \int q_{\phi}(z \vert x) \log p_{\theta}(x,z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x) \log p_{\theta}(z \vert x)p_{\theta}(z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x) \{\log p_{\theta}(z \vert x)+\log p_{\theta}(z)\} - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x)\log p_{\theta}(z \vert x) + q_{\phi}(z \vert x)\log p_{\theta}(z) - q_{\phi}(z \vert x) \log q_{\phi}(z \vert x) dz \\
+&\ge \int q_{\phi}(z \vert x)\log p_{\theta}(z \vert x) - q_{\phi}(z \vert x)\log \frac{q_{\phi}(z \vert x)}{p_{\theta}(z)} dz \\
 &\ge E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right] - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) \\
 \end{align*}$$
 
