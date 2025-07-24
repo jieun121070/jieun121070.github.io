@@ -98,10 +98,9 @@ class Decoder(nn.Module):
 $q_{\phi}(z \vert x)$를 $p_{\theta}(z \vert x)$에 근사시키는 것은 곧 $q_{\phi}(z \vert x)$가 $p_{\theta}(z \vert x)$에 최대한 가깝도록 만드는 것입니다. 따라서, 다음과 같이 두 분포 사이의 거리를 측정하는 [KL divergence](https://jieun121070.github.io/posts/%EB%B6%84%ED%8F%AC-%EA%B0%84%EC%9D%98-%EA%B1%B0%EB%A6%AC%EB%A5%BC-%EC%B8%A1%EC%A0%95%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95%EB%93%A4/)를 사용해 $$D_{KL}(q_{\phi}(z \vert x) \vert\vert p_{\theta}(z \vert x))$$를 최소화하는 문제로 바꿀 수 있습니다.
 
 $$\begin{align*}D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) &= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z|x)} dz \\
-&= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)p_{\theta}(x)}{p_{\theta}(z,x)} dz \\
-&= \int q_{\phi}(z|x) \log \frac{p_{\theta}(x|z) q_{\phi}(z|x)}{p_{\theta}(z,x)} dz \\
+&= \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)p_{\theta}(x)}{p_{\theta}(z,x)} dz (\because p_\theta(z|x)=p_\theta(x,z)/p_theta(x)) \\
 &= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(z,x)} dz \\
-&= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(x|z)p_{\theta}(z)} dz \\
+&= \log p_{\theta}(x) + \int q_{\phi}(z|x) \log \frac{q_{\phi}(z|x)}{p_{\theta}(x|z)p_{\theta}(z)} dz (\because p_\theta(x,z)=p_\theta(x|z)/p_theta(z)) \\
 &= \log p_{\theta}(x) + E_{z \sim q_{\phi}(z|x)} \left[ \log \frac{q_{\phi}(z|x)}{p_{\theta}(z)} - \log p_{\theta}(x|z) \right] \\
 &= \log p_{\theta}(x) + D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z)) - E_{z \sim q_{\phi}(z|x)} \left[ \log p_{\theta}(x|z) \right]
 \end{align*}$$
