@@ -14,7 +14,7 @@ typora-root-url: ..
 
 ![](/assets/img/gan/ae.png)
 
-Autoencoder는 encoder과 decoder로 구성된 모델이며, input과 output이 동일합니다. 고차원의 input을 저차원으로 압축했다가 다시 원래 input으로 복원하는 과정을 거칩니다. loss function으로는 input과 output 사이의 **Recontruction Error**를 사용합니다. 이 loss function을 최소화하기 위해 저차원으로 압축한 feature(code)가 핵심적인 정보를 담도록 학습됩니다. 즉, Autoencoder의 목적은 새로운 데이터를 생성하는 것이 아니라 차원 축소(manifold learning)입니다.
+Autoencoder는 encoder과 decoder로 구성된 모델이며, input과 output이 동일합니다. 고차원의 input을 저차원으로 압축했다가 다시 원래 input으로 복원하는 과정을 거칩니다. loss function으로는 input과 output 사이의 **Reconstruction Error**를 사용합니다. 이 loss function을 최소화하기 위해 저차원으로 압축한 feature(code)가 핵심적인 정보를 담도록 학습됩니다. 즉, Autoencoder의 목적은 새로운 데이터를 생성하는 것이 아니라 차원 축소(manifold learning)입니다.
 
 ### Manifold learning
 

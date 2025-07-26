@@ -4,6 +4,6 @@ date: 2024-12-27
 author: jieun
 math: True
 categories: [Multimodal]
-tags: [Stable-Diffusion]
+tags: [Diffusion]
 typora-root-url: ..
 ---
