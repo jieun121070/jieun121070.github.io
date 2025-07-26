@@ -41,7 +41,7 @@ VAE는 생성 모델의 일종으로 Autoencoder와는 목적이 다릅니다. *
 이제부터 Autoencoder와 VAE가 구체적으로 어떤 차이점을 갖는지, encoder $q_\theta(z \vert x)$와 decoder $p_\theta(x \vert z)$는 어떻게 학습시킬 수 있는지 알아보도록 하겠습니다. 먼저, input을 $x$라 하고 latent vector를 $z$라 하면 둘 사이의 관계는 다음과 같이 나타낼 수 있습니다.
 
 - 사전 확률 $p_{\theta}(z)$
-- Likelihood $p_{\theta}(x \vert z)$
+- conditional likelihood $p_{\theta}(x \vert z)$
 - 사후 확률 $p_{\theta}(z \vert x)$
 
 VAE가 구하고자 하는 $p_\theta(x)$를 계산하려면 가능한 모든 $z$에 대해 $p(x,z)$를 적분해야 합니다. $p(x,z)=p_{\theta}(z)p_{\theta}(x \vert z)$이므로, 최적의 파라미터 $\theta^\ast$는 training data의 likelihood $p_{\theta}(x)=\int{p_{\theta}(z)p_{\theta}(x \vert z)}dz$를 최대화하는 파라미터입니다. 최적의 파라미터 $\theta^\ast$를 구했다고 가정하면, 아래와 같은 순서를 따라 새로운 데이터 $x$를 생성할 수 있습니다.
@@ -171,12 +171,6 @@ class Model(nn.Module):
 ```
 
 VAE는 explicit likelihodd function을 최적화려고 하다보니 low bound에 대한 최적화에 그친다는 한계가 있습니다. 다음 포스트에서 다룰 예정인 [GAN](https://jieun121070.github.io/posts/Generative-Adversarial-Networks/)은 VAE와 달리 implicit distribution을 모델링하는, likelihood-free 모델입니다.
-
-
-
-
-
-$$-L_{VAE} = \log p_{\theta}(x) - D_{KL}(q_{\phi}(z|x) \vert\vert p_{\theta}(z|x)) \leq \log p_{\theta}(x)$$
 
 ## Reference
 
