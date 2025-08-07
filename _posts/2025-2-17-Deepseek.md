@@ -21,15 +21,12 @@ typora-root-url: ..
 ### Multi-head Latent Attention (MLA)
 
 ![](/assets/img/llm/mha.png)
-
 _Multi-head Attention_
 
 ![](/assets/img/llm/gqa_.png)
-
 _Grouped-query Attention_
 
 ![](/assets/img/llm/mla.png)
-
 _Multi-head Latent Attention_
 
 MLA는 KV를 저차원 공간으로 투영했다가 복원하는 방식입니다.
