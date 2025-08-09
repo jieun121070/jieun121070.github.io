@@ -8,7 +8,7 @@ tags: [LLM, DeepSeek, Qwen]
 typora-root-url: ..
 ---
 
-작년 9월, OpenAI는 추론 모델 o1을 발표했는데요. OpenAI 연구팀은 강화 학습을 늘리고(train-time compute) 생각을 더 오래 할수록(test-time compute) o1의 성능이 일관적으로 향상하는 것을 확인했습니다. 하지만 모델이 생각하는 시간을 무한정 늘릴 수는 없기 때문에 어떻게 하면 이 test-time을 효율적으로 사용할 것인지가 중요한 문제로 대두되었습니다.
+작년 9월, OpenAI에서 추론 모델 o1을 발표했습니다. OpenAI 연구팀은 o1 개발 과정에서 강화 학습을 늘리고(train-time compute) 생각을 더 오래 할수록(test-time compute) o1의 성능이 일관적으로 향상하는 것을 확인했습니다. 하지만 모델이 생각하는 시간을 무한정 늘릴 수는 없기 때문에 어떻게 하면 이 test-time을 효율적으로 사용할 것인지가 중요한 문제로 대두되었습니다.
 
 ![](/assets/img/llm/gpt_reasoning.png)
 
@@ -41,9 +41,15 @@ MLA는 KV를 저차원 공간으로 투영했다가 복원하는 방식입니다
 
 ## 2. Post-Training
 
+### DeepSeek-R1-Zero
+
 [이전 포스트](https://jieun121070.github.io/posts/LLaMA3/)에서 다룬 Llama 3와 같은 일반적인 LLM은 Pre-training 후에 Supervised Fine-Tuning (SFT)과 강화 학습(RLHF)을 거쳐 성능을 개선합니다. DeekSeek 연구팀은 라벨링된 데이터 없이, **순수 강화 학습만으로 추론 능력을 향상**시킬 수 있을지 LLM의 잠재력을 탐구해보고자 했습니다. 이를 위해 학습된 모델이 **DeepSeek-R1-Zero** 입니다. 먼저, 프롬프트는 아래와 같이 \<think>...\</think>와 \<answer>...\</answer> 형식만 지시합니다.
 
 ![](/assets/img/llm/deepseek_r1_prompt.png)
+
+### DeepSeek-R1
+
+하지만 DeepSeek-R1-Zero은 가독성이 떨어지거나 서로 다른 두 언어가 섞여 나타나는 등의 문제가 있었습니다. 이러한 문제를 해결하기 위해 제안된 모델이 **DeepSeek-R1**입니다.
 
 ## 3. Knowledge Distillation
 
