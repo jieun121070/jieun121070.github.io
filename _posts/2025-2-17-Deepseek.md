@@ -20,13 +20,13 @@ DeepSeek-R1은 작년에 발표된 **DeepSeek-V3**를 기반으로 강화 학습
 
 ![](/assets/img/llm/deepseek.png)
 
-### Mixture of Experts (MoE)
+### 1.1 Mixture of Experts (MoE)
 
 [지난 포스트](https://jieun121070.github.io/posts/Qwen/)에서 설명했듯이, MoE Transformer를 사용하면 전체 파라미터를 항상 사용하는 것이 아니라 필요한 부분만 활성화하기 때문에 계산 비용을 절감하면서도 강력한 성능을 유지할 수 있습니다. DeepSeek-V3의 전체 파라미터 수는 6,710억 개에 달하지만, 각 토큰을 처리할 때 **실제로 활성화되는 파라미터는 370억 개**에 불과합니다.
 
 DeepSeek-V3의 MoE 구조에는 두 가지 유형의 전문가(expert)가 있는데요. 위 그림에서 초록색 부분에 해당하는 Shared Expert와 하늘색 부분에 해당하는 Routed Expert입니다. **Shared Expert는 모든 토큰에 대해 항상 활성화**되는 전문가입니다. 주로 공통적인 언어 규칙이나 기본적인 문법과 같은 일반적인 지식을 처리하는 역할을 담당합니다. 모든 토큰이 거쳐야하는 기본 처리 과정을 담당하기 때문에, 모델의 안정성과 효율성을 높이는 데 기여합니다. 반면, **Routed Expert는 토큰별로 다르게 선택되어 활성화**됩니다. 여기에서는 코딩, 수학, 특정 도메인 지식 등 특화된 영역에 대한 정보를 처리합니다. 논문에 따르면, MoE layer당 1개의 Shared Expert와 256개의 Routed Expert가 있습니다. 그리고 각 토큰에 대해 256개의 Routed Expert 중 8개의 전문가가 선택되어 활성화됩니다.
 
-### Multi-head Latent Attention (MLA)
+### 1.2 Multi-head Latent Attention (MLA)
 
 ![](/assets/img/llm/mha.png)
 _Multi-head Attention_
@@ -65,7 +65,7 @@ $$\mathbf{k}_{t,i}=[\mathbf{k}_{t,i}^C;\mathbf{k}_t^R]$$
 
 Key와 같은 방식으로, 입력 토큰 $\mathbf{h}_t$를 $W^{DQ}$를 통해 압축합니다. Query는 매번 새로 계산되고 사용 즉시 버려집니다.
 
-$\mathbf{c}_t^{Q}=W^{DQ}\mathbf{h}_t$
+$$\mathbf{c}_t^{Q}=W^{DQ}\mathbf{h}_t$$
 
 압축된 vector $\mathbf{c}_t^{Q}$를 $W^{UQ}$를 통해 확장합니다. 이 확장된 Query vector $\mathbf{q}_t^{C}$가 Attention 계산에 사용됩니다.
 
@@ -94,11 +94,11 @@ $$
 = W^{O}\,[\,\mathbf{o}_{t,1};\,\mathbf{o}_{t,2};\,\dots;\,\mathbf{o}_{t,n_h}\,]
 $$
 
-위 수식에서 Softmax 값이 attension score $\alpha$이고, 이 값을 가중치로 사용해 Value를 가중합 한 것이 $\mathbf{o}_{t,i}$입니다. $\mathbf{u}_{t}$는 모든 head의 attention 결과를 이어 붙인 다음 $W^O$로 projection한 것입니다.
+위 수식에서 Softmax 값이 attension score $\alpha$이고, 이 값을 가중치로 사용해 Value를 가중합 한 것이 $\mathbf{o}_{t,i}$입니다. $\mathbf{u}_t$는 모든 head의 attention 결과를 이어 붙인 다음 $W^O$로 projection한 것입니다.
 
 ## 2. Post-Training
 
-### DeepSeek-R1-Zero
+### 2.1 DeepSeek-R1-Zero
 
 [이전 포스트](https://jieun121070.github.io/posts/LLaMA3/)에서 다룬 Llama 3와 같은 일반적인 LLM은 Pre-training 후에 Supervised Fine-Tuning (SFT)과 강화 학습(RLHF)을 거쳐 성능을 개선합니다. DeekSeek 연구팀은 라벨링된 데이터 없이, **순수 강화 학습만으로 추론 능력을 향상**시킬 수 있을지 LLM의 잠재력을 탐구해보고자 했습니다. 이를 위해 학습된 모델이 **DeepSeek-R1-Zero** 입니다. 먼저, 프롬프트는 아래와 같이 \<think>...\</think>와 \<answer>...\</answer> 포맷만 지시하고, 특정 해결 전략을 강제하지 않습니다.
 
@@ -125,7 +125,7 @@ $$
 
 - `Step 5` 정책 업데이트 후 $\pi_{\text{old}}$를 $\pi_{\theta}$로 교체합니다.
 
-### DeepSeek-R1
+### 2.2 DeepSeek-R1
 
 하지만 DeepSeek-R1-Zero은 가독성이 떨어지거나 서로 다른 두 언어가 섞여 나타나는 등의 문제가 있었습니다. 이러한 문제를 해결하기 위해 제안된 모델이 **DeepSeek-R1**입니다.
 
