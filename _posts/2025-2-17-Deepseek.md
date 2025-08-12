@@ -127,11 +127,17 @@ $$
 
 ### 2.2 DeepSeek-R1
 
-하지만 DeepSeek-R1-Zero은 가독성이 떨어지거나 서로 다른 두 언어가 섞여 나타나는 등의 문제가 있었습니다. 이러한 문제를 해결하기 위해 제안된 모델이 **DeepSeek-R1**입니다.
+하지만 DeepSeek-R1-Zero은 가독성이 떨어지거나 여러 언어가 섞여 나타나는 등의 문제가 있었습니다. 이러한 문제를 해결하기 위해 제안된 모델이 **DeepSeek-R1**입니다. DeepSeek-R1은 다음과 같이 네 단계로 진행됩니다.
+
+- `Cold Start`: 길이가 긴 Chain of Thought (CoT) 데이터를 수집하여 DeepSeek-V3-Base 모델을 fine-tuning합니다. 이를 통해 강화 학습의 불안정한 초기 단계를 방지합니다.
+
+- `Reasoning-oriented Reinforcement Learning`: DeepSeek-R1-Zero와 동일한 대규모 강화 학습을 실행합니다. 이 단계에서는 모델의 추론 능력을 향상시키는 데 집중합니다. 
+- `Rejection Sampling and SFT`: 추론 지향 강화 학습이 수렴하면, 그 결과로 얻은 체크포인트를 활용해 데이터를 수집하고 모델을 다시 fine-tuning합니다. 추론에 초점을 맞추었던 cold start 데이터와 달리, 쓰기, 롤플레잉, 기타 범용 작업 등 다른 도메인의 데이터가 포함됩니다. 약 80만 개의 데이터셋으로 모델을 2 epoch 학습시킵니다.
+- `Reinforcement Learning for all Scenarios`: 유용성과 안전성 측면에서 모델을 개선하고, 추론 능력을 정제하기 위해 두 번째 강화 학습을 실행합니다. 이는 모델을 사람의 선호에 맞추는 과정입니다.
 
 ## 3. Knowledge Distillation
 
-DeepSeek-R1로 800K 데이터를 생성해서 Qwen 7B 모델로 SFT한 다음, DeepSeek-R1의 추론 패턴(Chain-of-Thought)을 Knowledge Distillation으로 이식했습니다. 이는 [지난 포스트](https://jieun121070.github.io/posts/Alpaca/)에서 다룬 적 있는 Alpaca와 유사한 방식입니다.
+DeepSeek-R1을 사용해 생성한 80만 개의 데이터로 [Qwen](https://jieun121070.github.io/posts/Qwen/)과 [Llama 3](https://jieun121070.github.io/posts/LLaMA3/) 모델을 fine-tuning해서 DeepSeek-R1의 추론 패턴을 Knowledge Distillation으로 이식했습니다. 이는 [지난 포스트](https://jieun121070.github.io/posts/Alpaca/)에서 다룬 적 있는 Alpaca와 유사한 방식입니다.
 
 ## Reference
 
