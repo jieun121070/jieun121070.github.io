@@ -139,6 +139,12 @@ $$
 
 DeepSeek-R1을 사용해 생성한 80만 개의 데이터로 [Qwen](https://jieun121070.github.io/posts/Qwen/)과 [Llama 3](https://jieun121070.github.io/posts/LLaMA3/) 모델을 fine-tuning해서 DeepSeek-R1의 추론 패턴을 Knowledge Distillation으로 이식했습니다. 이는 [지난 포스트](https://jieun121070.github.io/posts/Alpaca/)에서 다룬 적 있는 Alpaca와 유사한 방식입니다.
 
+## 4. 모델 성능
+
+![](/assets/img/llm/deepseek_r1_performance.png)
+
+DeepSeek-R1은 거의 모든 영역에서 DeepSeek-V3보다 개선된 성능을 보입니다. 또한 최신 사용 모델들과도 견줄 만한 뛰어난 성능을 달성했습니다.
+
 ## Reference
 
 - [The Illustrated DeepSeek-R1](https://newsletter.languagemodels.co/p/the-illustrated-deepseek-r1)
